@@ -1,0 +1,68 @@
+templar_knights_of_the_temple = {
+	type = heavy_cavalry
+	can_recruit = { always = no }
+
+	damage = 38
+	toughness = 30
+	pursuit = 16
+	screen = 8
+
+	counters = {
+		archers = 1
+	}
+
+	buy_cost = { gold = 300 }
+	low_maintenance_cost = { gold = 0.15 }
+	high_maintenance_cost = { gold = 0.35 }
+
+	stack = 100
+
+	ai_quality = { value = culture_ai_weight_heavy_cavalry }
+	icon = heavy_cavalry
+}
+
+templar_sergeant_brothers = {
+	type = heavy_infantry
+	can_recruit = { always = no }
+
+	damage = 24
+	toughness = 34
+	pursuit = 4
+	screen = 20
+
+	counters = {
+		light_cavalry = 1
+	}
+
+	buy_cost = { gold = 180 }
+	low_maintenance_cost = { gold = 0.08 }
+	high_maintenance_cost = { gold = 0.18 }
+
+	stack = 100
+
+	ai_quality = { value = culture_ai_weight_heavy_infantry }
+	icon = heavy_infantry
+}
+
+templar_turcopoles = {
+	type = light_cavalry
+	can_recruit = { always = no }
+
+	damage = 20
+	toughness = 14
+	pursuit = 22
+	screen = 6
+
+	counters = {
+		archers = 1
+	}
+
+	buy_cost = { gold = 150 }
+	low_maintenance_cost = { gold = 0.07 }
+	high_maintenance_cost = { gold = 0.15 }
+
+	stack = 100
+
+	ai_quality = { value = culture_ai_weight_light_cavalry }
+	icon = light_cavalry
+}

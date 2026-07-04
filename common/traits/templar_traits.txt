@@ -1,0 +1,38 @@
+templar_grand_master = {
+	martial = 3
+	prowess = 5
+	diplomacy = 1
+
+	monthly_piety = 0.5
+	same_faith_opinion = 10
+	clergy_opinion = 15
+	knight_effectiveness_mult = 0.20
+
+	ruler_designer_cost = 100
+}
+
+templar_banker = {
+	stewardship = 3
+	monthly_income_mult = 0.15
+	vassal_opinion = 5
+}
+
+templar_deposit_banker = {
+	stewardship = 4
+	monthly_income_mult = 0.25
+	vassal_opinion = 5
+	same_faith_opinion = 5
+}
+
+templar_insurer = {
+	stewardship = 5
+	diplomacy = 2
+	monthly_income_mult = 0.35
+	vassal_opinion = 5
+	same_faith_opinion = 8
+}
+
+templar_bank_client_trait = {
+	same_faith_opinion = 3
+	stress_loss_mult = 0.10
+}

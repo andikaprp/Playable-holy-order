@@ -1,0 +1,185 @@
+templar_order_founder_modifier = {
+	martial = 2
+	monthly_piety = 0.5
+	knight_limit = 2
+	knight_effectiveness_mult = 0.10
+}
+
+founded_holy_order_modifier = {
+	martial = 2
+	monthly_piety = 0.5
+	knight_limit = 2
+	knight_effectiveness_mult = 0.10
+}
+
+templar_commandery_domain_administration_modifier = {
+	monthly_income = 0.10
+	monthly_county_control_growth_add = 0.05
+}
+
+templar_commandery_operating_rights_modifier = {
+	stacking = yes
+	same_faith_opinion = 1
+}
+
+templar_bank_of_the_temple_modifier = {
+	monthly_income = 0.35
+	monthly_income_modifier = 0.10
+}
+
+templar_reprisal_modifier = {
+	monthly_income_modifier = -0.15
+	men_at_arms_maintenance = 0.15
+	same_faith_opinion = -10
+}
+
+templar_chapter_modifier = {
+	martial = 2
+	prowess = 2
+	monthly_piety = 0.25
+	knight_effectiveness_mult = 0.10
+}
+
+templar_commandery_network_modifier = {
+	monthly_income = 0.5
+	men_at_arms_cap = 1
+	knight_limit = 1
+}
+
+templar_blessed_army_modifier = {
+	advantage = 5
+	knight_effectiveness_mult = 0.15
+	hostile_county_attrition = -0.10
+}
+
+templar_consecrated_fallen_modifier = {
+	monthly_piety = 0.5
+	advantage = 2
+	same_faith_opinion = 3
+}
+
+templar_relic_modifier = {
+	monthly_piety = 0.75
+	same_faith_opinion = 5
+	monthly_prestige = 0.25
+}
+
+templar_endorsed_modifier = {
+	monthly_piety = 0.5
+	same_faith_opinion = 10
+	monthly_income = 0.25
+}
+
+templar_commandery_small_modifier = {
+	stacking = yes
+	monthly_income = 0.20
+	knight_effectiveness_mult = 0.02
+	supply_capacity_add = 25
+}
+
+templar_commandery_medium_modifier = {
+	stacking = yes
+	monthly_income = 0.35
+	knight_limit = 1
+	men_at_arms_maintenance = -0.02
+	supply_capacity_add = 50
+}
+
+templar_commandery_headquarters_modifier = {
+	stacking = yes
+	monthly_income = 0.50
+	knight_limit = 1
+	men_at_arms_cap = 1
+	advantage = 1
+	supply_capacity_add = 100
+}
+
+templar_commandery_loyal_modifier = {
+	stacking = yes
+	monthly_income = 0.15
+	monthly_piety = 0.10
+}
+
+templar_commandery_disloyal_modifier = {
+	stacking = yes
+	monthly_income = -0.10
+	men_at_arms_maintenance = 0.02
+}
+
+templar_upgrade_barracks_modifier = {
+	stacking = yes
+	heavy_infantry_damage_mult = 0.05
+	knight_effectiveness_mult = 0.05
+}
+
+templar_upgrade_stables_modifier = {
+	stacking = yes
+	heavy_cavalry_damage_mult = 0.05
+	heavy_cavalry_maintenance_mult = -0.05
+}
+
+templar_upgrade_hospice_modifier = {
+	stacking = yes
+	monthly_income = 0.20
+	same_faith_opinion = 2
+}
+
+templar_upgrade_chapel_modifier = {
+	stacking = yes
+	monthly_piety = 0.25
+	monthly_income = 0.05
+}
+
+templar_upgrade_armory_modifier = {
+	stacking = yes
+	men_at_arms_cap = 1
+	men_at_arms_recruitment_cost = -0.05
+	men_at_arms_maintenance = -0.03
+}
+
+templar_upgrade_library_modifier = {
+	stacking = yes
+	learning = 1
+	monthly_lifestyle_xp_gain_mult = 0.03
+}
+
+templar_defending_commanderies_modifier = {
+	advantage = 4
+	knight_effectiveness_mult = 0.15
+	men_at_arms_maintenance = -0.10
+}
+
+templar_commandery_small_county_modifier = {
+	monthly_county_control_growth_add = 0.05
+	development_growth_factor = 0.02
+}
+
+templar_commandery_medium_county_modifier = {
+	monthly_county_control_growth_add = 0.10
+	development_growth_factor = 0.05
+	levy_size = 0.05
+}
+
+templar_commandery_headquarters_county_modifier = {
+	monthly_county_control_growth_add = 0.15
+	development_growth_factor = 0.10
+	levy_size = 0.10
+}
+
+templar_hospice_county_modifier = {
+	development_growth_factor = 0.10
+	popular_opinion = 5
+}
+
+templar_high_discipline_modifier = { prowess = 2 knight_effectiveness_mult = 0.15 men_at_arms_maintenance = -0.10 }
+templar_low_discipline_modifier = { prowess = -2 knight_effectiveness_mult = -0.15 men_at_arms_maintenance = 0.15 }
+templar_high_zeal_modifier = { monthly_piety = 0.75 advantage = 2 }
+templar_low_zeal_modifier = { monthly_piety = -0.25 advantage = -2 }
+templar_high_reputation_modifier = { monthly_income = 0.5 same_faith_opinion = 8 }
+templar_low_reputation_modifier = { monthly_income = -0.25 same_faith_opinion = -5 }
+
+templar_rank_regional_modifier = { monthly_piety = 0.10 }
+templar_rank_renowned_modifier = { monthly_piety = 0.20 knight_limit = 1 }
+templar_rank_guardian_modifier = { monthly_piety = 0.30 knight_limit = 2 men_at_arms_cap = 1 }
+templar_rank_legendary_modifier = { monthly_piety = 0.50 knight_limit = 3 men_at_arms_cap = 1 advantage = 2 }
+templar_rank_shield_modifier = { monthly_piety = 0.75 knight_limit = 4 men_at_arms_cap = 2 advantage = 3 }

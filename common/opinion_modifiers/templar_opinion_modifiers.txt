@@ -1,0 +1,20 @@
+founded_holy_order_opinion = {
+	opinion = 10
+	same_faith = yes
+}
+
+templar_recognized_patron = {
+	opinion = 15
+}
+
+templar_grateful_client_opinion = {
+	opinion = 15
+}
+
+templar_debtor_resentment_opinion = {
+	opinion = -20
+}
+
+templar_owed_favor_opinion = {
+	opinion = 10
+}

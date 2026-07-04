@@ -1,0 +1,74 @@
+templar_chapter_house = {
+	rename_window = primary_title
+
+	illustration = "gfx/interface/illustrations/decisions/decision_major_religion.dds"
+	icon = "gfx/interface/icons/flat_icons/flat_camp.dds"
+	map_pin_texture = "gfx/interface/icons/map_icons/map_icon_estate.dds"
+	map_pin_anchor = up
+
+	can_move_manually = yes
+	move_with_realm_capital = yes
+	move_cooldown = { days = 365 }
+
+	base_external_slots = 2
+
+	domicile_building_slots = {
+		main_slot = {
+			slot_type = main
+			position = { 28.2% 13.2% }
+			size = { 28% 34.5% }
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_grain_fields_byzantine_mask.png"
+			}
+
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_manor_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_manor_construction_western_mask.png"
+			}
+		}
+
+		external_slot_1 = {
+			position = { 19.7% 5.5% }
+			size = { 15% 30% }
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+			}
+
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+		}
+
+		external_slot_2 = {
+			position = { 4% 20% }
+			size = { 15% 30% }
+
+			empty_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+			}
+
+			construction_slot_asset = {
+				icon = "gfx/interface/icons/flat_icons/plus.dds"
+				texture = "gfx/interface/window_domiciles/estate_building_construction_western.dds"
+				intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_construction_western_mask.png"
+			}
+		}
+	}
+
+	domicile_asset = {
+		background = "gfx/interface/window_domiciles/estate_background_green_terrain.dds"
+		foreground = "gfx/interface/window_domiciles/estate_background_green_terrain_foreground.dds"
+		ambience = "event:/DLC/EP3/SFX/Ambience/2D/Domicile/ep3_amb_2d_domicile_green_lands"
+	}
+}

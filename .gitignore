@@ -1,0 +1,22 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.vscode/
+.idea/
+
+# Logs and local test output
+*.log
+error.log
+debug.log
+
+# Archives / backups
+*.zip
+*.7z
+*.rar
+*.bak
+
+# Cursor / agent workspace copies (not part of the mod)
+assets/

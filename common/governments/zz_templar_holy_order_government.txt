@@ -1,0 +1,46 @@
+holy_order_government = {
+	government_rules = {
+		council = no
+		court_generate_spouses = no
+		inherit_from_dynastic_government = no
+		allow_accolades = no
+		landless_playable = yes
+		rulers_should_have_dynasty = yes
+		sticky_government = yes
+		use_as_base_on_landed = yes
+	}
+
+	court_generate_commanders = 5
+
+	can_get_government = {
+		any_held_title = { is_holy_order = yes }
+	}
+
+	ai = {
+		arrange_marriage = no
+		use_goals = no
+		use_scripted_guis = no
+		perform_religious_reformation = no
+		use_legends = no
+	}
+
+	valid_holdings = { castle_holding city_holding temple_citadel_holding }
+
+	flags = {
+		government_uses_crown_authority
+		cannot_be_vassal_or_liege
+		government_is_holy_order
+		government_uses_domicile_but_not_adventurer
+	}
+
+	mechanic_type = holy_order
+	is_mechanic_type_default = yes
+
+	color = hsv{ 0.00 0.00 0.66 }
+	realm_mask_offset = { 0.0 -0.01 }
+	realm_mask_scale = { 1 1 }
+
+	royal_court = any
+	domicile_type = templar_chapter_house
+	primary_holding = castle_holding
+}

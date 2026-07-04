@@ -1,0 +1,64 @@
+templar_chapter_main_01 = {
+	slot_type = main
+	construction_time = 1
+	allowed_domicile_types = { templar_chapter_house }
+
+	character_modifier = {
+		monthly_piety = 0.5
+		knight_effectiveness_mult = 0.1
+		domicile_external_slots_capacity_add = 2
+	}
+
+	ai_value = { value = 10000 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_villa.dds"
+		texture = "gfx/interface/window_domiciles/estate_building_villa_western.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_villa_western_mask.png"
+		soundeffect = "event:/DLC/EP3/SFX/UI/domicile_buildings/ep3_ui_domicile_buildings_estate_main_building"
+	}
+}
+
+templar_chapter_barracks_01 = {
+	slot_type = external
+	construction_time = 365
+	allowed_domicile_types = { templar_chapter_house }
+	previous_building = templar_chapter_main_01
+
+	cost = { gold = 250 }
+
+	character_modifier = {
+		knight_limit = 1
+		prowess = 1
+	}
+
+	ai_value = { value = 50 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_barracks.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
+templar_chapter_treasury_01 = {
+	slot_type = external
+	construction_time = 365
+	allowed_domicile_types = { templar_chapter_house }
+	previous_building = templar_chapter_main_01
+
+	cost = { gold = 300 }
+
+	character_modifier = {
+		stewardship = 1
+		monthly_income_mult = 0.05
+	}
+
+	ai_value = { value = 40 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_treasury.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}

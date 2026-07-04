@@ -1,0 +1,52 @@
+is_landless_holy_order = {
+	government_has_flag = government_is_holy_order
+	is_ruler = yes
+	OR = {
+		has_domicile = yes
+		any_held_title = { is_holy_order = yes }
+	}
+}
+
+is_playable_holy_order = {
+	government_has_flag = government_is_holy_order
+	is_ruler = yes
+	OR = {
+		is_landed = yes
+		is_landless_holy_order = yes
+		has_character_flag = templar_playable_grandmaster
+	}
+}
+
+is_playable_character = {
+	OR = {
+		is_landed = yes
+		is_landless_administrative = yes
+		is_landless_adventurer = yes
+		is_landless_nomad = yes
+		is_landless_soryo = yes
+		is_landless_holy_order = yes
+		is_playable_holy_order = yes
+		tgp_is_any_minister = yes
+	}
+}
+
+templar_loan_needy_ruler_trigger = {
+	is_ruler = yes
+	NOT = { exists = var:templar_loan_amount_owed }
+	NOT = { has_variable = templar_loan_in_default }
+	OR = {
+		is_at_war = yes
+		gold < 50
+	}
+}
+
+templar_active_bank_exists_trigger = {
+	exists = global_var:templar_active_banks
+	any_in_global_list = {
+		variable = templar_active_banks
+		is_alive = yes
+		has_variable = templar_temple_bank_active
+		faith = root.faith
+		this != root
+	}
+}

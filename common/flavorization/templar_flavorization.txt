@@ -1,0 +1,71 @@
+templar_grand_master_title_county = {
+	type = character
+	gender = male
+	tier = county
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_county_female = {
+	type = character
+	gender = female
+	tier = county
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_duchy = {
+	type = character
+	gender = male
+	tier = duchy
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_duchy_female = {
+	type = character
+	gender = female
+	tier = duchy
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_kingdom = {
+	type = character
+	gender = male
+	tier = kingdom
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_kingdom_female = {
+	type = character
+	gender = female
+	tier = kingdom
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_empire = {
+	type = character
+	gender = male
+	tier = empire
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}
+
+templar_grand_master_title_empire_female = {
+	type = character
+	gender = female
+	tier = empire
+	priority = 1000
+	flag = templar_simulated_order
+	flavourization_rules = { top_liege = no only_holder = yes spouse_takes_title = no }
+}

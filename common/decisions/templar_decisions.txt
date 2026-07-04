@@ -1,0 +1,299 @@
+﻿templar_review_order_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_review_order_decision_desc
+	selection_tooltip = templar_review_order_decision_tooltip
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { always = yes }
+	effect = { trigger_event = templar_order.0001 }
+	ai_potential = { always = no }
+}
+
+templar_review_commanderies_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_review_commanderies_decision_desc
+	selection_tooltip = templar_review_commanderies_decision_tooltip
+	ai_check_interval = 0
+	is_shown = {
+		has_variable = templar_simulated_order
+		has_variable_list = templar_commanderies_list
+	}
+	is_valid = { var:templar_commanderies > 0 }
+	effect = { trigger_event = templar_order.0002 }
+	ai_potential = { always = no }
+}
+
+templar_recruit_warrior_monks_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_recruit_warrior_monks_decision_desc
+	selection_tooltip = templar_recruit_warrior_monks_decision_tooltip
+	cooldown = { years = 2 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { var:templar_zeal >= 35 }
+	cost = { piety = 300 }
+	effect = {
+		create_maa_regiment = { type = templar_sergeant_brothers check_can_recruit = no size = 2 }
+		templar_change_zeal_effect = { VALUE = -8 }
+		templar_change_discipline_effect = { VALUE = 4 }
+		add_prestige = 100
+	}
+	ai_potential = { always = no }
+}
+
+templar_recruit_knights_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_recruit_knights_decision_desc
+	selection_tooltip = templar_recruit_knights_decision_tooltip
+	cooldown = { years = 4 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { var:templar_reputation >= 40 var:templar_discipline >= 40 }
+	cost = { gold = 400 piety = 200 }
+	effect = {
+		create_maa_regiment = { type = templar_knights_of_the_temple check_can_recruit = no size = 1 }
+		templar_change_discipline_effect = { VALUE = 5 }
+		templar_change_reputation_effect = { VALUE = 4 }
+	}
+	ai_potential = { always = no }
+}
+
+templar_recruit_turcopoles_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_recruit_turcopoles_decision_desc
+	selection_tooltip = templar_recruit_turcopoles_decision_tooltip
+	cooldown = { years = 2 }
+	ai_check_interval = 0
+	is_shown = {
+		has_variable = templar_simulated_order
+		var:templar_commanderies > 0
+	}
+	is_valid = { always = yes }
+	cost = { gold = 200 }
+	effect = {
+		create_maa_regiment = { type = templar_turcopoles check_can_recruit = no size = 2 }
+		templar_change_discipline_effect = { VALUE = 2 }
+	}
+	ai_potential = { always = no }
+}
+
+templar_accept_donations_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_accept_donations_decision_desc
+	selection_tooltip = templar_accept_donations_decision_tooltip
+	cooldown = { years = 2 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { var:templar_reputation >= 20 }
+	effect = {
+		add_gold = 200
+		add_piety = 100
+		templar_change_reputation_effect = { VALUE = 3 }
+	}
+	ai_potential = { always = no }
+}
+
+templar_consecrate_fallen_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_consecrate_fallen_decision_desc
+	selection_tooltip = templar_consecrate_fallen_decision_tooltip
+	cooldown = { years = 3 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { is_at_war = no }
+	cost = { piety = 150 }
+	effect = {
+		add_character_modifier = { modifier = templar_consecrated_fallen_modifier years = 5 }
+		add_piety = 250
+		templar_change_zeal_effect = { VALUE = 5 }
+		templar_change_reputation_effect = { VALUE = 3 }
+	}
+	ai_potential = { always = no }
+}
+
+templar_bless_army_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_bless_army_decision_desc
+	selection_tooltip = templar_bless_army_decision_tooltip
+	cooldown = { years = 2 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { var:templar_zeal >= 40 }
+	cost = { piety = 200 }
+	effect = {
+		add_character_modifier = { modifier = templar_blessed_army_modifier years = 3 }
+		templar_change_zeal_effect = { VALUE = -5 }
+		templar_change_discipline_effect = { VALUE = 3 }
+		if = {
+			limit = { has_variable_list = templar_commanderies_list }
+			every_in_list = {
+				variable = templar_commanderies_list
+				change_variable = { name = templar_commandery_loyalty add = 3 }
+				if = { limit = { var:templar_commandery_loyalty > 100 } set_variable = { name = templar_commandery_loyalty value = 100 } }
+			}
+			templar_rebuild_commandery_bonuses_effect = yes
+		}
+	}
+	ai_potential = { always = no }
+}
+
+templar_search_relics_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_search_relics_decision_desc
+	selection_tooltip = templar_search_relics_decision_tooltip
+	cooldown = { years = 5 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { is_at_war = no gold >= 150 }
+	cost = { gold = 150 }
+	effect = { trigger_event = templar_order.0200 }
+	ai_potential = { always = no }
+}
+
+templar_purge_corruption_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_purge_corruption_decision_desc
+	selection_tooltip = templar_purge_corruption_decision_tooltip
+	cooldown = { years = 4 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { is_at_war = no }
+	effect = { trigger_event = templar_order.0300 }
+	ai_potential = { always = no }
+}
+
+templar_recruit_veteran_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_recruit_veteran_decision_desc
+	selection_tooltip = templar_recruit_veteran_decision_tooltip
+	cooldown = { years = 3 }
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_simulated_order }
+	is_valid = { var:templar_reputation >= 30 }
+	cost = { gold = 200 }
+	effect = { trigger_event = templar_order.0400 }
+	ai_potential = { always = no }
+}
+
+templar_hold_chapter_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_hold_chapter_decision_desc
+	selection_tooltip = templar_hold_chapter_decision_tooltip
+	cooldown = { years = 5 }
+	ai_check_interval = 0
+	is_shown = {
+		has_variable = templar_simulated_order
+	}
+	is_valid = { is_adult = yes is_at_war = no }
+	cost = { gold = 100 piety = 150 }
+	effect = {
+		random_list = {
+			30 = { trigger_event = templar_order.0101 }
+			30 = { trigger_event = templar_order.0102 }
+			20 = { trigger_event = templar_order.0103 }
+			20 = { trigger_event = templar_order.0104 }
+		}
+	}
+	ai_potential = { always = no }
+}
+
+templar_operate_as_bank_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_operate_as_bank_decision_desc
+	selection_tooltip = templar_operate_as_bank_decision_tooltip
+	ai_check_interval = 0
+	is_shown = {
+		has_variable = templar_simulated_order
+		NOT = { has_variable = templar_temple_bank_active }
+	}
+	is_valid = {
+		var:templar_reputation >= 30
+		var:templar_rank >= 2
+	}
+	cost = { gold = 300 piety = 200 }
+	effect = { templar_open_bank_effect = yes }
+	ai_potential = { always = no }
+}
+
+templar_review_bank_clients_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_review_bank_clients_decision_desc
+	selection_tooltip = templar_review_bank_clients_decision_tooltip
+	ai_check_interval = 0
+	is_shown = { has_variable = templar_temple_bank_active }
+	is_valid = { always = yes }
+	effect = { trigger_event = templar_order.0700 }
+	ai_potential = { always = no }
+}
+
+borrow_from_holy_order_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = borrow_from_holy_order_decision_desc
+	selection_tooltip = borrow_from_holy_order_decision_tooltip
+	ai_check_interval = 0
+	is_shown = {
+		is_independent_ruler = yes
+		is_landed = yes
+		NOT = { exists = var:templar_loan_amount_owed }
+		templar_active_bank_exists_trigger = yes
+	}
+	is_valid = { always = yes }
+	effect = {
+		save_scope_as = templar_borrower
+		random_in_global_list = {
+			variable = templar_active_banks
+			limit = {
+				is_alive = yes
+				has_variable = templar_temple_bank_active
+				faith = root.faith
+				this != root
+			}
+			save_scope_as = templar_chosen_bank
+		}
+		scope:templar_chosen_bank = { trigger_event = templar_order.0600 }
+	}
+	ai_potential = { always = no }
+}
+
+templar_defend_commanderies_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
+	desc = templar_defend_commanderies_decision_desc
+	selection_tooltip = templar_defend_commanderies_decision_tooltip
+	cooldown = { years = 3 }
+	ai_check_interval = 0
+	is_shown = {
+		has_variable = templar_simulated_order
+		has_variable_list = templar_commanderies_list
+	}
+	is_valid = {
+		any_in_list = {
+			variable = templar_commanderies_list
+			var:templar_commandery_patron ?= {
+				is_at_war = yes
+				any_war_enemy = {
+					faith = {
+						faith_hostility_level = {
+							target = root.faith
+							value >= faith_hostile_level
+						}
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		add_character_modifier = { modifier = templar_defending_commanderies_modifier years = 3 }
+		every_in_list = {
+			variable = templar_commanderies_list
+			if = {
+				limit = { var:templar_commandery_patron ?= { is_at_war = yes } }
+				change_variable = { name = templar_commandery_loyalty add = 10 }
+				if = { limit = { var:templar_commandery_loyalty > 100 } set_variable = { name = templar_commandery_loyalty value = 100 } }
+			}
+		}
+		add_piety = 200
+		templar_change_reputation_effect = { VALUE = 6 }
+		templar_rebuild_commandery_bonuses_effect = yes
+	}
+	ai_potential = { always = no }
+}

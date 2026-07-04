@@ -1,0 +1,414 @@
+templar_request_donation_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 40
+	cooldown_against_recipient = { years = 5 }
+	icon = icon_gold
+	desc = templar_request_donation_interaction_desc
+	greeting = positive
+	notification_text = templar_request_donation_interaction_notification
+	answer_accept_key = templar_interaction_accept
+	answer_reject_key = templar_interaction_reject
+	use_diplomatic_range = yes
+
+	is_shown = {
+		scope:actor = { has_variable = templar_simulated_order }
+		scope:recipient = {
+			is_landed = yes
+			is_ai = yes
+			faith = scope:actor.faith
+		}
+		scope:recipient != scope:actor
+	}
+
+	is_valid_showing_failures_only = { scope:recipient.gold >= 100 }
+
+	on_accept = {
+		scope:recipient = { remove_short_term_gold = 100 }
+		scope:actor = {
+			add_gold = 100
+			add_piety = 75
+			templar_change_reputation_effect = { VALUE = 4 }
+		}
+	}
+
+	ai_accept = {
+		base = 10
+		modifier = { add = 30 scope:actor = { var:templar_reputation >= 50 } }
+		modifier = { add = 25 scope:actor = { var:templar_zeal >= 70 } }
+		modifier = { add = -30 scope:actor = { var:templar_reputation <= 25 } }
+		modifier = { add = 25 scope:recipient = { gold >= 500 } }
+	}
+}
+
+templar_request_endorsement_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 35
+	cooldown_against_recipient = { years = 10 }
+	icon = religious
+	desc = templar_request_endorsement_interaction_desc
+	greeting = positive
+	notification_text = templar_request_endorsement_interaction_notification
+	answer_accept_key = templar_interaction_accept
+	answer_reject_key = templar_interaction_reject
+	use_diplomatic_range = no
+
+	is_shown = {
+		scope:actor = { has_variable = templar_simulated_order }
+		scope:recipient = {
+			is_head_of_faith = yes
+			faith = scope:actor.faith
+			is_ai = yes
+		}
+		scope:recipient != scope:actor
+	}
+
+	is_valid_showing_failures_only = { scope:actor = { piety >= 300 } }
+	cost = { piety = 300 }
+
+	on_accept = {
+		scope:actor = {
+			add_piety = 250
+			add_prestige = 200
+			templar_change_reputation_effect = { VALUE = 12 }
+			add_character_modifier = { modifier = templar_endorsed_modifier years = 10 }
+		}
+	}
+
+	ai_accept = {
+		base = 0
+		modifier = { add = 35 scope:actor = { var:templar_reputation >= 50 } }
+		modifier = { add = 30 scope:actor = { var:templar_zeal >= 70 } }
+		modifier = { add = -40 scope:actor = { var:templar_discipline <= 30 } }
+	}
+}
+
+templar_request_commandery_charter_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 30
+	cooldown_against_recipient = { years = 10 }
+	icon = holy_order
+	target_type = title
+	target_filter = recipient_domain_titles
+	desc = templar_request_commandery_charter_interaction_desc
+	greeting = positive
+	notification_text = templar_request_commandery_charter_interaction_notification
+	answer_accept_key = templar_interaction_accept
+	answer_reject_key = templar_interaction_reject
+	use_diplomatic_range = yes
+
+	is_shown = {
+		scope:actor = {
+			has_variable = templar_simulated_order
+			OR = {
+				var:templar_reputation >= 40
+				piety >= 500
+			}
+			var:templar_commanderies < var:templar_commandery_limit
+			NOT = { has_character_flag = holy_order_recently_requested_land }
+		}
+		scope:recipient = {
+			is_landed = yes
+			is_ai = yes
+			faith = scope:actor.faith
+			NOT = { has_character_flag = holy_order_recently_received_land }
+		}
+		scope:recipient != scope:actor
+	}
+
+	has_valid_target = {
+		scope:target ?= {
+			tier = tier_barony
+			holder = scope:recipient
+			NOT = { has_variable = templar_commandery_order }
+			title_province = {
+				OR = {
+					has_holding_type = castle_holding
+					has_holding_type = church_holding
+				}
+				county = { NOT = { has_variable = templar_county_commandery } }
+			}
+		}
+	}
+
+	can_be_picked_title = {
+		scope:target = {
+			tier = tier_barony
+			holder = scope:recipient
+			NOT = { has_variable = templar_commandery_order }
+			title_province = {
+				OR = {
+					has_holding_type = castle_holding
+					has_holding_type = church_holding
+				}
+				county = { NOT = { has_variable = templar_county_commandery } }
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = { opinion = { target = scope:actor value > 40 } }
+		scope:actor = { var:templar_commanderies < var:templar_commandery_limit }
+	}
+
+	on_accept = {
+		scope:target = {
+			set_variable = { name = templar_commandery_order value = scope:actor }
+			set_variable = { name = templar_commandery_patron value = scope:recipient }
+			set_variable = { name = templar_commandery_loyalty value = 60 }
+			set_variable = { name = templar_commandery_level value = 1 }
+			set_variable = { name = templar_commandery_investment value = 0 }
+			title_province.county = { set_variable = { name = templar_county_commandery value = scope:actor } }
+			templar_update_commandery_level_effect = yes
+		}
+		scope:actor = {
+			add_to_variable_list = { name = templar_commanderies_list target = scope:target }
+			add_piety = 150
+			templar_change_reputation_effect = { VALUE = 8 }
+			templar_change_discipline_effect = { VALUE = 3 }
+			templar_rebuild_commandery_bonuses_effect = yes
+			add_character_flag = { flag = holy_order_recently_requested_land years = 5 }
+		}
+		scope:recipient = {
+			add_character_flag = { flag = holy_order_recently_received_land years = 5 }
+		}
+	}
+
+	ai_accept = {
+		base = -20
+		modifier = { add = 35 scope:actor = { var:templar_reputation >= 60 } }
+		modifier = { add = 30 scope:actor = { var:templar_zeal >= 70 } }
+		modifier = { add = -40 scope:actor = { var:templar_discipline <= 30 } }
+		modifier = { add = 20 scope:recipient = { gold >= 500 } }
+	}
+}
+
+templar_upgrade_commandery_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 28
+	cooldown_against_recipient = { years = 1 }
+	icon = holy_order
+	target_type = title
+	target_filter = recipient_domain_titles
+	desc = templar_upgrade_commandery_interaction_desc
+	notification_text = templar_upgrade_commandery_interaction_notification
+	auto_accept = yes
+	force_notification = yes
+	use_diplomatic_range = no
+	send_options_exclusive = yes
+
+	is_shown = {
+		scope:actor = { has_variable = templar_simulated_order }
+		scope:recipient = { is_landed = yes }
+		scope:recipient != scope:actor
+	}
+
+	has_valid_target = {
+		scope:target ?= {
+			holder = scope:recipient
+			var:templar_commandery_order ?= scope:actor
+		}
+	}
+
+	can_be_picked_title = {
+		scope:target = {
+			holder = scope:recipient
+			var:templar_commandery_order ?= scope:actor
+		}
+	}
+
+	send_option = {
+		flag = barracks
+		localization = templar_upgrade_barracks_option
+		starts_enabled = { scope:target = { NOT = { has_variable = templar_upgrade_barracks } } }
+	}
+	send_option = {
+		flag = stables
+		localization = templar_upgrade_stables_option
+		starts_enabled = { scope:target = { NOT = { has_variable = templar_upgrade_stables } } }
+	}
+	send_option = {
+		flag = hospice
+		localization = templar_upgrade_hospice_option
+		starts_enabled = { scope:target = { NOT = { has_variable = templar_upgrade_hospice } } }
+	}
+	send_option = {
+		flag = chapel
+		localization = templar_upgrade_chapel_option
+		starts_enabled = { scope:target = { NOT = { has_variable = templar_upgrade_chapel } } }
+	}
+	send_option = {
+		flag = armory
+		localization = templar_upgrade_armory_option
+		starts_enabled = { scope:target = { NOT = { has_variable = templar_upgrade_armory } } }
+	}
+	send_option = {
+		flag = library
+		localization = templar_upgrade_library_option
+		starts_enabled = { scope:target = { NOT = { has_variable = templar_upgrade_library } } }
+	}
+
+	cost = { gold = 250 }
+
+	can_send = {
+		OR = {
+			scope:barracks = yes
+			scope:stables = yes
+			scope:hospice = yes
+			scope:chapel = yes
+			scope:armory = yes
+			scope:library = yes
+		}
+	}
+
+	on_accept = {
+		scope:target = {
+			if = { limit = { scope:barracks = yes } set_variable = templar_upgrade_barracks }
+			if = { limit = { scope:stables = yes } set_variable = templar_upgrade_stables }
+			if = {
+				limit = { scope:hospice = yes }
+				set_variable = templar_upgrade_hospice
+				title_province.county = { add_county_modifier = { modifier = templar_hospice_county_modifier } }
+			}
+			if = { limit = { scope:chapel = yes } set_variable = templar_upgrade_chapel }
+			if = { limit = { scope:armory = yes } set_variable = templar_upgrade_armory }
+			if = { limit = { scope:library = yes } set_variable = templar_upgrade_library }
+			change_variable = { name = templar_commandery_investment add = 1 }
+			change_variable = { name = templar_commandery_loyalty add = 5 }
+			if = { limit = { var:templar_commandery_loyalty > 100 } set_variable = { name = templar_commandery_loyalty value = 100 } }
+			templar_update_commandery_level_effect = yes
+		}
+		scope:actor = {
+			if = { limit = { scope:barracks = yes } templar_change_discipline_effect = { VALUE = 2 } }
+			if = { limit = { scope:stables = yes } templar_change_discipline_effect = { VALUE = 1 } }
+			if = { limit = { scope:hospice = yes } templar_change_reputation_effect = { VALUE = 4 } }
+			if = { limit = { scope:chapel = yes } templar_change_zeal_effect = { VALUE = 5 } }
+			if = { limit = { scope:armory = yes } templar_change_discipline_effect = { VALUE = 3 } }
+			if = { limit = { scope:library = yes } add_piety = 100 }
+			templar_change_reputation_effect = { VALUE = 2 }
+			templar_rebuild_commandery_bonuses_effect = yes
+		}
+	}
+}
+
+send_to_holy_order_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 24
+	cooldown_against_recipient = { years = 8 }
+	icon = icon_gold
+	desc = send_to_holy_order_interaction_desc
+	greeting = positive
+	notification_text = send_to_holy_order_interaction_notification
+	answer_accept_key = templar_interaction_accept
+	answer_reject_key = templar_interaction_reject
+	use_diplomatic_range = yes
+
+	is_shown = {
+		scope:recipient = { has_variable = templar_temple_bank_active }
+		scope:actor = {
+			is_landed = yes
+			faith = scope:recipient.faith
+			NOT = { exists = var:templar_deposit_amount }
+		}
+		scope:actor != scope:recipient
+	}
+
+	is_valid_showing_failures_only = { scope:actor.gold >= 250 }
+
+	on_accept = {
+		templar_make_deposit_effect = {
+			BANK = scope:recipient
+			DEPOSITOR = scope:actor
+			GROSS = 250
+			NET = 210
+		}
+	}
+
+	ai_accept = { base = 40 }
+}
+
+withdraw_templar_deposit_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 22
+	cooldown_against_recipient = { years = 2 }
+	icon = icon_gold
+	desc = withdraw_templar_deposit_interaction_desc
+	notification_text = withdraw_templar_deposit_interaction_notification
+	auto_accept = yes
+	force_notification = yes
+	use_diplomatic_range = yes
+
+	is_shown = {
+		scope:actor = { exists = var:templar_deposit_amount }
+		scope:recipient = { has_variable = templar_temple_bank_active }
+		scope:actor.var:templar_bank_client_of ?= scope:recipient
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient.gold >= scope:actor.var:templar_deposit_amount
+	}
+
+	on_accept = {
+		templar_withdraw_deposit_effect = {
+			DEPOSITOR = scope:actor
+			NET = scope:actor.var:templar_deposit_amount
+		}
+	}
+}
+
+templar_support_commandery_patron_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 26
+	cooldown_against_recipient = { years = 3 }
+	icon = icon_gold
+	target_type = title
+	target_filter = recipient_domain_titles
+	desc = templar_support_commandery_patron_interaction_desc
+	notification_text = templar_support_commandery_patron_interaction_notification
+	auto_accept = yes
+	force_notification = yes
+	use_diplomatic_range = no
+
+	is_shown = {
+		scope:actor = { has_variable = templar_simulated_order }
+		scope:recipient = { is_landed = yes }
+		scope:recipient != scope:actor
+	}
+
+	has_valid_target = {
+		scope:target ?= {
+			holder = scope:recipient
+			var:templar_commandery_order ?= scope:actor
+		}
+	}
+
+	can_be_picked_title = {
+		scope:target = {
+			holder = scope:recipient
+			var:templar_commandery_order ?= scope:actor
+		}
+	}
+
+	cost = { gold = 150 }
+
+	on_accept = {
+		scope:target = {
+			change_variable = { name = templar_commandery_loyalty add = 20 }
+			if = { limit = { var:templar_commandery_loyalty > 100 } set_variable = { name = templar_commandery_loyalty value = 100 } }
+		}
+		scope:recipient = {
+			add_opinion = { target = scope:actor modifier = grateful_opinion opinion = 15 }
+		}
+		scope:actor = {
+			add_piety = 75
+			templar_change_reputation_effect = { VALUE = 3 }
+			templar_rebuild_commandery_bonuses_effect = yes
+		}
+	}
+}

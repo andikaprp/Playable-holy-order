@@ -1,0 +1,227 @@
+yearly_playable_pulse = {
+	on_actions = { templar_order_yearly_pulse templar_holy_order_playable_pulse }
+}
+
+templar_holy_order_playable_pulse = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				government_has_flag = government_is_holy_order
+				is_ruler = yes
+			}
+			templar_ensure_playable_grandmaster_effect = yes
+		}
+	}
+}
+
+on_government_change = {
+	on_actions = { templar_holy_order_government_change }
+}
+
+templar_holy_order_government_change = {
+	effect = {
+		if = {
+			limit = {
+				government_has_flag = government_is_holy_order
+				is_ruler = yes
+			}
+			templar_ensure_playable_grandmaster_effect = yes
+		}
+	}
+}
+
+on_title_gain = {
+	on_actions = { templar_holy_order_title_gain }
+}
+
+templar_holy_order_title_gain = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				scope:title = { is_holy_order = yes }
+			}
+			templar_ensure_playable_grandmaster_effect = yes
+		}
+	}
+}
+
+templar_order_yearly_pulse = {
+	effect = {
+		if = {
+			limit = { has_variable = templar_simulated_order }
+			remove_character_flag = templar_revocation_event_queued
+			templar_change_discipline_effect = { VALUE = -1 }
+			templar_change_zeal_effect = { VALUE = -1 }
+			if = {
+				limit = { has_variable_list = templar_commanderies_list }
+				every_in_list = {
+					variable = templar_commanderies_list
+					if = {
+						limit = { exists = holder }
+						set_variable = { name = templar_commandery_patron value = holder }
+						if = {
+							limit = { holder.faith = root.faith }
+							if = { limit = { root.var:templar_reputation >= 70 } change_variable = { name = templar_commandery_loyalty add = 2 } }
+							else_if = { limit = { root.var:templar_reputation <= 30 } change_variable = { name = templar_commandery_loyalty add = -3 } }
+						}
+						else = { change_variable = { name = templar_commandery_loyalty add = -10 } }
+					}
+					if = { limit = { var:templar_commandery_loyalty > 100 } set_variable = { name = templar_commandery_loyalty value = 100 } }
+					if = { limit = { var:templar_commandery_loyalty < 0 } set_variable = { name = templar_commandery_loyalty value = 0 } }
+					if = {
+						limit = {
+							var:templar_commandery_loyalty <= 25
+							root = { NOT = { has_character_flag = templar_revocation_event_queued } }
+						}
+						save_scope_as = templar_revoked_commandery
+						holder = { save_scope_as = templar_revoking_patron }
+						root = {
+							add_character_flag = { flag = templar_revocation_event_queued years = 1 }
+							trigger_event = { id = templar_order.2000 days = 5 }
+						}
+					}
+				}
+				templar_rebuild_commandery_bonuses_effect = yes
+			}
+			templar_update_bank_tier_effect = yes
+			random_list = {
+				55 = { }
+				12 = { trigger_event = templar_order.1000 }
+				12 = { trigger_event = templar_order.1001 }
+				11 = { trigger_event = templar_order.1002 }
+				10 = { trigger_event = templar_order.1003 }
+			}
+		}
+		if = {
+			limit = {
+				exists = var:templar_loan_amount_owed
+				NOT = { has_variable = templar_loan_in_default }
+				NOT = { has_character_flag = templar_loan_reminder_queued }
+			}
+			change_variable = { name = templar_loan_years_elapsed add = 1 }
+			if = {
+				limit = { var:templar_loan_years_elapsed >= 3 }
+				add_character_flag = { flag = templar_loan_reminder_queued years = 2 }
+				if = {
+					limit = { exists = var:templar_bank_client_of }
+					var:templar_bank_client_of = { save_scope_as = templar_lender }
+					trigger_event = { id = templar_order.0601 days = 3 }
+				}
+			}
+		}
+	}
+}
+
+on_death = {
+	on_actions = { templar_grandmaster_on_death }
+}
+
+templar_grandmaster_on_death = {
+	effect = {
+		if = {
+			limit = {
+				has_variable = templar_simulated_order
+				is_ai = no
+				exists = primary_heir
+			}
+			primary_heir = { save_scope_as = templar_successor }
+			if = {
+				limit = { has_variable_list = templar_commanderies_list }
+				every_in_list = {
+					variable = templar_commanderies_list
+					set_variable = { name = templar_commandery_order value = scope:templar_successor }
+					scope:templar_successor = {
+						add_to_variable_list = { name = templar_commanderies_list target = prev }
+					}
+				}
+			}
+			scope:templar_successor = {
+				if = {
+					limit = { is_lowborn = yes }
+					create_dynasty = { spread_to_descendants = yes }
+				}
+				add_character_flag = templar_playable_grandmaster
+				set_variable = templar_simulated_order
+				set_variable = { name = templar_discipline value = root.var:templar_discipline }
+				set_variable = { name = templar_zeal value = root.var:templar_zeal }
+				set_variable = { name = templar_reputation value = root.var:templar_reputation }
+				set_variable = { name = templar_commanderies value = root.var:templar_commanderies }
+				set_variable = { name = templar_rank value = root.var:templar_rank }
+				add_trait = templar_grand_master
+				templar_update_order_effect = yes
+				templar_rebuild_commandery_bonuses_effect = yes
+				set_up_templar_chapter_domicile_effect = yes
+			}
+			set_player_character = scope:templar_successor
+			if = {
+				limit = { has_variable = templar_temple_bank_active }
+				scope:templar_successor = {
+					set_variable = templar_temple_bank_active
+					add_trait = templar_banker
+					add_character_modifier = { modifier = templar_bank_of_the_temple_modifier }
+					add_to_global_variable_list = { name = templar_active_banks target = scope:templar_successor }
+				}
+				remove_list_variable = { name = templar_active_banks target = root }
+				if = {
+					limit = { has_variable_list = templar_bank_clients }
+					every_in_list = {
+						variable = templar_bank_clients
+						set_variable = { name = templar_bank_client_of value = scope:templar_successor }
+						scope:templar_successor = {
+							add_to_variable_list = { name = templar_bank_clients target = prev }
+						}
+					}
+				}
+				if = {
+					limit = { has_variable_list = owes_me_money }
+					every_in_list = {
+						variable = owes_me_money
+						scope:templar_successor = {
+							add_to_variable_list = { name = owes_me_money target = prev }
+						}
+					}
+				}
+				if = {
+					limit = { has_variable_list = templar_depositors }
+					every_in_list = {
+						variable = templar_depositors
+						scope:templar_successor = {
+							add_to_variable_list = { name = templar_depositors target = prev }
+						}
+					}
+				}
+			}
+			if = {
+				limit = { exists = var:templar_loan_amount_owed }
+				scope:templar_successor = {
+					set_variable = { name = templar_loan_amount_owed value = root.var:templar_loan_amount_owed }
+					set_variable = { name = templar_loan_years_elapsed value = root.var:templar_loan_years_elapsed }
+					set_variable = { name = templar_bank_client_of value = root.var:templar_bank_client_of }
+				}
+				if = {
+					limit = { exists = var:templar_bank_client_of }
+					var:templar_bank_client_of = {
+						remove_list_variable = { name = owes_me_money target = root }
+						add_to_variable_list = { name = owes_me_money target = scope:templar_successor }
+					}
+				}
+			}
+			if = {
+				limit = { exists = var:templar_deposit_amount }
+				scope:templar_successor = {
+					set_variable = { name = templar_deposit_amount value = root.var:templar_deposit_amount }
+					set_variable = { name = templar_bank_client_of value = root.var:templar_bank_client_of }
+				}
+				if = {
+					limit = { exists = var:templar_bank_client_of }
+					var:templar_bank_client_of = {
+						remove_list_variable = { name = templar_depositors target = root }
+						add_to_variable_list = { name = templar_depositors target = scope:templar_successor }
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,50 @@
+templar_become_grandmaster_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 50
+	icon = holy_order
+	desc = templar_become_grandmaster_interaction_desc
+	notification_text = templar_become_grandmaster_interaction_notification
+	auto_accept = yes
+	force_notification = yes
+	use_diplomatic_range = no
+
+	is_shown = {
+		scope:actor = {
+			is_ai = no
+			is_ruler = yes
+			NOT = { government_has_flag = government_is_holy_order }
+			NOT = { has_variable = templar_simulated_order }
+		}
+		scope:recipient = {
+			government_has_flag = government_is_holy_order
+			is_alive = yes
+			is_ruler = yes
+			faith = scope:actor.faith
+		}
+		scope:recipient != scope:actor
+	}
+
+	is_valid = {
+		scope:actor = {
+			is_adult = yes
+			is_at_war = no
+			is_imprisoned = no
+		}
+		scope:recipient = {
+			is_imprisoned = no
+			primary_title = { is_holy_order = yes }
+		}
+	}
+
+	cost = {
+		piety = 500
+		prestige = 300
+	}
+
+	on_accept = {
+		hidden_effect = {
+			templar_become_grandmaster_effect = yes
+		}
+	}
+}

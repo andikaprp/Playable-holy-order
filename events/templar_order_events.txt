@@ -1,0 +1,527 @@
+namespace = templar_order
+
+templar_order.0001 = {
+	type = character_event
+	title = templar_order.0001.t
+	desc = templar_order.0001.desc
+	theme = faith
+	left_portrait = root
+	option = { name = templar_order.0001.a }
+}
+
+templar_order.0002 = {
+	type = character_event
+	title = templar_order.0002.t
+	desc = templar_order.0002.desc
+	theme = realm
+	left_portrait = root
+	immediate = {
+		random_in_list = { variable = templar_commanderies_list save_scope_as = templar_commandery_1 }
+		if = {
+			limit = { variable_list_size = { name = templar_commanderies_list value >= 2 } }
+			random_in_list = {
+				variable = templar_commanderies_list
+				limit = { this != scope:templar_commandery_1 }
+				save_scope_as = templar_commandery_2
+			}
+		}
+		if = {
+			limit = { variable_list_size = { name = templar_commanderies_list value >= 3 } }
+			random_in_list = {
+				variable = templar_commanderies_list
+				limit = {
+					this != scope:templar_commandery_1
+					this != scope:templar_commandery_2
+				}
+				save_scope_as = templar_commandery_3
+			}
+		}
+		if = {
+			limit = { variable_list_size = { name = templar_commanderies_list value >= 4 } }
+			random_in_list = {
+				variable = templar_commanderies_list
+				limit = {
+					this != scope:templar_commandery_1
+					this != scope:templar_commandery_2
+					this != scope:templar_commandery_3
+				}
+				save_scope_as = templar_commandery_4
+			}
+		}
+		if = {
+			limit = { variable_list_size = { name = templar_commanderies_list value >= 5 } }
+			random_in_list = {
+				variable = templar_commanderies_list
+				limit = {
+					this != scope:templar_commandery_1
+					this != scope:templar_commandery_2
+					this != scope:templar_commandery_3
+					this != scope:templar_commandery_4
+				}
+				save_scope_as = templar_commandery_5
+			}
+		}
+	}
+	option = { name = templar_order.0002.a trigger = { exists = scope:templar_commandery_1 } }
+	option = { name = templar_order.0002.b trigger = { exists = scope:templar_commandery_2 } }
+	option = { name = templar_order.0002.c trigger = { exists = scope:templar_commandery_3 } }
+	option = { name = templar_order.0002.d trigger = { exists = scope:templar_commandery_4 } }
+	option = { name = templar_order.0002.e trigger = { exists = scope:templar_commandery_5 } }
+	option = { name = templar_order.0002.f }
+}
+
+templar_order.0101 = {
+	type = character_event
+	title = templar_order.0101.t
+	desc = templar_order.0101.desc
+	theme = faith
+	left_portrait = root
+	option = {
+		name = templar_order.0101.a
+		add_character_modifier = { modifier = templar_chapter_modifier years = 5 }
+		templar_change_discipline_effect = { VALUE = 12 }
+		add_prestige = 200
+	}
+}
+
+templar_order.0102 = {
+	type = character_event
+	title = templar_order.0102.t
+	desc = templar_order.0102.desc
+	theme = faith
+	left_portrait = root
+	option = {
+		name = templar_order.0102.a
+		templar_change_zeal_effect = { VALUE = 12 }
+		add_piety = 300
+	}
+}
+
+templar_order.0103 = {
+	type = character_event
+	title = templar_order.0103.t
+	desc = templar_order.0103.desc
+	theme = realm
+	left_portrait = root
+	option = {
+		name = templar_order.0103.a
+		add_gold = 250
+		templar_change_reputation_effect = { VALUE = 6 }
+	}
+}
+
+templar_order.0104 = {
+	type = character_event
+	title = templar_order.0104.t
+	desc = templar_order.0104.desc
+	theme = intrigue
+	left_portrait = root
+	option = {
+		name = templar_order.0104.a
+		remove_short_term_gold = 150
+		templar_change_discipline_effect = { VALUE = -10 }
+		templar_change_reputation_effect = { VALUE = -5 }
+	}
+}
+
+templar_order.0200 = {
+	type = character_event
+	title = templar_order.0200.t
+	desc = templar_order.0200.desc
+	theme = faith
+	left_portrait = root
+	option = {
+		name = templar_order.0200.a
+		random_list = {
+			45 = { trigger_event = templar_order.0201 }
+			30 = { trigger_event = templar_order.0202 }
+			25 = { trigger_event = templar_order.0203 }
+		}
+	}
+}
+
+templar_order.0201 = {
+	type = character_event
+	title = templar_order.0201.t
+	desc = templar_order.0201.desc
+	theme = faith
+	left_portrait = root
+	option = {
+		name = templar_order.0201.a
+		add_character_modifier = { modifier = templar_relic_modifier }
+		add_piety = 500
+		templar_change_reputation_effect = { VALUE = 15 }
+	}
+}
+
+templar_order.0202 = {
+	type = character_event
+	title = templar_order.0202.t
+	desc = templar_order.0202.desc
+	theme = realm
+	left_portrait = root
+	option = {
+		name = templar_order.0202.a
+		add_trait = wounded_1
+		templar_change_zeal_effect = { VALUE = 5 }
+	}
+}
+
+templar_order.0203 = {
+	type = character_event
+	title = templar_order.0203.t
+	desc = templar_order.0203.desc
+	theme = intrigue
+	left_portrait = root
+	option = {
+		name = templar_order.0203.a
+		add_gold = 100
+		templar_change_reputation_effect = { VALUE = -12 }
+		templar_change_discipline_effect = { VALUE = -5 }
+	}
+}
+
+templar_order.0300 = {
+	type = character_event
+	title = templar_order.0300.t
+	desc = templar_order.0300.desc
+	theme = intrigue
+	left_portrait = root
+	option = {
+		name = templar_order.0300.a
+		templar_change_discipline_effect = { VALUE = 8 }
+		templar_change_reputation_effect = { VALUE = 4 }
+		add_piety = 100
+	}
+	option = {
+		name = templar_order.0300.b
+		templar_change_discipline_effect = { VALUE = 15 }
+		templar_change_reputation_effect = { VALUE = -7 }
+		add_dread = 15
+	}
+}
+
+templar_order.0400 = {
+	type = character_event
+	title = templar_order.0400.t
+	desc = templar_order.0400.desc
+	theme = realm
+	left_portrait = root
+	immediate = {
+		create_character = {
+			location = root.location
+			age = { 28 48 }
+			gender = male
+			faith = root.faith
+			culture = root.culture
+			trait = education_martial_3
+			trait = order_member
+			martial = { 12 18 }
+			prowess = { 16 24 }
+			save_scope_as = templar_veteran
+		}
+		add_courtier = scope:templar_veteran
+	}
+	option = {
+		name = templar_order.0400.a
+		templar_change_reputation_effect = { VALUE = 5 }
+		templar_change_discipline_effect = { VALUE = 3 }
+	}
+}
+
+templar_order.1000 = {
+	type = character_event
+	title = templar_order.1000.t
+	desc = templar_order.1000.desc
+	theme = intrigue
+	left_portrait = root
+	option = {
+		name = templar_order.1000.a
+		templar_change_discipline_effect = { VALUE = -8 }
+		remove_short_term_gold = 75
+	}
+	option = {
+		name = templar_order.1000.b
+		templar_change_discipline_effect = { VALUE = 5 }
+		templar_change_reputation_effect = { VALUE = -3 }
+		add_dread = 5
+	}
+}
+
+templar_order.1001 = {
+	type = character_event
+	title = templar_order.1001.t
+	desc = templar_order.1001.desc
+	theme = faith
+	left_portrait = root
+	option = {
+		name = templar_order.1001.a
+		add_gold = 150
+		templar_change_reputation_effect = { VALUE = 5 }
+		templar_change_zeal_effect = { VALUE = 3 }
+	}
+}
+
+templar_order.1002 = {
+	type = character_event
+	title = templar_order.1002.t
+	desc = templar_order.1002.desc
+	theme = realm
+	left_portrait = root
+	option = {
+		name = templar_order.1002.a
+		templar_change_zeal_effect = { VALUE = 8 }
+		templar_change_discipline_effect = { VALUE = -3 }
+		add_piety = 150
+	}
+	option = {
+		name = templar_order.1002.b
+		templar_change_reputation_effect = { VALUE = 4 }
+		templar_change_zeal_effect = { VALUE = -5 }
+	}
+}
+
+templar_order.1003 = {
+	type = character_event
+	title = templar_order.1003.t
+	desc = templar_order.1003.desc
+	theme = faith
+	left_portrait = root
+	option = {
+		name = templar_order.1003.a
+		create_maa_regiment = { type = armored_horsemen check_can_recruit = no size = 1 }
+		templar_change_reputation_effect = { VALUE = 8 }
+	}
+}
+
+templar_order.0600 = {
+	type = character_event
+	title = templar_order.0600.t
+	desc = templar_order.0600.desc
+	theme = realm
+	left_portrait = root
+	right_portrait = scope:templar_borrower
+
+	trigger = {
+		has_variable = templar_temple_bank_active
+		exists = scope:templar_borrower
+		scope:templar_borrower = { NOT = { exists = var:templar_loan_amount_owed } }
+	}
+
+	immediate = {
+		if = { limit = { var:templar_rank >= 5 } set_variable = { name = templar_loan_offer_amount value = 900 } }
+		else_if = { limit = { var:templar_rank >= 4 } set_variable = { name = templar_loan_offer_amount value = 600 } }
+		else_if = { limit = { var:templar_rank >= 3 } set_variable = { name = templar_loan_offer_amount value = 400 } }
+		else_if = { limit = { var:templar_rank >= 2 } set_variable = { name = templar_loan_offer_amount value = 250 } }
+		else = { set_variable = { name = templar_loan_offer_amount value = 150 } }
+	}
+
+	option = {
+		name = templar_order.0600.a
+		trigger = { gold >= var:templar_loan_offer_amount }
+		templar_grant_loan_effect = {
+			LENDER = root
+			BORROWER = scope:templar_borrower
+			AMOUNT = var:templar_loan_offer_amount
+		}
+	}
+	option = {
+		name = templar_order.0600.b
+		trigger = { gold >= 100 }
+		templar_grant_loan_effect = {
+			LENDER = root
+			BORROWER = scope:templar_borrower
+			AMOUNT = 100
+		}
+	}
+	option = {
+		name = templar_order.0600.c
+	}
+
+	after = {
+		remove_variable = templar_loan_offer_amount
+	}
+}
+
+templar_order.0601 = {
+	type = character_event
+	title = templar_order.0601.t
+	desc = templar_order.0601.desc
+	theme = realm
+	left_portrait = root
+	right_portrait = scope:templar_lender
+
+	trigger = {
+		exists = var:templar_loan_amount_owed
+		exists = scope:templar_lender
+	}
+
+	option = {
+		name = templar_order.0601.a
+		trigger = { gold >= var:templar_loan_amount_owed }
+		add_gold = { value = var:templar_loan_amount_owed multiply = -1 }
+		scope:templar_lender = {
+			add_gold = root.var:templar_loan_amount_owed
+			templar_change_reputation_effect = { VALUE = 3 }
+		}
+		add_opinion = { target = scope:templar_lender modifier = templar_grateful_client_opinion opinion = 10 }
+		templar_clear_loan_effect = yes
+	}
+	option = {
+		name = templar_order.0601.b
+		change_variable = { name = templar_loan_years_elapsed subtract = 1 }
+		scope:templar_lender = { templar_change_reputation_effect = { VALUE = -1 } }
+	}
+	option = {
+		name = templar_order.0601.c
+		set_variable = templar_loan_in_default
+		save_scope_as = templar_defaulter
+		scope:templar_lender = { trigger_event = { id = templar_order.0602 days = 3 } }
+	}
+}
+
+templar_order.0602 = {
+	type = character_event
+	title = templar_order.0602.t
+	desc = templar_order.0602.desc
+	theme = realm
+	left_portrait = root
+	right_portrait = scope:templar_defaulter
+
+	trigger = {
+		has_variable = templar_temple_bank_active
+		exists = scope:templar_defaulter
+	}
+
+	option = {
+		name = templar_order.0602.a
+		scope:templar_defaulter = {
+			add_opinion = { target = root modifier = templar_grateful_client_opinion opinion = 20 }
+			templar_clear_loan_effect = yes
+		}
+		templar_change_reputation_effect = { VALUE = 10 }
+		add_piety = 100
+	}
+	option = {
+		name = templar_order.0602.b
+		scope:templar_defaulter = {
+			add_character_modifier = { modifier = templar_reprisal_modifier years = 10 }
+			add_opinion = { target = root modifier = templar_debtor_resentment_opinion }
+			templar_clear_loan_effect = yes
+		}
+		add_dread = 10
+		templar_change_reputation_effect = { VALUE = -5 }
+	}
+}
+
+templar_order.0700 = {
+	type = character_event
+	title = templar_order.0700.t
+	desc = templar_order.0700.desc
+	theme = realm
+	left_portrait = root
+
+	immediate = {
+		if = {
+			limit = { has_variable_list = owes_me_money }
+			random_in_list = { variable = owes_me_money save_scope_as = templar_debtor_1 }
+			if = {
+				limit = { variable_list_size = { name = owes_me_money value >= 2 } }
+				random_in_list = {
+					variable = owes_me_money
+					limit = { this != scope:templar_debtor_1 }
+					save_scope_as = templar_debtor_2
+				}
+			}
+			if = {
+				limit = { variable_list_size = { name = owes_me_money value >= 3 } }
+				random_in_list = {
+					variable = owes_me_money
+					limit = { this != scope:templar_debtor_1 this != scope:templar_debtor_2 }
+					save_scope_as = templar_debtor_3
+				}
+			}
+		}
+		if = {
+			limit = { has_variable_list = templar_depositors }
+			random_in_list = { variable = templar_depositors save_scope_as = templar_depositor_1 }
+			if = {
+				limit = { variable_list_size = { name = templar_depositors value >= 2 } }
+				random_in_list = {
+					variable = templar_depositors
+					limit = { this != scope:templar_depositor_1 }
+					save_scope_as = templar_depositor_2
+				}
+			}
+		}
+	}
+
+	option = { name = templar_order.0700.a trigger = { exists = scope:templar_debtor_1 } }
+	option = { name = templar_order.0700.b trigger = { exists = scope:templar_debtor_2 } }
+	option = { name = templar_order.0700.c trigger = { exists = scope:templar_debtor_3 } }
+	option = { name = templar_order.0700.d trigger = { exists = scope:templar_depositor_1 } }
+	option = { name = templar_order.0700.e trigger = { exists = scope:templar_depositor_2 } }
+	option = {
+		name = templar_order.0700.f
+		add_piety = 25
+	}
+}
+
+templar_order.2000 = {
+	type = character_event
+	title = templar_order.2000.t
+	desc = templar_order.2000.desc
+	theme = realm
+	left_portrait = root
+	right_portrait = scope:templar_revoking_patron
+
+	trigger = {
+		has_variable = templar_simulated_order
+		exists = scope:templar_revoked_commandery
+		exists = scope:templar_revoking_patron
+		scope:templar_revoked_commandery = { var:templar_commandery_order ?= root }
+	}
+
+	option = {
+		name = templar_order.2000.a
+		scope:templar_revoking_patron = {
+			add_opinion = { target = root modifier = grateful_opinion opinion = 20 }
+		}
+		add_piety = 200
+		templar_change_reputation_effect = { VALUE = -3 }
+		templar_remove_commandery_effect = { COMMANDERY = scope:templar_revoked_commandery }
+	}
+
+	option = {
+		name = templar_order.2000.b
+		trigger = { gold >= 200 prestige >= 300 }
+		remove_short_term_gold = 200
+		add_prestige = -300
+		scope:templar_revoked_commandery = {
+			change_variable = { name = templar_commandery_loyalty add = 35 }
+		}
+		scope:templar_revoking_patron = {
+			add_opinion = { target = root modifier = grateful_opinion opinion = 10 }
+		}
+		templar_change_reputation_effect = { VALUE = 2 }
+		templar_rebuild_commandery_bonuses_effect = yes
+	}
+
+	option = {
+		name = templar_order.2000.c
+		scope:templar_revoking_patron = {
+			add_opinion = { target = root modifier = angry_opinion opinion = -40 }
+		}
+		add_dread = 10
+		templar_change_reputation_effect = { VALUE = -10 }
+		random_list = {
+			60 = {
+				scope:templar_revoked_commandery = { set_variable = { name = templar_commandery_loyalty value = 25 } }
+				templar_rebuild_commandery_bonuses_effect = yes
+			}
+			40 = {
+				templar_remove_commandery_effect = { COMMANDERY = scope:templar_revoked_commandery }
+			}
+		}
+	}
+}
