@@ -1,4 +1,7 @@
 templar_grand_master = {
+	category = fame
+	icon = order_member.dds
+
 	martial = 3
 	prowess = 5
 	diplomacy = 1

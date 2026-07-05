@@ -1,29 +1,85 @@
-templar_chapter_main_01 = {
+templar_chapter_temple_01 = {
 	slot_type = main
+	internal_slots = 2
 	construction_time = 1
-	allowed_domicile_types = { templar_chapter_house }
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = camp_main_01
 
 	character_modifier = {
-		monthly_piety = 0.5
+		monthly_piety = 1
+		clergy_opinion = 5
 		knight_effectiveness_mult = 0.1
 		domicile_external_slots_capacity_add = 2
+		domicile_monthly_piety_add = 0.5
 	}
 
 	ai_value = { value = 10000 }
 
 	asset = {
-		icon = "gfx/interface/icons/domicile_building/domicile_building_villa.dds"
-		texture = "gfx/interface/window_domiciles/estate_building_villa_western.dds"
-		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_villa_western_mask.png"
-		soundeffect = "event:/DLC/EP3/SFX/UI/domicile_buildings/ep3_ui_domicile_buildings_estate_main_building"
+		icon = "gfx/interface/icons/domicile_building/domicile_building_shrine.dds"
+		texture = "gfx/interface/window_domiciles/estate_building_temple_christian.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_temple_christian_mask.png"
+		soundeffect = "event:/DLC/EP3/SFX/UI/domicile_buildings/ep3_ui_domicile_buildings_temple_small"
+	}
+}
+
+templar_chapter_temple_02 = {
+	slot_type = main
+	internal_slots = 3
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_temple_01
+
+	cost = { gold = 350 piety = 200 }
+
+	character_modifier = {
+		monthly_piety = 2
+		clergy_opinion = 10
+		knight_effectiveness_mult = 0.15
+		domicile_monthly_piety_add = 1
+	}
+
+	ai_value = { value = 5000 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_shrine.dds"
+		texture = "gfx/interface/window_domiciles/estate_building_temple_christian_orthodox.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_temple_christian_orthodox_mask.png"
+		soundeffect = "event:/DLC/EP3/SFX/UI/domicile_buildings/ep3_ui_domicile_buildings_temple_small"
+	}
+}
+
+templar_chapter_temple_03 = {
+	slot_type = main
+	internal_slots = 4
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_temple_02
+
+	cost = { gold = 600 piety = 400 }
+
+	character_modifier = {
+		monthly_piety = 3
+		clergy_opinion = 15
+		knight_effectiveness_mult = 0.2
+		domicile_monthly_piety_add = 1.5
+		domicile_external_slots_capacity_add = 1
+	}
+
+	ai_value = { value = 3000 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_shrine.dds"
+		texture = "gfx/interface/window_domiciles/estate_building_temple_generic_western.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_temple_generic_mask.png"
+		soundeffect = "event:/DLC/EP3/SFX/UI/domicile_buildings/ep3_ui_domicile_buildings_temple_small"
 	}
 }
 
 templar_chapter_barracks_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { templar_chapter_house }
-	previous_building = templar_chapter_main_01
+	allowed_domicile_types = { holy_orders camp }
 
 	cost = { gold = 250 }
 
@@ -41,17 +97,40 @@ templar_chapter_barracks_01 = {
 	}
 }
 
+templar_chapter_barracks_02 = {
+	slot_type = external
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_barracks_01
+
+	cost = { gold = 450 }
+
+	character_modifier = {
+		knight_limit = 2
+		prowess = 2
+		knight_effectiveness_mult = 0.1
+	}
+
+	ai_value = { value = 40 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_barracks.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
 templar_chapter_treasury_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { templar_chapter_house }
-	previous_building = templar_chapter_main_01
+	allowed_domicile_types = { holy_orders camp }
 
 	cost = { gold = 300 }
 
 	character_modifier = {
 		stewardship = 1
 		monthly_income_mult = 0.05
+		domicile_monthly_gold_add = 0.5
 	}
 
 	ai_value = { value = 40 }
@@ -60,5 +139,292 @@ templar_chapter_treasury_01 = {
 		icon = "gfx/interface/icons/domicile_building/domicile_building_treasury.dds"
 		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
 		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}
+
+templar_chapter_treasury_02 = {
+	slot_type = external
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_treasury_01
+
+	cost = { gold = 550 }
+
+	character_modifier = {
+		stewardship = 2
+		monthly_income_mult = 0.1
+		domicile_monthly_gold_add = 1
+	}
+
+	ai_value = { value = 35 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_treasury.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}
+
+templar_chapter_stables_01 = {
+	slot_type = external
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+
+	cost = { gold = 275 }
+
+	character_modifier = {
+		martial = 1
+		archer_cavalry_toughness_mult = 0.1
+	}
+
+	ai_value = { value = 45 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_stables.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
+templar_chapter_stables_02 = {
+	slot_type = external
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_stables_01
+
+	cost = { gold = 500 }
+
+	character_modifier = {
+		martial = 2
+		archer_cavalry_toughness_mult = 0.15
+		heavy_cavalry_toughness_mult = 0.1
+	}
+
+	ai_value = { value = 35 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_stables.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
+templar_chapter_chapel_01 = {
+	slot_type = external
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+
+	cost = { gold = 200 piety = 150 }
+
+	character_modifier = {
+		monthly_piety = 1
+		learning = 1
+	}
+
+	ai_value = { value = 45 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_shrine.dds"
+		texture = "gfx/interface/window_domiciles/estate_building_temple_christian.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_temple_christian_mask.png"
+	}
+}
+
+templar_chapter_chapel_02 = {
+	slot_type = external
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_chapel_01
+
+	cost = { gold = 400 piety = 300 }
+
+	character_modifier = {
+		monthly_piety = 2
+		learning = 2
+		domicile_monthly_piety_add = 0.5
+	}
+
+	ai_value = { value = 35 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_shrine.dds"
+		texture = "gfx/interface/window_domiciles/estate_building_temple_christian_orthodox.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_building_temple_christian_orthodox_mask.png"
+	}
+}
+
+templar_chapter_library_01 = {
+	slot_type = external
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+
+	cost = { gold = 225 }
+
+	character_modifier = {
+		learning = 2
+		monthly_lifestyle_xp_gain_mult = 0.05
+	}
+
+	ai_value = { value = 40 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_library.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}
+
+templar_chapter_library_02 = {
+	slot_type = external
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_library_01
+
+	cost = { gold = 425 }
+
+	character_modifier = {
+		learning = 3
+		monthly_lifestyle_xp_gain_mult = 0.1
+	}
+
+	ai_value = { value = 30 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_library.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}
+
+templar_chapter_hospice_01 = {
+	slot_type = external
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+
+	cost = { gold = 200 }
+
+	character_modifier = {
+		health = 0.25
+		general_opinion = 5
+	}
+
+	ai_value = { value = 40 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_hospital.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
+templar_chapter_hospice_02 = {
+	slot_type = external
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_hospice_01
+
+	cost = { gold = 400 }
+
+	character_modifier = {
+		health = 0.5
+		general_opinion = 10
+		domicile_monthly_prestige_add = 0.25
+	}
+
+	ai_value = { value = 30 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_hospital.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
+templar_chapter_armory_01 = {
+	slot_type = internal
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_temple_01
+
+	cost = { gold = 250 }
+
+	character_modifier = {
+		prowess = 1
+		men_at_arms_maintenance = -0.05
+	}
+
+	ai_value = { value = 45 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_barracks.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}
+
+templar_chapter_armory_02 = {
+	slot_type = internal
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_armory_01
+
+	cost = { gold = 450 }
+
+	character_modifier = {
+		prowess = 2
+		men_at_arms_maintenance = -0.1
+		knight_effectiveness_mult = 0.05
+	}
+
+	ai_value = { value = 35 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_barracks.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_06.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_06_mask.png"
+	}
+}
+
+templar_chapter_scriptorium_01 = {
+	slot_type = internal
+	construction_time = 365
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_temple_01
+
+	cost = { gold = 175 piety = 100 }
+
+	character_modifier = {
+		learning = 1
+		monthly_piety = 0.5
+	}
+
+	ai_value = { value = 40 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_library.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
+	}
+}
+
+templar_chapter_scriptorium_02 = {
+	slot_type = internal
+	construction_time = 730
+	allowed_domicile_types = { holy_orders camp }
+	previous_building = templar_chapter_scriptorium_01
+
+	cost = { gold = 350 piety = 200 }
+
+	character_modifier = {
+		learning = 2
+		monthly_piety = 1
+	}
+
+	ai_value = { value = 30 }
+
+	asset = {
+		icon = "gfx/interface/icons/domicile_building/domicile_building_library.dds"
+		texture = "gfx/interface/window_domiciles/estate_grassland_empty_05.dds"
+		intersectionmask_texture = "gfx/interface/window_domiciles/estate_grassland_empty_05_mask.png"
 	}
 }

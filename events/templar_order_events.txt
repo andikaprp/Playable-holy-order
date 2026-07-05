@@ -519,9 +519,50 @@ templar_order.2000 = {
 				scope:templar_revoked_commandery = { set_variable = { name = templar_commandery_loyalty value = 25 } }
 				templar_rebuild_commandery_bonuses_effect = yes
 			}
-			40 = {
-				templar_remove_commandery_effect = { COMMANDERY = scope:templar_revoked_commandery }
+		}
+	}
+}
+
+templar_order.0009 = {
+	type = character_event
+	hidden = yes
+
+	immediate = {
+		remove_character_flag = templar_finalize_scheduled
+		templar_finalize_grandmaster_effect = yes
+	}
+}
+
+templar_order.0010 = {
+	type = character_event
+	hidden = yes
+
+	immediate = {
+		remove_character_flag = templar_domicile_setup_scheduled
+		if = {
+			limit = { has_domicile = yes }
+			templar_setup_chapter_domicile_buildings_effect = yes
+		}
+		else = {
+			if = {
+				limit = { NOT = { exists = var:templar_domicile_setup_retries } }
+				set_variable = { name = templar_domicile_setup_retries value = 0 }
 			}
+			if = {
+				limit = { var:templar_domicile_setup_retries < 5 }
+				change_variable = { name = templar_domicile_setup_retries add = 1 }
+				templar_bootstrap_chapter_domicile_effect = yes
+				templar_enforce_holy_order_identity_effect = yes
+				add_character_flag = templar_domicile_setup_scheduled
+				trigger_event = { id = templar_order.0010 days = 1 }
+			}
+		}
+		if = {
+			limit = {
+				has_domicile = yes
+				NOT = { templar_grandmaster_setup_incomplete_trigger = yes }
+			}
+			remove_variable = templar_domicile_setup_retries
 		}
 	}
 }

@@ -1,4 +1,53 @@
-﻿templar_review_order_decision = {
+templar_reform_chapter_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_major_religion.dds" }
+	desc = templar_reform_chapter_decision_desc
+	selection_tooltip = templar_reform_chapter_decision_tooltip
+	ai_check_interval = 0
+	is_shown = {
+		templar_is_active_grandmaster_trigger = yes
+		templar_grandmaster_setup_incomplete_trigger = yes
+	}
+	is_valid = { always = yes }
+	effect = {
+		templar_ensure_playable_grandmaster_effect = yes
+		templar_finalize_grandmaster_effect = yes
+		templar_enforce_holy_order_identity_effect = yes
+	}
+	ai_potential = { always = no }
+}
+
+templar_refresh_grandmaster_decision = {
+	picture = { reference = "gfx/interface/illustrations/decisions/decision_major_religion.dds" }
+	desc = templar_refresh_grandmaster_decision_desc
+	selection_tooltip = templar_refresh_grandmaster_decision_tooltip
+	ai_check_interval = 0
+	cooldown = { years = 1 }
+	is_shown = {
+		templar_is_active_grandmaster_trigger = yes
+		OR = {
+			has_government = landless_adventurer_government
+			NOT = { has_character_flag = templar_ho_army_synced }
+			var:templar_reputation < 30
+		}
+	}
+	is_valid = { always = yes }
+	effect = {
+		if = {
+			limit = { var:templar_reputation < 30 }
+			set_variable = { name = templar_reputation value = 45 }
+			templar_update_order_effect = yes
+		}
+		templar_ensure_playable_grandmaster_effect = yes
+		templar_enforce_holy_order_identity_effect = yes
+		if = {
+			limit = { has_domicile = yes }
+			templar_destroy_chapter_domicile_anchor_effect = yes
+		}
+	}
+	ai_potential = { always = no }
+}
+
+templar_review_order_decision = {
 	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
 	desc = templar_review_order_decision_desc
 	selection_tooltip = templar_review_order_decision_tooltip
@@ -47,11 +96,14 @@ templar_recruit_knights_decision = {
 	selection_tooltip = templar_recruit_knights_decision_tooltip
 	cooldown = { years = 4 }
 	ai_check_interval = 0
-	is_shown = { has_variable = templar_simulated_order }
-	is_valid = { var:templar_reputation >= 40 var:templar_discipline >= 40 }
-	cost = { gold = 400 piety = 200 }
+	is_shown = {
+		templar_is_active_grandmaster_trigger = yes
+		has_variable = templar_simulated_order
+	}
+	is_valid = { var:templar_reputation >= 25 var:templar_discipline >= 25 }
+	cost = { gold = 200 piety = 100 }
 	effect = {
-		create_maa_regiment = { type = templar_knights_of_the_temple check_can_recruit = no size = 1 }
+		templar_grant_order_knights_effect = yes
 		templar_change_discipline_effect = { VALUE = 5 }
 		templar_change_reputation_effect = { VALUE = 4 }
 	}
@@ -143,9 +195,12 @@ templar_search_relics_decision = {
 	selection_tooltip = templar_search_relics_decision_tooltip
 	cooldown = { years = 5 }
 	ai_check_interval = 0
-	is_shown = { has_variable = templar_simulated_order }
-	is_valid = { is_at_war = no gold >= 150 }
-	cost = { gold = 150 }
+	is_shown = {
+		templar_is_active_grandmaster_trigger = yes
+		has_variable = templar_simulated_order
+	}
+	is_valid = { is_at_war = no gold >= 50 }
+	cost = { gold = 50 }
 	effect = { trigger_event = templar_order.0200 }
 	ai_potential = { always = no }
 }
@@ -168,8 +223,11 @@ templar_recruit_veteran_decision = {
 	selection_tooltip = templar_recruit_veteran_decision_tooltip
 	cooldown = { years = 3 }
 	ai_check_interval = 0
-	is_shown = { has_variable = templar_simulated_order }
-	is_valid = { var:templar_reputation >= 30 }
+	is_shown = {
+		templar_is_active_grandmaster_trigger = yes
+		has_variable = templar_simulated_order
+	}
+	is_valid = { var:templar_reputation >= 15 }
 	cost = { gold = 200 }
 	effect = { trigger_event = templar_order.0400 }
 	ai_potential = { always = no }
@@ -207,8 +265,7 @@ templar_operate_as_bank_decision = {
 		NOT = { has_variable = templar_temple_bank_active }
 	}
 	is_valid = {
-		var:templar_reputation >= 30
-		var:templar_rank >= 2
+		var:templar_reputation >= 20
 	}
 	cost = { gold = 300 piety = 200 }
 	effect = { templar_open_bank_effect = yes }
@@ -226,14 +283,16 @@ templar_review_bank_clients_decision = {
 	ai_potential = { always = no }
 }
 
-borrow_from_holy_order_decision = {
+templar_borrow_from_bank_decision = {
 	picture = { reference = "gfx/interface/illustrations/decisions/decision_realm.dds" }
-	desc = borrow_from_holy_order_decision_desc
-	selection_tooltip = borrow_from_holy_order_decision_tooltip
+	desc = templar_borrow_from_bank_decision_desc
+	selection_tooltip = templar_borrow_from_bank_decision_tooltip
 	ai_check_interval = 0
 	is_shown = {
 		is_independent_ruler = yes
 		is_landed = yes
+		NOT = { templar_is_active_grandmaster_trigger = yes }
+		NOT = { has_variable = templar_temple_bank_active }
 		NOT = { exists = var:templar_loan_amount_owed }
 		templar_active_bank_exists_trigger = yes
 	}

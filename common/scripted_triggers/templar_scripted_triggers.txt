@@ -1,52 +1,202 @@
-is_landless_holy_order = {
-	government_has_flag = government_is_holy_order
-	is_ruler = yes
+templar_is_active_grandmaster_trigger = {
 	OR = {
-		has_domicile = yes
-		any_held_title = { is_holy_order = yes }
+		primary_title = { is_holy_order = yes }
+		has_trait = templar_grand_master
 	}
 }
+
+is_landless_holy_order = {
+
+	government_has_flag = government_is_holy_order
+
+	is_ruler = yes
+
+	any_held_title = { is_holy_order = yes }
+
+	NOT = {
+
+		any_held_title = {
+			is_noble_family_title = no
+			NOT = { is_holy_order = yes }
+			NOT = { has_variable = templar_chapter_domicile_anchor }
+		}
+
+	}
+
+}
+
+
 
 is_playable_holy_order = {
+
 	government_has_flag = government_is_holy_order
+
 	is_ruler = yes
+
 	OR = {
-		is_landed = yes
+
 		is_landless_holy_order = yes
+
 		has_character_flag = templar_playable_grandmaster
+
 	}
+
 }
+
+
+
+templar_grandmaster_setup_incomplete_trigger = {
+
+	OR = {
+
+		NOT = { government_has_flag = government_is_holy_order }
+
+		any_held_title = {
+			is_noble_family_title = no
+			NOT = { is_holy_order = yes }
+			NOT = { has_variable = templar_chapter_domicile_anchor }
+		}
+
+		AND = {
+
+			has_dlc_feature = roads_to_power
+
+			NOT = { has_domicile = yes }
+
+		}
+
+	}
+
+}
+
+
 
 is_playable_character = {
+
 	OR = {
+
 		is_landed = yes
+
 		is_landless_administrative = yes
+
 		is_landless_adventurer = yes
+
 		is_landless_nomad = yes
+
 		is_landless_soryo = yes
+
 		is_landless_holy_order = yes
+
 		is_playable_holy_order = yes
+
 		tgp_is_any_minister = yes
+
 	}
+
 }
+
+
 
 templar_loan_needy_ruler_trigger = {
+
 	is_ruler = yes
+
 	NOT = { exists = var:templar_loan_amount_owed }
+
 	NOT = { has_variable = templar_loan_in_default }
+
 	OR = {
+
 		is_at_war = yes
+
 		gold < 50
+
 	}
+
 }
 
-templar_active_bank_exists_trigger = {
-	exists = global_var:templar_active_banks
-	any_in_global_list = {
-		variable = templar_active_banks
-		is_alive = yes
-		has_variable = templar_temple_bank_active
-		faith = root.faith
-		this != root
+
+
+templar_is_registered_commandery_trigger = {
+
+	OR = {
+
+		var:templar_commandery_order ?= $GRANDMASTER$
+
+		AND = {
+
+			is_under_holy_order_lease = yes
+
+			lessee = $GRANDMASTER$.primary_title
+
+		}
+
 	}
+
 }
+
+
+
+templar_barony_valid_for_charter_trigger = {
+
+	tier = tier_barony
+
+	NOT = { has_variable = templar_commandery_order }
+
+	title_province = {
+
+		OR = {
+
+			has_holding_type = castle_holding
+
+			has_holding_type = city_holding
+
+		}
+
+	}
+
+	county = { NOT = { has_variable = templar_county_commandery } }
+
+	NOT = { is_leased_out = yes }
+
+	barony_is_valid_for_holy_order_lease_trigger = { CHARACTER = $GRANDMASTER$ }
+
+}
+
+
+
+templar_recipient_has_charter_barony_trigger = {
+
+	any_sub_realm_barony = {
+
+		holder = scope:recipient
+
+		templar_barony_valid_for_charter_trigger = { GRANDMASTER = scope:actor }
+
+	}
+
+}
+
+
+
+templar_active_bank_exists_trigger = {
+
+	exists = global_var:templar_active_banks
+
+	any_in_global_list = {
+
+		variable = templar_active_banks
+
+		is_alive = yes
+
+		has_variable = templar_temple_bank_active
+
+		faith = root.faith
+
+		this != root
+
+	}
+
+}
+
+

@@ -20,7 +20,7 @@ templar_become_grandmaster_interaction = {
 			government_has_flag = government_is_holy_order
 			is_alive = yes
 			is_ruler = yes
-			faith = scope:actor.faith
+			primary_title = { is_holy_order = yes }
 		}
 		scope:recipient != scope:actor
 	}

@@ -1,8 +1,8 @@
-templar_chapter_house = {
+holy_orders = {
 	rename_window = primary_title
 
-	illustration = "gfx/interface/illustrations/decisions/decision_major_religion.dds"
-	icon = "gfx/interface/icons/flat_icons/flat_camp.dds"
+	illustration = "gfx/interface/window_domiciles/estate_building_temple_christian.dds"
+	icon = "gfx/interface/icons/domicile_building/domicile_building_shrine.dds"
 	map_pin_texture = "gfx/interface/icons/map_icons/map_icon_estate.dds"
 	map_pin_anchor = up
 

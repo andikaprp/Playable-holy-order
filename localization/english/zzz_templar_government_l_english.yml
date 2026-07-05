@@ -1,0 +1,4 @@
+l_english:
+ government_is_holy_order:0 "Is playable as Grand Master"
+ landless_playable_rule:0 "Is playable without [land|E]"
+ holy_order_government_desc:0 "\nThe holy warriors of the orders have dedicated their life to fighting infidels and serving their faith. They hold castles leased by pious landholders. As Grand Master you command the order directly, with a Chapter Temple [domicile|E] and full personal [men_at_arms|E]."

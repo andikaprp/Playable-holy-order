@@ -2,15 +2,50 @@ yearly_playable_pulse = {
 	on_actions = { templar_order_yearly_pulse templar_holy_order_playable_pulse }
 }
 
+quarterly_playable_pulse = {
+	on_actions = { templar_holy_order_playable_pulse }
+}
+
 templar_holy_order_playable_pulse = {
 	effect = {
 		if = {
 			limit = {
 				is_ai = no
-				government_has_flag = government_is_holy_order
 				is_ruler = yes
+				any_held_title = { is_holy_order = yes }
+				templar_grandmaster_setup_incomplete_trigger = yes
 			}
-			templar_ensure_playable_grandmaster_effect = yes
+			templar_schedule_grandmaster_finalize_effect = yes
+		}
+		else_if = {
+			limit = {
+				is_ai = no
+				is_ruler = yes
+				any_held_title = { is_holy_order = yes }
+				OR = {
+					has_government = landless_adventurer_government
+					NOT = { primary_title = { is_holy_order = yes } }
+				}
+			}
+			templar_enforce_holy_order_identity_effect = yes
+		}
+		else_if = {
+			limit = {
+				is_ai = no
+				is_ruler = yes
+				any_held_title = { is_holy_order = yes }
+				has_domicile = yes
+			}
+			templar_setup_chapter_domicile_buildings_effect = yes
+		}
+		else_if = {
+			limit = {
+				is_ai = no
+				is_ruler = yes
+				any_held_title = { is_holy_order = yes }
+				templar_is_active_grandmaster_trigger = yes
+			}
+			templar_sync_ho_army_effect = yes
 		}
 	}
 }
@@ -25,8 +60,10 @@ templar_holy_order_government_change = {
 			limit = {
 				government_has_flag = government_is_holy_order
 				is_ruler = yes
+				is_ai = no
 			}
-			templar_ensure_playable_grandmaster_effect = yes
+			templar_setup_chapter_domicile_effect = yes
+			templar_schedule_domicile_setup_effect = yes
 		}
 	}
 }
@@ -41,8 +78,17 @@ templar_holy_order_title_gain = {
 			limit = {
 				is_ai = no
 				scope:title = { is_holy_order = yes }
+				NOT = { has_character_flag = templar_becoming_grandmaster }
 			}
-			templar_ensure_playable_grandmaster_effect = yes
+			templar_schedule_grandmaster_finalize_effect = yes
+		}
+		if = {
+			limit = {
+				is_ai = no
+				scope:title = { has_variable = templar_chapter_domicile_anchor }
+			}
+			templar_enforce_holy_order_identity_effect = yes
+			templar_schedule_domicile_setup_effect = yes
 		}
 	}
 }
@@ -152,7 +198,7 @@ templar_grandmaster_on_death = {
 				add_trait = templar_grand_master
 				templar_update_order_effect = yes
 				templar_rebuild_commandery_bonuses_effect = yes
-				set_up_templar_chapter_domicile_effect = yes
+				templar_finalize_grandmaster_effect = yes
 			}
 			set_player_character = scope:templar_successor
 			if = {

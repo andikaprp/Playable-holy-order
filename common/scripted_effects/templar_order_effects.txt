@@ -1,86 +1,92 @@
 templar_initialize_order_effect = {
-	set_variable = { name = templar_discipline value = 55 }
-	set_variable = { name = templar_zeal value = 60 }
-	set_variable = { name = templar_reputation value = 20 }
+	set_variable = { name = templar_discipline value = 50 }
+	set_variable = { name = templar_zeal value = 55 }
+	set_variable = { name = templar_reputation value = 45 }
 	set_variable = { name = templar_commanderies value = 0 }
 	set_variable = { name = templar_commandery_limit value = 5 }
 	set_variable = { name = templar_rank value = 1 }
-	templar_update_order_effect = yes
+	hidden_effect = { templar_update_order_effect = yes }
 }
 
 templar_normalize_resources_effect = {
-	if = { limit = { var:templar_discipline > 100 } set_variable = { name = templar_discipline value = 100 } }
-	if = { limit = { var:templar_discipline < 0 } set_variable = { name = templar_discipline value = 0 } }
-	if = { limit = { var:templar_zeal > 100 } set_variable = { name = templar_zeal value = 100 } }
-	if = { limit = { var:templar_zeal < 0 } set_variable = { name = templar_zeal value = 0 } }
-	if = { limit = { var:templar_reputation > 100 } set_variable = { name = templar_reputation value = 100 } }
-	if = { limit = { var:templar_reputation < 0 } set_variable = { name = templar_reputation value = 0 } }
+	hidden_effect = {
+		if = { limit = { var:templar_discipline > 100 } set_variable = { name = templar_discipline value = 100 } }
+		if = { limit = { var:templar_discipline < 0 } set_variable = { name = templar_discipline value = 0 } }
+		if = { limit = { var:templar_zeal > 100 } set_variable = { name = templar_zeal value = 100 } }
+		if = { limit = { var:templar_zeal < 0 } set_variable = { name = templar_zeal value = 0 } }
+		if = { limit = { var:templar_reputation > 100 } set_variable = { name = templar_reputation value = 100 } }
+		if = { limit = { var:templar_reputation < 0 } set_variable = { name = templar_reputation value = 0 } }
+	}
 }
 
 templar_update_status_effect = {
-	remove_character_modifier = templar_high_discipline_modifier
-	remove_character_modifier = templar_low_discipline_modifier
-	remove_character_modifier = templar_high_zeal_modifier
-	remove_character_modifier = templar_low_zeal_modifier
-	remove_character_modifier = templar_high_reputation_modifier
-	remove_character_modifier = templar_low_reputation_modifier
+	hidden_effect = {
+		remove_character_modifier = templar_high_discipline_modifier
+		remove_character_modifier = templar_low_discipline_modifier
+		remove_character_modifier = templar_high_zeal_modifier
+		remove_character_modifier = templar_low_zeal_modifier
+		remove_character_modifier = templar_high_reputation_modifier
+		remove_character_modifier = templar_low_reputation_modifier
 
-	if = {
-		limit = { var:templar_discipline >= 70 }
-		add_character_modifier = { modifier = templar_high_discipline_modifier }
-	}
-	else_if = {
-		limit = { var:templar_discipline <= 30 }
-		add_character_modifier = { modifier = templar_low_discipline_modifier }
-	}
-	if = {
-		limit = { var:templar_zeal >= 70 }
-		add_character_modifier = { modifier = templar_high_zeal_modifier }
-	}
-	else_if = {
-		limit = { var:templar_zeal <= 30 }
-		add_character_modifier = { modifier = templar_low_zeal_modifier }
-	}
-	if = {
-		limit = { var:templar_reputation >= 70 }
-		add_character_modifier = { modifier = templar_high_reputation_modifier }
-	}
-	else_if = {
-		limit = { var:templar_reputation <= 30 }
-		add_character_modifier = { modifier = templar_low_reputation_modifier }
+		if = {
+			limit = { var:templar_discipline >= 70 }
+			add_character_modifier = { modifier = templar_high_discipline_modifier }
+		}
+		else_if = {
+			limit = { var:templar_discipline <= 30 }
+			add_character_modifier = { modifier = templar_low_discipline_modifier }
+		}
+		if = {
+			limit = { var:templar_zeal >= 70 }
+			add_character_modifier = { modifier = templar_high_zeal_modifier }
+		}
+		else_if = {
+			limit = { var:templar_zeal <= 30 }
+			add_character_modifier = { modifier = templar_low_zeal_modifier }
+		}
+		if = {
+			limit = { var:templar_reputation >= 70 }
+			add_character_modifier = { modifier = templar_high_reputation_modifier }
+		}
+		else_if = {
+			limit = { var:templar_reputation <= 30 }
+			add_character_modifier = { modifier = templar_low_reputation_modifier }
+		}
 	}
 }
 
 templar_update_rank_effect = {
-	remove_character_modifier = templar_rank_regional_modifier
-	remove_character_modifier = templar_rank_renowned_modifier
-	remove_character_modifier = templar_rank_guardian_modifier
-	remove_character_modifier = templar_rank_legendary_modifier
-	remove_character_modifier = templar_rank_shield_modifier
+	hidden_effect = {
+		remove_character_modifier = templar_rank_regional_modifier
+		remove_character_modifier = templar_rank_renowned_modifier
+		remove_character_modifier = templar_rank_guardian_modifier
+		remove_character_modifier = templar_rank_legendary_modifier
+		remove_character_modifier = templar_rank_shield_modifier
 
-	if = {
-		limit = { var:templar_reputation >= 90 }
-		set_variable = { name = templar_rank value = 5 }
-		add_character_modifier = { modifier = templar_rank_shield_modifier }
-	}
-	else_if = {
-		limit = { var:templar_reputation >= 70 }
-		set_variable = { name = templar_rank value = 4 }
-		add_character_modifier = { modifier = templar_rank_legendary_modifier }
-	}
-	else_if = {
-		limit = { var:templar_reputation >= 50 }
-		set_variable = { name = templar_rank value = 3 }
-		add_character_modifier = { modifier = templar_rank_guardian_modifier }
-	}
-	else_if = {
-		limit = { var:templar_reputation >= 30 }
-		set_variable = { name = templar_rank value = 2 }
-		add_character_modifier = { modifier = templar_rank_renowned_modifier }
-	}
-	else = {
-		set_variable = { name = templar_rank value = 1 }
-		add_character_modifier = { modifier = templar_rank_regional_modifier }
+		if = {
+			limit = { var:templar_reputation >= 90 }
+			set_variable = { name = templar_rank value = 5 }
+			add_character_modifier = { modifier = templar_rank_shield_modifier }
+		}
+		else_if = {
+			limit = { var:templar_reputation >= 70 }
+			set_variable = { name = templar_rank value = 4 }
+			add_character_modifier = { modifier = templar_rank_legendary_modifier }
+		}
+		else_if = {
+			limit = { var:templar_reputation >= 50 }
+			set_variable = { name = templar_rank value = 3 }
+			add_character_modifier = { modifier = templar_rank_guardian_modifier }
+		}
+		else_if = {
+			limit = { var:templar_reputation >= 30 }
+			set_variable = { name = templar_rank value = 2 }
+			add_character_modifier = { modifier = templar_rank_renowned_modifier }
+		}
+		else = {
+			set_variable = { name = templar_rank value = 1 }
+			add_character_modifier = { modifier = templar_rank_regional_modifier }
+		}
 	}
 }
 
@@ -93,118 +99,175 @@ templar_update_order_effect = {
 
 templar_change_discipline_effect = {
 	change_variable = { name = templar_discipline add = $VALUE$ }
-	templar_update_order_effect = yes
+	hidden_effect = { templar_update_order_effect = yes }
 }
 
 templar_change_zeal_effect = {
 	change_variable = { name = templar_zeal add = $VALUE$ }
-	templar_update_order_effect = yes
+	hidden_effect = { templar_update_order_effect = yes }
 }
 
 templar_change_reputation_effect = {
 	change_variable = { name = templar_reputation add = $VALUE$ }
-	templar_update_order_effect = yes
+	hidden_effect = { templar_update_order_effect = yes }
 }
 
 templar_update_commandery_limit_effect = {
-	set_variable = { name = templar_commandery_limit value = 4 }
-	change_variable = { name = templar_commandery_limit add = var:templar_rank }
-	if = {
-		limit = { piety_level >= 3 }
-		change_variable = { name = templar_commandery_limit add = 1 }
+	hidden_effect = {
+		set_variable = { name = templar_commandery_limit value = 4 }
+		change_variable = { name = templar_commandery_limit add = var:templar_rank }
+		if = {
+			limit = { piety_level >= 3 }
+			change_variable = { name = templar_commandery_limit add = 1 }
+		}
+		if = {
+			limit = { has_character_modifier = templar_endorsed_modifier }
+			change_variable = { name = templar_commandery_limit add = 1 }
+		}
+		if = {
+			limit = { var:templar_commandery_limit > 12 }
+			set_variable = { name = templar_commandery_limit value = 12 }
+		}
 	}
+}
+
+templar_register_commandery_barony_effect = {
 	if = {
-		limit = { has_character_modifier = templar_endorsed_modifier }
-		change_variable = { name = templar_commandery_limit add = 1 }
+		limit = { NOT = { has_variable = templar_commandery_order } }
+		set_variable = { name = templar_commandery_order value = scope:templar_new_grandmaster }
+		set_variable = { name = templar_commandery_patron value = scope:templar_commandery_patron }
+		set_variable = { name = templar_commandery_loyalty value = 60 }
+		set_variable = { name = templar_commandery_level value = 1 }
+		set_variable = { name = templar_commandery_investment value = 0 }
+		title_province.county = {
+			set_variable = { name = templar_county_commandery value = scope:templar_new_grandmaster }
+		}
+		templar_update_commandery_level_effect = yes
+		scope:templar_new_grandmaster = {
+			add_to_variable_list = { name = templar_commanderies_list target = scope:templar_cmd_barony }
+		}
 	}
-	if = {
-		limit = { var:templar_commandery_limit > 12 }
-		set_variable = { name = templar_commandery_limit value = 12 }
+}
+
+templar_sync_vanilla_commanderies_effect = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_ruler = yes
+				any_held_title = { is_holy_order = yes }
+			}
+			save_scope_as = templar_new_grandmaster
+			faith = {
+				every_faith_ruler = {
+					limit = {
+						any_sub_realm_barony = {
+							is_under_holy_order_lease = yes
+							lessee = scope:templar_new_grandmaster.primary_title
+						}
+					}
+					every_sub_realm_barony = {
+						limit = {
+							is_under_holy_order_lease = yes
+							lessee = scope:templar_new_grandmaster.primary_title
+						}
+						save_scope_as = templar_cmd_barony
+						holder = { save_scope_as = templar_commandery_patron }
+						templar_register_commandery_barony_effect = yes
+					}
+				}
+			}
+			templar_rebuild_commandery_bonuses_effect = yes
+			templar_sync_ho_army_effect = yes
+		}
 	}
 }
 
 templar_rebuild_commandery_bonuses_effect = {
-	remove_character_modifier = templar_commandery_small_modifier
-	remove_character_modifier = templar_commandery_medium_modifier
-	remove_character_modifier = templar_commandery_headquarters_modifier
-	remove_character_modifier = templar_commandery_loyal_modifier
-	remove_character_modifier = templar_commandery_disloyal_modifier
-	remove_character_modifier = templar_upgrade_barracks_modifier
-	remove_character_modifier = templar_upgrade_stables_modifier
-	remove_character_modifier = templar_upgrade_hospice_modifier
-	remove_character_modifier = templar_upgrade_chapel_modifier
-	remove_character_modifier = templar_upgrade_armory_modifier
-	remove_character_modifier = templar_upgrade_library_modifier
-	remove_character_modifier = templar_commandery_operating_rights_modifier
-	set_variable = { name = templar_commanderies value = 0 }
+	hidden_effect = {
+		remove_character_modifier = templar_commandery_small_modifier
+		remove_character_modifier = templar_commandery_medium_modifier
+		remove_character_modifier = templar_commandery_headquarters_modifier
+		remove_character_modifier = templar_commandery_loyal_modifier
+		remove_character_modifier = templar_commandery_disloyal_modifier
+		remove_character_modifier = templar_upgrade_barracks_modifier
+		remove_character_modifier = templar_upgrade_stables_modifier
+		remove_character_modifier = templar_upgrade_hospice_modifier
+		remove_character_modifier = templar_upgrade_chapel_modifier
+		remove_character_modifier = templar_upgrade_armory_modifier
+		remove_character_modifier = templar_upgrade_library_modifier
+		remove_character_modifier = templar_commandery_operating_rights_modifier
+		set_variable = { name = templar_commanderies value = 0 }
 
-	if = {
-		limit = { has_variable_list = templar_commanderies_list }
-		every_in_list = {
-			variable = templar_commanderies_list
-			limit = { var:templar_commandery_order ?= root }
-			root = {
-				change_variable = { name = templar_commanderies add = 1 }
-				add_character_modifier = { modifier = templar_commandery_operating_rights_modifier }
+		if = {
+			limit = { has_variable_list = templar_commanderies_list }
+			every_in_list = {
+				variable = templar_commanderies_list
+				limit = { var:templar_commandery_order ?= root }
+				root = {
+					change_variable = { name = templar_commanderies add = 1 }
+					add_character_modifier = { modifier = templar_commandery_operating_rights_modifier }
+				}
+				if = {
+					limit = { var:templar_commandery_level >= 3 }
+					root = { add_character_modifier = { modifier = templar_commandery_headquarters_modifier } }
+				}
+				else_if = {
+					limit = { var:templar_commandery_level >= 2 }
+					root = { add_character_modifier = { modifier = templar_commandery_medium_modifier } }
+				}
+				else = {
+					root = { add_character_modifier = { modifier = templar_commandery_small_modifier } }
+				}
+				if = {
+					limit = { var:templar_commandery_loyalty >= 70 }
+					root = { add_character_modifier = { modifier = templar_commandery_loyal_modifier } }
+				}
+				else_if = {
+					limit = { var:templar_commandery_loyalty <= 30 }
+					root = { add_character_modifier = { modifier = templar_commandery_disloyal_modifier } }
+				}
+				if = { limit = { has_variable = templar_upgrade_barracks } root = { add_character_modifier = { modifier = templar_upgrade_barracks_modifier } } }
+				if = { limit = { has_variable = templar_upgrade_stables } root = { add_character_modifier = { modifier = templar_upgrade_stables_modifier } } }
+				if = { limit = { has_variable = templar_upgrade_hospice } root = { add_character_modifier = { modifier = templar_upgrade_hospice_modifier } } }
+				if = { limit = { has_variable = templar_upgrade_chapel } root = { add_character_modifier = { modifier = templar_upgrade_chapel_modifier } } }
+				if = { limit = { has_variable = templar_upgrade_armory } root = { add_character_modifier = { modifier = templar_upgrade_armory_modifier } } }
+				if = { limit = { has_variable = templar_upgrade_library } root = { add_character_modifier = { modifier = templar_upgrade_library_modifier } } }
 			}
-			if = {
-				limit = { var:templar_commandery_level >= 3 }
-				root = { add_character_modifier = { modifier = templar_commandery_headquarters_modifier } }
-			}
-			else_if = {
-				limit = { var:templar_commandery_level >= 2 }
-				root = { add_character_modifier = { modifier = templar_commandery_medium_modifier } }
-			}
-			else = {
-				root = { add_character_modifier = { modifier = templar_commandery_small_modifier } }
-			}
-			if = {
-				limit = { var:templar_commandery_loyalty >= 70 }
-				root = { add_character_modifier = { modifier = templar_commandery_loyal_modifier } }
-			}
-			else_if = {
-				limit = { var:templar_commandery_loyalty <= 30 }
-				root = { add_character_modifier = { modifier = templar_commandery_disloyal_modifier } }
-			}
-			if = { limit = { has_variable = templar_upgrade_barracks } root = { add_character_modifier = { modifier = templar_upgrade_barracks_modifier } } }
-			if = { limit = { has_variable = templar_upgrade_stables } root = { add_character_modifier = { modifier = templar_upgrade_stables_modifier } } }
-			if = { limit = { has_variable = templar_upgrade_hospice } root = { add_character_modifier = { modifier = templar_upgrade_hospice_modifier } } }
-			if = { limit = { has_variable = templar_upgrade_chapel } root = { add_character_modifier = { modifier = templar_upgrade_chapel_modifier } } }
-			if = { limit = { has_variable = templar_upgrade_armory } root = { add_character_modifier = { modifier = templar_upgrade_armory_modifier } } }
-			if = { limit = { has_variable = templar_upgrade_library } root = { add_character_modifier = { modifier = templar_upgrade_library_modifier } } }
 		}
+		templar_update_commandery_limit_effect = yes
 	}
-	templar_update_commandery_limit_effect = yes
 }
 
 templar_update_commandery_level_effect = {
-	if = {
-		limit = { var:templar_commandery_investment >= 4 }
-		set_variable = { name = templar_commandery_level value = 3 }
-		title_province.county = {
-			remove_county_modifier = templar_commandery_small_county_modifier
-			remove_county_modifier = templar_commandery_medium_county_modifier
-			remove_county_modifier = templar_commandery_headquarters_county_modifier
-			add_county_modifier = { modifier = templar_commandery_headquarters_county_modifier }
+	hidden_effect = {
+		if = {
+			limit = { var:templar_commandery_investment >= 4 }
+			set_variable = { name = templar_commandery_level value = 3 }
+			title_province.county = {
+				remove_county_modifier = templar_commandery_small_county_modifier
+				remove_county_modifier = templar_commandery_medium_county_modifier
+				remove_county_modifier = templar_commandery_headquarters_county_modifier
+				add_county_modifier = { modifier = templar_commandery_headquarters_county_modifier }
+			}
 		}
-	}
-	else_if = {
-		limit = { var:templar_commandery_investment >= 2 }
-		set_variable = { name = templar_commandery_level value = 2 }
-		title_province.county = {
-			remove_county_modifier = templar_commandery_small_county_modifier
-			remove_county_modifier = templar_commandery_medium_county_modifier
-			remove_county_modifier = templar_commandery_headquarters_county_modifier
-			add_county_modifier = { modifier = templar_commandery_medium_county_modifier }
+		else_if = {
+			limit = { var:templar_commandery_investment >= 2 }
+			set_variable = { name = templar_commandery_level value = 2 }
+			title_province.county = {
+				remove_county_modifier = templar_commandery_small_county_modifier
+				remove_county_modifier = templar_commandery_medium_county_modifier
+				remove_county_modifier = templar_commandery_headquarters_county_modifier
+				add_county_modifier = { modifier = templar_commandery_medium_county_modifier }
+			}
 		}
-	}
-	else = {
-		set_variable = { name = templar_commandery_level value = 1 }
-		title_province.county = {
-			remove_county_modifier = templar_commandery_small_county_modifier
-			remove_county_modifier = templar_commandery_medium_county_modifier
-			remove_county_modifier = templar_commandery_headquarters_county_modifier
-			add_county_modifier = { modifier = templar_commandery_small_county_modifier }
+		else = {
+			set_variable = { name = templar_commandery_level value = 1 }
+			title_province.county = {
+				remove_county_modifier = templar_commandery_small_county_modifier
+				remove_county_modifier = templar_commandery_medium_county_modifier
+				remove_county_modifier = templar_commandery_headquarters_county_modifier
+				add_county_modifier = { modifier = templar_commandery_small_county_modifier }
+			}
 		}
 	}
 }
@@ -217,21 +280,26 @@ templar_open_bank_effect = {
 }
 
 templar_update_bank_tier_effect = {
-	if = {
-		limit = { has_variable = templar_temple_bank_active }
+	hidden_effect = {
 		if = {
-			limit = { var:templar_rank >= 5 has_trait = templar_deposit_banker }
-			remove_trait = templar_deposit_banker
-			add_trait = templar_insurer
-		}
-		else_if = {
-			limit = {
-				var:templar_rank >= 3
-				NOT = { has_trait = templar_deposit_banker }
-				NOT = { has_trait = templar_insurer }
+			limit = { has_variable = templar_temple_bank_active }
+			if = {
+				limit = {
+					var:templar_rank >= 5
+					has_trait = templar_deposit_banker
+				}
+				remove_trait = templar_deposit_banker
+				add_trait = templar_insurer
 			}
-			remove_trait = templar_banker
-			add_trait = templar_deposit_banker
+			else_if = {
+				limit = {
+					var:templar_rank >= 3
+					NOT = { has_trait = templar_deposit_banker }
+					NOT = { has_trait = templar_insurer }
+				}
+				remove_trait = templar_banker
+				add_trait = templar_deposit_banker
+			}
 		}
 	}
 }
@@ -258,8 +326,10 @@ templar_clear_loan_effect = {
 		limit = { exists = var:templar_bank_client_of }
 		var:templar_bank_client_of = {
 			remove_list_variable = { name = owes_me_money target = prev }
+			remove_list_variable = { name = templar_bank_clients target = prev }
 		}
 	}
+	remove_trait = templar_bank_client_trait
 	remove_variable = templar_loan_amount_owed
 	remove_variable = templar_loan_years_elapsed
 	remove_variable = templar_loan_in_default
@@ -297,13 +367,749 @@ templar_withdraw_deposit_effect = {
 	}
 }
 
-set_up_templar_chapter_domicile_effect = {
+templar_enforce_holy_order_identity_effect = {
 	if = {
-		limit = { government_has_flag = government_is_holy_order }
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+		}
+		hidden_effect = {
+			every_held_title = {
+				limit = { is_holy_order = yes }
+				save_scope_as = templar_ho_title
+			}
+			if = {
+				limit = { exists = scope:templar_ho_title }
+				set_primary_title_to = scope:templar_ho_title
+			}
+			templar_set_holy_order_government_effect = yes
+		}
+	}
+}
+
+templar_destroy_chapter_domicile_anchor_effect = {
+	if = {
+		limit = {
+			has_domicile = yes
+			any_held_title = { has_variable = templar_chapter_domicile_anchor }
+		}
+		hidden_effect = {
+			every_held_title = {
+				limit = { has_variable = templar_chapter_domicile_anchor }
+				save_scope_as = templar_chapter_anchor_title
+				prev = { destroy_title = scope:templar_chapter_anchor_title }
+			}
+			templar_enforce_holy_order_identity_effect = yes
+		}
+	}
+}
+
+templar_setup_chapter_domicile_buildings_effect = {
+	if = {
+		limit = { has_domicile = yes }
 		domicile = {
 			if = {
-				limit = { NOT = { has_domicile_building_or_higher = templar_chapter_main_01 } }
-				add_domicile_building = templar_chapter_main_01
+				limit = { root = { exists = location } }
+				move_domicile = root.location
+			}
+			if = {
+				limit = {
+					OR = {
+						is_domicile_type = camp
+						is_domicile_type = holy_orders
+					}
+					has_domicile_building = camp_main_01
+					NOT = { has_domicile_building_or_higher = templar_chapter_temple_01 }
+				}
+				add_domicile_building = templar_chapter_temple_01
+			}
+			else_if = {
+				limit = {
+					is_domicile_type = holy_orders
+					NOT = { has_domicile_building_or_higher = templar_chapter_temple_01 }
+				}
+				add_domicile_building = templar_chapter_temple_01
+			}
+		}
+		templar_destroy_chapter_domicile_anchor_effect = yes
+	}
+}
+
+templar_schedule_domicile_setup_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			NOT = { has_domicile = yes }
+			NOT = { has_character_flag = templar_domicile_setup_scheduled }
+		}
+		add_character_flag = templar_domicile_setup_scheduled
+		trigger_event = { id = templar_order.0010 days = 1 }
+	}
+	else_if = {
+		limit = {
+			is_ruler = yes
+			has_domicile = yes
+		}
+		templar_setup_chapter_domicile_buildings_effect = yes
+	}
+}
+
+templar_bootstrap_chapter_domicile_effect = {
+	if = {
+		limit = {
+			has_dlc_feature = roads_to_power
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			NOT = { has_domicile = yes }
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						any_held_title = { has_variable = templar_chapter_domicile_anchor }
+					}
+				}
+				create_adventurer_title = {
+					name = templar_chapter_domicile_name
+					holder = root
+					article = DEFAULT_TITLE_NAME_ARTICLE
+					save_scope_as = templar_chapter_domicile_title
+				}
+				scope:templar_chapter_domicile_title = {
+					set_variable = templar_chapter_domicile_anchor
+					set_coa = root.house
+				}
+			}
+			every_held_title = {
+				limit = { is_holy_order = yes }
+				save_scope_as = templar_ho_title
+			}
+			if = {
+				limit = { exists = scope:templar_ho_title }
+				set_primary_title_to = scope:templar_ho_title
+			}
+			templar_enforce_holy_order_identity_effect = yes
+		}
+	}
+}
+
+templar_force_domicile_spawn_effect = {
+	templar_bootstrap_chapter_domicile_effect = yes
+}
+
+templar_sync_ho_army_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			templar_is_active_grandmaster_trigger = yes
+		}
+		hidden_effect = {
+			set_variable = { name = templar_ho_lease_count value = 0 }
+			primary_title = { save_scope_as = templar_ho_title }
+			faith = {
+				every_faith_ruler = {
+					every_sub_realm_barony = {
+						limit = {
+							is_under_holy_order_lease = yes
+							lessee = scope:templar_ho_title
+						}
+						root = { change_variable = { name = templar_ho_lease_count add = 1 } }
+					}
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_variable = templar_ho_army_lease_snapshot }
+						var:templar_ho_army_lease_snapshot < var:templar_ho_lease_count
+						NOT = { has_character_flag = templar_ho_army_synced }
+					}
+				}
+				set_variable = { name = templar_ho_army_lease_snapshot value = var:templar_ho_lease_count }
+				add_character_flag = templar_ho_army_synced
+				templar_rebuild_ho_maa_regiments_effect = yes
+			}
+		}
+	}
+}
+
+templar_rebuild_ho_maa_regiments_effect = {
+	every_maa_regiment = {
+		limit = {
+			OR = {
+				is_maa_type = teutonic_knights
+				is_maa_type = crossbowmen
+				is_maa_type = armored_footmen
+				is_maa_type = mubarizun
+				is_maa_type = shomer
+				is_maa_type = war_elephant
+				is_maa_type = khandayat
+				is_maa_type = ayyar
+				is_maa_type = horse_archers
+				is_maa_type = jomsviking_pirates
+				is_maa_type = templar_knights_of_the_temple
+				is_maa_type = templar_sergeant_brothers
+			}
+		}
+		destroy_maa_regiment = yes
+	}
+	if = {
+		limit = { primary_title = title:d_knights_templar }
+		if = {
+			limit = { var:templar_ho_lease_count >= 8 }
+			create_maa_regiment = { type = templar_knights_of_the_temple check_can_recruit = no size = 8 }
+			create_maa_regiment = { type = templar_sergeant_brothers check_can_recruit = no size = 4 }
+		}
+		else_if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = templar_knights_of_the_temple check_can_recruit = no size = 6 }
+			create_maa_regiment = { type = templar_sergeant_brothers check_can_recruit = no size = 3 }
+		}
+		else = {
+			create_maa_regiment = { type = templar_knights_of_the_temple check_can_recruit = no size = 4 }
+			create_maa_regiment = { type = templar_sergeant_brothers check_can_recruit = no size = 2 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:christianity_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 8 }
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 8 }
+			create_maa_regiment = { type = crossbowmen check_can_recruit = no size = 4 }
+		}
+		else_if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 6 }
+			create_maa_regiment = { type = crossbowmen check_can_recruit = no size = 3 }
+		}
+		else = {
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 4 }
+			create_maa_regiment = { type = crossbowmen check_can_recruit = no size = 2 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:islam_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = mubarizun check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = mubarizun check_can_recruit = no size = 4 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:judaism_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = shomer check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = shomer check_can_recruit = no size = 4 }
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				faith.religion = religion:hinduism_religion
+				faith.religion = religion:buddhism_religion
+			}
+		}
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = war_elephant check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = war_elephant check_can_recruit = no size = 4 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:jainism_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = khandayat check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = khandayat check_can_recruit = no size = 4 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:zoroastrianism_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = ayyar check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = ayyar check_can_recruit = no size = 4 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:tengrism_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = horse_archers check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = horse_archers check_can_recruit = no size = 4 }
+		}
+	}
+	else_if = {
+		limit = { faith.religion = religion:germanic_religion }
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = jomsviking_pirates check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = jomsviking_pirates check_can_recruit = no size = 4 }
+		}
+	}
+	else = {
+		if = {
+			limit = { var:templar_ho_lease_count >= 5 }
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 6 }
+		}
+		else = {
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 4 }
+		}
+	}
+}
+
+templar_grant_order_knights_effect = {
+	if = {
+		limit = { primary_title = title:d_knights_templar }
+		create_maa_regiment = { type = templar_knights_of_the_temple check_can_recruit = no size = 2 }
+	}
+	else = {
+		create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 2 }
+	}
+}
+
+templar_transfer_bank_from_grandmaster_effect = {
+	if = {
+		limit = { $OLD_GRANDMASTER$ = { has_variable = templar_temple_bank_active } }
+		$NEW_GRANDMASTER$ = {
+			set_variable = templar_temple_bank_active
+			if = {
+				limit = { $OLD_GRANDMASTER$ = { has_trait = templar_insurer } }
+				add_trait = templar_insurer
+			}
+			else_if = {
+				limit = { $OLD_GRANDMASTER$ = { has_trait = templar_deposit_banker } }
+				add_trait = templar_deposit_banker
+			}
+			else = {
+				add_trait = templar_banker
+			}
+			add_character_modifier = { modifier = templar_bank_of_the_temple_modifier }
+			add_to_global_variable_list = { name = templar_active_banks target = $NEW_GRANDMASTER$ }
+		}
+		$OLD_GRANDMASTER$ = {
+			remove_list_global_variable = { name = templar_active_banks target = $OLD_GRANDMASTER$ }
+			remove_variable = templar_temple_bank_active
+			remove_trait = templar_banker
+			remove_trait = templar_deposit_banker
+			remove_trait = templar_insurer
+			remove_character_modifier = templar_bank_of_the_temple_modifier
+		}
+		if = {
+			limit = { $OLD_GRANDMASTER$ = { has_variable_list = templar_bank_clients } }
+			$OLD_GRANDMASTER$ = {
+				every_in_list = {
+					variable = templar_bank_clients
+					set_variable = { name = templar_bank_client_of value = $NEW_GRANDMASTER$ }
+					$NEW_GRANDMASTER$ = {
+						add_to_variable_list = { name = templar_bank_clients target = prev }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { $OLD_GRANDMASTER$ = { has_variable_list = owes_me_money } }
+			$OLD_GRANDMASTER$ = {
+				every_in_list = {
+					variable = owes_me_money
+					$NEW_GRANDMASTER$ = {
+						add_to_variable_list = { name = owes_me_money target = prev }
+					}
+				}
+			}
+		}
+		if = {
+			limit = { $OLD_GRANDMASTER$ = { has_variable_list = templar_depositors } }
+			$OLD_GRANDMASTER$ = {
+				every_in_list = {
+					variable = templar_depositors
+					set_variable = { name = templar_bank_client_of value = $NEW_GRANDMASTER$ }
+					$NEW_GRANDMASTER$ = {
+						add_to_variable_list = { name = templar_depositors target = prev }
+					}
+				}
+			}
+		}
+	}
+}
+
+templar_retire_old_grandmaster_effect = {
+	hidden_effect = {
+		remove_trait = templar_grand_master
+		remove_character_flag = templar_playable_grandmaster
+		remove_variable = templar_simulated_order
+		remove_variable = templar_discipline
+		remove_variable = templar_zeal
+		remove_variable = templar_reputation
+		remove_variable = templar_commanderies
+		remove_variable = templar_commandery_limit
+		remove_variable = templar_rank
+		remove_character_modifier = templar_rank_regional_modifier
+		remove_character_modifier = templar_rank_renowned_modifier
+		remove_character_modifier = templar_rank_guardian_modifier
+		remove_character_modifier = templar_rank_legendary_modifier
+		remove_character_modifier = templar_rank_shield_modifier
+		remove_character_modifier = founded_holy_order_modifier
+		remove_character_modifier = templar_endorsed_modifier
+		remove_character_modifier = templar_bank_of_the_temple_modifier
+		if = {
+			limit = { has_variable_list = templar_commanderies_list }
+			every_in_list = {
+				variable = templar_commanderies_list
+				remove_variable = templar_commandery_order
+			}
+			clear_variable_list = templar_commanderies_list
+		}
+	}
+}
+
+templar_install_old_grandmaster_as_knight_effect = {
+	if = {
+		limit = {
+			scope:templar_old_grandmaster = { is_alive = yes }
+		}
+		scope:templar_new_grandmaster = {
+			add_courtier = scope:templar_old_grandmaster
+		}
+		scope:templar_old_grandmaster = {
+			if = {
+				limit = { NOT = { has_trait = order_member } }
+				add_trait = order_member
+			}
+			set_knight_status = force
+		}
+	}
+}
+
+templar_schedule_grandmaster_finalize_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			templar_grandmaster_setup_incomplete_trigger = yes
+			NOT = { has_character_flag = templar_finalize_scheduled }
+		}
+		if = {
+			limit = { NOT = { has_variable = templar_finalize_retries } }
+			set_variable = { name = templar_finalize_retries value = 0 }
+		}
+		if = {
+			limit = { var:templar_finalize_retries < 10 }
+			change_variable = { name = templar_finalize_retries add = 1 }
+			add_character_flag = templar_finalize_scheduled
+			trigger_event = { id = templar_order.0009 days = 1 }
+		}
+	}
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			NOT = { templar_grandmaster_setup_incomplete_trigger = yes }
+		}
+		remove_variable = templar_finalize_retries
+	}
+}
+
+templar_setup_chapter_domicile_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			government_has_flag = government_is_holy_order
+		}
+		templar_setup_chapter_domicile_buildings_effect = yes
+		if = {
+			limit = { templar_grandmaster_setup_incomplete_trigger = yes }
+			templar_schedule_grandmaster_finalize_effect = yes
+		}
+	}
+}
+
+templar_finalize_grandmaster_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+		}
+		save_scope_as = templar_new_grandmaster
+		primary_title = { save_scope_as = templar_ho_title }
+		if = {
+			limit = { exists = player_heir }
+			player_heir = { save_scope_as = templar_realm_heir }
+		}
+		else_if = {
+			limit = { exists = primary_heir }
+			primary_heir = { save_scope_as = templar_realm_heir }
+		}
+		templar_enforce_landless_grandmaster_effect = yes
+		templar_force_domicile_spawn_effect = yes
+		templar_enforce_holy_order_identity_effect = yes
+		templar_schedule_domicile_setup_effect = yes
+		templar_sync_ho_army_effect = yes
+		templar_sync_vanilla_commanderies_effect = yes
+		if = {
+			limit = { templar_grandmaster_setup_incomplete_trigger = yes }
+			templar_schedule_grandmaster_finalize_effect = yes
+		}
+	}
+}
+
+templar_set_holy_order_government_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			OR = {
+				NOT = { government_has_flag = government_is_holy_order }
+				has_government = landless_adventurer_government
+			}
+		}
+		change_government = holy_order_government
+	}
+	if = {
+		limit = {
+			is_ruler = yes
+			government_has_flag = government_is_holy_order
+		}
+		if = {
+			limit = { has_realm_law = landless_adventurer_succession_law }
+			remove_realm_law = landless_adventurer_succession_law
+		}
+		if = {
+			limit = { NOT = { has_realm_law = holy_order_succession_law } }
+			add_realm_law_skip_effects = holy_order_succession_law
+		}
+	}
+}
+
+templar_play_as_grandmaster_effect = {
+	scope:recipient = { save_scope_as = templar_new_grandmaster }
+	scope:recipient.primary_title = { save_scope_as = templar_ho_title }
+	scope:recipient = {
+		templar_ensure_playable_grandmaster_effect = yes
+		templar_finalize_grandmaster_effect = yes
+	}
+	set_player_character = scope:recipient
+}
+
+templar_lease_barony_to_ho_effect = {
+	save_scope_as = templar_lease_barony
+	county = { save_scope_as = templar_lease_county }
+	if = {
+		limit = { scope:templar_lease_county.holder = scope:templar_new_grandmaster }
+		if = {
+			limit = { exists = scope:templar_realm_heir }
+			scope:templar_lease_county = {
+				change_title_holder = {
+					holder = scope:templar_realm_heir
+					change = scope:templar_land_change
+				}
+			}
+		}
+		else_if = {
+			limit = { scope:templar_old_grandmaster = { is_alive = yes is_ruler = yes } }
+			scope:templar_lease_county = {
+				change_title_holder = {
+					holder = scope:templar_old_grandmaster
+					change = scope:templar_land_change
+				}
+			}
+		}
+		else_if = {
+			limit = { scope:templar_lease_county.holder.liege ?= { is_alive = yes } }
+			scope:templar_lease_county = {
+				change_title_holder = {
+					holder = scope:templar_lease_county.holder.liege
+					change = scope:templar_land_change
+				}
+			}
+		}
+	}
+	county.holder = { save_scope_as = templar_lease_patron }
+	if = {
+		limit = { holder = scope:templar_new_grandmaster }
+		change_title_holder = {
+			holder = scope:templar_lease_patron
+			change = scope:templar_land_change
+		}
+	}
+	if = {
+		limit = {
+			is_leased_out = no
+			barony_is_valid_for_holy_order_lease_trigger = { CHARACTER = scope:templar_new_grandmaster }
+		}
+		lease_out_to = scope:templar_ho_title
+	}
+}
+
+templar_abdicate_all_secular_titles_effect = {
+	every_held_title = {
+		limit = {
+			is_noble_family_title = no
+			NOT = { is_holy_order = yes }
+			NOT = { has_variable = templar_chapter_domicile_anchor }
+			tier > tier_barony
+		}
+		if = {
+			limit = { exists = scope:templar_realm_heir }
+			change_title_holder_include_vassals = {
+				holder = scope:templar_realm_heir
+				change = scope:templar_land_change
+			}
+		}
+		else_if = {
+			limit = { exists = current_heir }
+			change_title_holder_include_vassals = {
+				holder = current_heir
+				change = scope:templar_land_change
+			}
+		}
+		else_if = {
+			limit = { scope:templar_new_grandmaster = { exists = liege } }
+			change_title_holder_include_vassals = {
+				holder = scope:templar_new_grandmaster.liege
+				change = scope:templar_land_change
+			}
+		}
+	}
+	every_held_title = {
+		limit = {
+			is_noble_family_title = no
+			NOT = { is_holy_order = yes }
+			NOT = { has_variable = templar_chapter_domicile_anchor }
+			tier = tier_barony
+		}
+		if = {
+			limit = { exists = scope:templar_realm_heir }
+			change_title_holder = {
+				holder = scope:templar_realm_heir
+				change = scope:templar_land_change
+			}
+		}
+		else_if = {
+			limit = { exists = current_heir }
+			change_title_holder = {
+				holder = current_heir
+				change = scope:templar_land_change
+			}
+		}
+		else_if = {
+			limit = { scope:templar_new_grandmaster = { exists = liege } }
+			change_title_holder = {
+				holder = scope:templar_new_grandmaster.liege
+				change = scope:templar_land_change
+			}
+		}
+	}
+}
+
+templar_strip_secular_titles_effect = {
+	templar_abdicate_all_secular_titles_effect = yes
+	every_held_title = {
+		limit = {
+			is_noble_family_title = no
+			NOT = { is_holy_order = yes }
+			NOT = { has_variable = templar_chapter_domicile_anchor }
+			tier = tier_barony
+			holder = scope:templar_new_grandmaster
+		}
+		templar_lease_barony_to_ho_effect = yes
+	}
+}
+
+templar_seize_old_grandmaster_baronies_effect = {
+	scope:templar_old_grandmaster = {
+		every_held_title = {
+			limit = {
+				is_noble_family_title = no
+				NOT = { is_holy_order = yes }
+				tier = tier_barony
+				holder = scope:templar_old_grandmaster
+			}
+			save_scope_as = templar_lease_barony
+			county.holder = { save_scope_as = templar_lease_patron }
+			if = {
+				limit = { holder = scope:templar_old_grandmaster }
+				change_title_holder = {
+					holder = scope:templar_lease_patron
+					change = scope:templar_land_change
+				}
+			}
+			if = {
+				limit = {
+					is_leased_out = no
+					barony_is_valid_for_holy_order_lease_trigger = { CHARACTER = scope:templar_new_grandmaster }
+				}
+				lease_out_to = scope:templar_ho_title
+			}
+		}
+	}
+}
+
+templar_enforce_landless_grandmaster_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+		}
+		save_scope_as = templar_new_grandmaster
+		primary_title = { save_scope_as = templar_ho_title }
+		if = {
+			limit = { exists = player_heir }
+			player_heir = { save_scope_as = templar_realm_heir }
+		}
+		else_if = {
+			limit = { exists = primary_heir }
+			primary_heir = { save_scope_as = templar_realm_heir }
+		}
+		if = {
+			limit = {
+				any_held_title = {
+					is_noble_family_title = no
+					NOT = { is_holy_order = yes }
+					NOT = { has_variable = templar_chapter_domicile_anchor }
+				}
+			}
+			create_title_and_vassal_change = {
+				type = stepped_down
+				save_scope_as = templar_land_change
+				add_claim_on_loss = no
+			}
+			templar_strip_secular_titles_effect = yes
+			resolve_title_and_vassal_change = scope:templar_land_change
+		}
+	}
+}
+
+templar_transfer_holy_order_leases_effect = {
+	scope:templar_ho_title.faith = {
+		every_faith_ruler = {
+			every_sub_realm_barony = {
+				limit = {
+					is_under_holy_order_lease = yes
+					OR = {
+						lessee = scope:templar_old_grandmaster
+						lessee = scope:templar_ho_title
+					}
+				}
+				lease_out_to = scope:templar_ho_title
 			}
 		}
 	}
@@ -312,12 +1118,16 @@ set_up_templar_chapter_domicile_effect = {
 templar_ensure_playable_grandmaster_effect = {
 	add_character_flag = templar_playable_grandmaster
 	if = {
-		limit = { NOT = { has_government = holy_order_government } }
-		change_government = holy_order_government
+		limit = { NOT = { has_realm_law = holy_order_succession_law } }
+		add_realm_law_skip_effects = holy_order_succession_law
 	}
-	add_realm_law_skip_effects = holy_order_succession_law
 	if = {
-		limit = { NOT = { has_variable = templar_simulated_order } }
+		limit = {
+			OR = {
+				NOT = { has_variable = templar_simulated_order }
+				NOT = { has_variable = templar_reputation }
+			}
+		}
 		set_variable = templar_simulated_order
 		templar_initialize_order_effect = yes
 	}
@@ -334,22 +1144,41 @@ templar_ensure_playable_grandmaster_effect = {
 		add_character_modifier = { modifier = founded_holy_order_modifier }
 	}
 	if = {
-		limit = { NOT = { has_character_modifier = templar_commandery_domain_administration_modifier } }
-		add_character_modifier = { modifier = templar_commandery_domain_administration_modifier }
+		limit = { NOT = { has_variable = templar_temple_bank_active } }
+		templar_open_bank_effect = yes
 	}
-	set_up_templar_chapter_domicile_effect = yes
+	templar_enforce_holy_order_identity_effect = yes
+	remove_character_flag = templar_ho_army_synced
+	remove_variable = templar_ho_army_lease_snapshot
+	templar_sync_ho_army_effect = yes
+	templar_sync_vanilla_commanderies_effect = yes
 }
 
 templar_become_grandmaster_effect = {
 	scope:recipient = { save_scope_as = templar_old_grandmaster }
 	scope:recipient.primary_title = { save_scope_as = templar_ho_title }
 	scope:actor = {
+		add_character_flag = templar_becoming_grandmaster
 		if = {
+			limit = { exists = player_heir }
+			player_heir = { save_scope_as = templar_realm_heir }
+		}
+		else_if = {
 			limit = { exists = primary_heir }
 			primary_heir = { save_scope_as = templar_realm_heir }
 		}
 		save_scope_as = templar_new_grandmaster
 	}
+
+	create_title_and_vassal_change = {
+		type = stepped_down
+		save_scope_as = templar_land_change
+		add_claim_on_loss = no
+	}
+	scope:templar_new_grandmaster = {
+		templar_abdicate_all_secular_titles_effect = yes
+	}
+	resolve_title_and_vassal_change = scope:templar_land_change
 
 	create_title_and_vassal_change = {
 		type = granted
@@ -364,55 +1193,30 @@ templar_become_grandmaster_effect = {
 	}
 	resolve_title_and_vassal_change = scope:templar_ho_change
 
+	create_title_and_vassal_change = {
+		type = stepped_down
+		save_scope_as = templar_land_change
+		add_claim_on_loss = no
+	}
+	templar_seize_old_grandmaster_baronies_effect = yes
 	scope:templar_new_grandmaster = {
-		templar_ensure_playable_grandmaster_effect = yes
+		every_held_title = {
+			limit = {
+				is_noble_family_title = no
+				NOT = { is_holy_order = yes }
+				tier = tier_barony
+				holder = scope:templar_new_grandmaster
+			}
+			templar_lease_barony_to_ho_effect = yes
+		}
+	}
+	templar_transfer_holy_order_leases_effect = yes
+	resolve_title_and_vassal_change = scope:templar_land_change
 
-		create_title_and_vassal_change = {
-			type = abdicated
-			save_scope_as = templar_strip_change
-			add_claim_on_loss = no
-		}
-		every_held_title = {
-			limit = {
-				this != scope:templar_ho_title
-				is_noble_family_title = no
-				tier = scope:templar_new_grandmaster.highest_held_title_tier
-			}
-			if = {
-				limit = { exists = scope:templar_realm_heir }
-				change_title_holder_include_vassals = {
-					holder = scope:templar_realm_heir
-					change = scope:templar_strip_change
-				}
-			}
-			else = {
-				change_title_holder_include_vassals = {
-					holder = scope:templar_old_grandmaster
-					change = scope:templar_strip_change
-				}
-			}
-		}
-		every_held_title = {
-			limit = {
-				this != scope:templar_ho_title
-				is_noble_family_title = no
-				tier < scope:templar_new_grandmaster.highest_held_title_tier
-			}
-			if = {
-				limit = { exists = scope:templar_realm_heir }
-				change_title_holder = {
-					holder = scope:templar_realm_heir
-					change = scope:templar_strip_change
-				}
-			}
-			else = {
-				change_title_holder = {
-					holder = scope:templar_old_grandmaster
-					change = scope:templar_strip_change
-				}
-			}
-		}
-		resolve_title_and_vassal_change = scope:templar_strip_change
+	scope:templar_new_grandmaster = {
+		templar_finalize_grandmaster_effect = yes
+		templar_ensure_playable_grandmaster_effect = yes
+		remove_character_flag = templar_becoming_grandmaster
 
 		if = {
 			limit = { scope:templar_old_grandmaster = { has_variable = templar_simulated_order } }
@@ -437,18 +1241,18 @@ templar_become_grandmaster_effect = {
 			templar_rebuild_commandery_bonuses_effect = yes
 		}
 
+		templar_transfer_bank_from_grandmaster_effect = {
+			OLD_GRANDMASTER = scope:templar_old_grandmaster
+			NEW_GRANDMASTER = scope:templar_new_grandmaster
+		}
+
 		add_piety = 250
 		add_prestige = 150
 	}
 
 	scope:templar_old_grandmaster = {
-		if = {
-			limit = {
-				is_alive = yes
-				is_ruler = no
-			}
-			scope:templar_new_grandmaster = { add_courtier = scope:templar_old_grandmaster }
-		}
+		templar_retire_old_grandmaster_effect = yes
+		templar_install_old_grandmaster_as_knight_effect = yes
 	}
 }
 
