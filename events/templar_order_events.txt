@@ -543,6 +543,11 @@ templar_order.0010 = {
 			limit = { has_domicile = yes }
 			templar_setup_chapter_domicile_buildings_effect = yes
 		}
+		else_if = {
+			limit = { has_government = templar_chapter_domicile_seed_government }
+			templar_finalize_domicile_seed_government_effect = yes
+			templar_setup_chapter_domicile_buildings_effect = yes
+		}
 		else = {
 			if = {
 				limit = { NOT = { exists = var:templar_domicile_setup_retries } }
@@ -551,8 +556,8 @@ templar_order.0010 = {
 			if = {
 				limit = { var:templar_domicile_setup_retries < 5 }
 				change_variable = { name = templar_domicile_setup_retries add = 1 }
+				templar_refresh_government_for_domicile_effect = yes
 				templar_initialize_chapter_domicile_effect = yes
-				templar_enforce_holy_order_identity_effect = yes
 				add_character_flag = templar_domicile_setup_scheduled
 				trigger_event = { id = templar_order.0010 days = 1 }
 			}
@@ -563,6 +568,92 @@ templar_order.0010 = {
 				NOT = { templar_grandmaster_setup_incomplete_trigger = yes }
 			}
 			remove_variable = templar_domicile_setup_retries
+			templar_automated_grandmaster_maintenance_effect = yes
 		}
+	}
+}
+
+templar_order.0013 = {
+	type = character_event
+	hidden = yes
+
+	immediate = {
+		remove_character_flag = templar_maa_setup_scheduled
+		if = {
+			limit = {
+				is_ruler = yes
+				any_held_title = { is_holy_order = yes }
+				templar_is_active_grandmaster_trigger = yes
+				number_of_maa_regiments < 1
+			}
+			templar_automated_grandmaster_maintenance_effect = yes
+		}
+	}
+}
+
+templar_order.0011 = {
+	type = character_event
+	hidden = yes
+
+	immediate = {
+		remove_character_flag = templar_senior_knight_setup_scheduled
+		templar_automated_grandmaster_maintenance_effect = yes
+	}
+}
+
+templar_order.0012 = {
+	type = character_event
+	title = templar_order.0012.t
+	desc = templar_order.0012.desc
+	theme = faith
+	override_background = { reference = ep3_military_tent }
+
+	immediate = {
+		every_court_position_holder = {
+			type = templar_senior_knight_court_position
+			limit = { NOT = { exists = scope:templar_sk_pick_1 } }
+			save_scope_as = templar_sk_pick_1
+		}
+		every_court_position_holder = {
+			type = templar_senior_knight_court_position
+			limit = {
+				NOT = { exists = scope:templar_sk_pick_2 }
+				NOT = { this = scope:templar_sk_pick_1 }
+			}
+			save_scope_as = templar_sk_pick_2
+		}
+		every_court_position_holder = {
+			type = templar_senior_knight_court_position
+			limit = {
+				NOT = { exists = scope:templar_sk_pick_3 }
+				NOR = {
+					this = scope:templar_sk_pick_1
+					this = scope:templar_sk_pick_2
+				}
+			}
+			save_scope_as = templar_sk_pick_3
+		}
+	}
+
+	option = {
+		name = templar_order.0012.a
+		trigger = { exists = scope:templar_sk_pick_1 }
+		scope:templar_sk_pick_1 = { save_scope_as = templar_nominee }
+		templar_set_chapter_nominee_effect = yes
+	}
+	option = {
+		name = templar_order.0012.b
+		trigger = { exists = scope:templar_sk_pick_2 }
+		scope:templar_sk_pick_2 = { save_scope_as = templar_nominee }
+		templar_set_chapter_nominee_effect = yes
+	}
+	option = {
+		name = templar_order.0012.c
+		trigger = { exists = scope:templar_sk_pick_3 }
+		scope:templar_sk_pick_3 = { save_scope_as = templar_nominee }
+		templar_set_chapter_nominee_effect = yes
+	}
+	option = {
+		name = templar_order.0012.d
 	}
 }

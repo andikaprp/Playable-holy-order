@@ -1,0 +1,36 @@
+templar_chapter_appointment = {
+	default_candidates = { holder_court_position }
+
+	allow_children = no
+	allow_same_tier_candidates = yes
+
+	candidate_score = {
+		value = 0
+		if = {
+			limit = {
+				NOT = { has_court_position = templar_senior_knight_court_position }
+			}
+			add = -10000
+		}
+		if = {
+			limit = {
+				has_court_position = templar_senior_knight_court_position
+			}
+			add = 100
+		}
+		add = {
+			value = martial
+			multiply = 2
+		}
+		add = prowess
+		if = {
+			limit = {
+				scope:title.holder ?= {
+					exists = var:templar_chapter_nominee
+					var:templar_chapter_nominee = root
+				}
+			}
+			add = 10000
+		}
+	}
+}

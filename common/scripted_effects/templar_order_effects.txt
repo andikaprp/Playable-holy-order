@@ -168,7 +168,10 @@ templar_sync_vanilla_commanderies_effect = {
 					every_sub_realm_barony = {
 						limit = {
 							is_under_holy_order_lease = yes
-							lessee = scope:templar_new_grandmaster.primary_title
+							OR = {
+								lessee = scope:templar_new_grandmaster.primary_title
+								lessee = scope:templar_new_grandmaster
+							}
 						}
 						save_scope_as = templar_cmd_barony
 						holder = { save_scope_as = templar_commandery_patron }
@@ -444,12 +447,68 @@ templar_schedule_domicile_setup_effect = {
 	}
 }
 
+templar_refresh_government_for_domicile_effect = {
+	if = {
+		limit = {
+			has_dlc_feature = roads_to_power
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			NOT = { has_domicile = yes }
+			NOT = { has_government = templar_chapter_domicile_seed_government }
+			government_has_flag = government_is_holy_order
+		}
+		hidden_effect = {
+			every_held_title = {
+				limit = { is_holy_order = yes }
+				save_scope_as = templar_ho_title
+			}
+			change_government = templar_chapter_domicile_seed_government
+			if = {
+				limit = { exists = scope:templar_ho_title }
+				set_primary_title_to = scope:templar_ho_title
+			}
+		}
+	}
+}
+
+templar_finalize_domicile_seed_government_effect = {
+	if = {
+		limit = {
+			has_dlc_feature = roads_to_power
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			has_government = templar_chapter_domicile_seed_government
+		}
+		hidden_effect = {
+			every_held_title = {
+				limit = { is_holy_order = yes }
+				save_scope_as = templar_ho_title
+			}
+			change_government = holy_order_government
+			if = {
+				limit = { exists = scope:templar_ho_title }
+				set_primary_title_to = scope:templar_ho_title
+			}
+		}
+	}
+}
+
 templar_initialize_chapter_domicile_effect = {
 	if = {
 		limit = {
 			has_dlc_feature = roads_to_power
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
+		}
+		if = {
+			limit = { NOT = { has_domicile = yes } }
+			if = {
+				limit = { has_government = templar_chapter_domicile_seed_government }
+				templar_finalize_domicile_seed_government_effect = yes
+			}
+			else = {
+				templar_refresh_government_for_domicile_effect = yes
+			}
 		}
 		templar_enforce_holy_order_identity_effect = yes
 		if = {
@@ -462,6 +521,54 @@ templar_initialize_chapter_domicile_effect = {
 	}
 }
 
+templar_count_ho_leases_effect = {
+	set_variable = { name = templar_ho_lease_count value = 0 }
+	primary_title = { save_scope_as = templar_ho_title }
+	faith = {
+		every_faith_ruler = {
+			every_sub_realm_barony = {
+				limit = {
+					is_under_holy_order_lease = yes
+					OR = {
+						lessee = scope:templar_ho_title
+						lessee = root
+					}
+				}
+				root = { change_variable = { name = templar_ho_lease_count add = 1 } }
+			}
+		}
+	}
+}
+
+templar_reset_ho_maa_sync_effect = {
+	remove_character_flag = templar_ho_army_synced
+	remove_variable = templar_ho_army_lease_snapshot
+}
+
+templar_automated_grandmaster_maintenance_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			any_held_title = { is_holy_order = yes }
+			templar_is_active_grandmaster_trigger = yes
+		}
+		templar_set_holy_order_elective_succession_effect = yes
+		templar_enforce_holy_order_identity_effect = yes
+		templar_initialize_chapter_voices_effect = yes
+		templar_initialize_chapter_domicile_effect = yes
+		templar_schedule_domicile_setup_effect = yes
+		templar_sync_vanilla_commanderies_effect = yes
+		templar_auto_appoint_senior_knights_effect = yes
+		templar_repair_senior_knight_election_effect = yes
+		templar_auto_nominate_chapter_successor_effect = yes
+		templar_schedule_senior_knight_setup_effect = yes
+		if = {
+			limit = { templar_grandmaster_setup_incomplete_trigger = yes }
+			templar_schedule_grandmaster_finalize_effect = yes
+		}
+	}
+}
+
 templar_sync_ho_army_effect = {
 	if = {
 		limit = {
@@ -470,30 +577,28 @@ templar_sync_ho_army_effect = {
 			templar_is_active_grandmaster_trigger = yes
 		}
 		hidden_effect = {
-			set_variable = { name = templar_ho_lease_count value = 0 }
-			primary_title = { save_scope_as = templar_ho_title }
-			faith = {
-				every_faith_ruler = {
-					every_sub_realm_barony = {
-						limit = {
-							is_under_holy_order_lease = yes
-							lessee = scope:templar_ho_title
-						}
-						root = { change_variable = { name = templar_ho_lease_count add = 1 } }
-					}
-				}
-			}
+			templar_count_ho_leases_effect = yes
 			if = {
 				limit = {
 					OR = {
+						is_ai = no
+						NOT = { has_character_flag = templar_ho_army_synced }
 						NOT = { has_variable = templar_ho_army_lease_snapshot }
 						var:templar_ho_army_lease_snapshot < var:templar_ho_lease_count
-						NOT = { has_character_flag = templar_ho_army_synced }
+						var:templar_ho_army_lease_snapshot > var:templar_ho_lease_count
 					}
 				}
+				templar_rebuild_ho_maa_regiments_effect = yes
 				set_variable = { name = templar_ho_army_lease_snapshot value = var:templar_ho_lease_count }
 				add_character_flag = templar_ho_army_synced
-				templar_rebuild_ho_maa_regiments_effect = yes
+				if = {
+					limit = {
+						is_ai = no
+						NOT = { has_character_flag = templar_maa_setup_scheduled }
+					}
+					add_character_flag = templar_maa_setup_scheduled
+					trigger_event = { id = templar_order.0013 days = 1 }
+				}
 			}
 		}
 	}
@@ -539,18 +644,19 @@ templar_rebuild_ho_maa_regiments_effect = {
 	else_if = {
 		limit = { faith.religion = religion:christianity_religion }
 		if = {
-			limit = { var:templar_ho_lease_count >= 8 }
+			limit = { var:templar_ho_lease_count >= 6 }
 			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 8 }
-			create_maa_regiment = { type = crossbowmen check_can_recruit = no size = 4 }
 		}
 		else_if = {
-			limit = { var:templar_ho_lease_count >= 5 }
-			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 6 }
-			create_maa_regiment = { type = crossbowmen check_can_recruit = no size = 3 }
+			limit = { var:templar_ho_lease_count >= 3 }
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 5 }
+		}
+		else_if = {
+			limit = { var:templar_ho_lease_count >= 1 }
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 3 }
 		}
 		else = {
-			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 4 }
-			create_maa_regiment = { type = crossbowmen check_can_recruit = no size = 2 }
+			create_maa_regiment = { type = teutonic_knights check_can_recruit = no size = 2 }
 		}
 	}
 	else_if = {
@@ -812,6 +918,10 @@ templar_finalize_grandmaster_effect = {
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
 		}
+		if = {
+			limit = { is_ai = no }
+			templar_ensure_playable_grandmaster_effect = yes
+		}
 		save_scope_as = templar_new_grandmaster
 		primary_title = { save_scope_as = templar_ho_title }
 		if = {
@@ -823,19 +933,7 @@ templar_finalize_grandmaster_effect = {
 			primary_heir = { save_scope_as = templar_realm_heir }
 		}
 		templar_enforce_landless_grandmaster_effect = yes
-		# Changing to the Holy Order government creates its custom holy_orders domicile.
-		# Do this before domicile setup and never create an adventurer title as a bootstrap.
-		templar_enforce_holy_order_identity_effect = yes
-		templar_set_holy_order_elective_succession_effect = yes
-		templar_initialize_chapter_domicile_effect = yes
-		templar_schedule_domicile_setup_effect = yes
-		templar_sync_ho_army_effect = yes
-		templar_sync_vanilla_commanderies_effect = yes
-		templar_auto_appoint_senior_knights_effect = yes
-		if = {
-			limit = { templar_grandmaster_setup_incomplete_trigger = yes }
-			templar_schedule_grandmaster_finalize_effect = yes
-		}
+		templar_automated_grandmaster_maintenance_effect = yes
 	}
 }
 
@@ -870,6 +968,7 @@ templar_set_holy_order_elective_succession_effect = {
 			add_realm_law_skip_effects = male_preference_law
 		}
 		templar_auto_appoint_senior_knights_effect = yes
+		templar_repair_senior_knight_election_effect = yes
 	}
 	else_if = {
 		limit = {
@@ -997,7 +1096,10 @@ templar_ho_player_succession_effect = {
 			NOT = { this = scope:previous_holder }
 		}
 		add_character_flag = templar_ho_succession_handled
-		scope:previous_holder = { save_scope_as = templar_old_grandmaster }
+		scope:previous_holder = {
+			save_scope_as = templar_old_grandmaster
+			remove_character_flag = templar_player_grandmaster
+		}
 		save_scope_as = templar_successor
 		templar_transfer_grandmaster_assets_effect = yes
 		templar_inherit_grandmaster_effect = yes
@@ -1251,7 +1353,6 @@ templar_ensure_playable_grandmaster_effect = {
 		limit = { is_ai = no }
 		add_character_flag = templar_player_grandmaster
 	}
-	templar_set_holy_order_elective_succession_effect = yes
 	if = {
 		limit = {
 			OR = {
@@ -1278,12 +1379,6 @@ templar_ensure_playable_grandmaster_effect = {
 		limit = { NOT = { has_variable = templar_temple_bank_active } }
 		templar_open_bank_effect = yes
 	}
-	templar_enforce_holy_order_identity_effect = yes
-	remove_character_flag = templar_ho_army_synced
-	remove_variable = templar_ho_army_lease_snapshot
-	templar_sync_ho_army_effect = yes
-	templar_sync_vanilla_commanderies_effect = yes
-	templar_auto_appoint_senior_knights_effect = yes
 }
 
 templar_become_grandmaster_effect = {
@@ -1347,7 +1442,6 @@ templar_become_grandmaster_effect = {
 
 	scope:templar_new_grandmaster = {
 		templar_finalize_grandmaster_effect = yes
-		templar_ensure_playable_grandmaster_effect = yes
 		remove_character_flag = templar_becoming_grandmaster
 
 		if = {

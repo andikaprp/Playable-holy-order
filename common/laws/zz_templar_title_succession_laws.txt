@@ -13,9 +13,9 @@ title_succession_laws = {
 			always = no
 		}
 		succession = {
-			order_of_succession = election
-			election_type = templar_holy_order_elective
+			order_of_succession = theocratic
+			faith = same_faith
+			pool_character_config = pool_templar_chapter_succession
 		}
-		flag = elective_succession_law
 	}
 }

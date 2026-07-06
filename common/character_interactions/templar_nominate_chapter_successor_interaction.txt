@@ -1,0 +1,41 @@
+templar_nominate_chapter_successor_interaction = {
+	icon = heir
+	category = interaction_category_diplomacy
+	common_interaction = yes
+
+	is_shown = {
+		scope:actor = {
+			is_ai = no
+			any_held_title = { is_holy_order = yes }
+			templar_is_active_grandmaster_trigger = yes
+		}
+		scope:recipient = {
+			OR = {
+				has_character_flag = templar_senior_knight
+				has_court_position = templar_senior_knight_court_position
+			}
+			is_courtier_of = scope:actor
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			is_capable_adult = yes
+			is_imprisoned = no
+		}
+	}
+
+	auto_accept = yes
+
+	on_accept = {
+		scope:actor = {
+			set_variable = { name = templar_chapter_nominee value = scope:recipient }
+			send_interface_toast = {
+				type = event_toast_effect_neutral
+				title = templar_chapter_vote_toast_title
+				left_icon = scope:actor
+				right_icon = scope:recipient
+			}
+		}
+	}
+}

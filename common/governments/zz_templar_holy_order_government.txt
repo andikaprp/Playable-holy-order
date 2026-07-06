@@ -6,7 +6,6 @@ holy_order_government = {
 		allow_accolades = no
 		landless_playable = yes
 		rulers_should_have_dynasty = yes
-		sticky_government = yes
 		use_title_tier_modifiers = no
 	}
 
@@ -14,9 +13,9 @@ holy_order_government = {
 
 	character_modifier = {
 		domain_limit_max = 0
-		men_at_arms_cap = 8
-		men_at_arms_limit = 16
-		knight_limit = 2
+		men_at_arms_cap = 12
+		men_at_arms_limit = 24
+		knight_limit = 12
 	}
 
 	can_get_government = {
@@ -36,10 +35,11 @@ holy_order_government = {
 
 	flags = {
 		government_uses_crown_authority
-		cannot_be_vassal_or_liege
 		government_is_holy_order
 		government_uses_domicile_but_not_adventurer
 	}
+
+	vassal_contract_group = feudal_vassal
 
 	mechanic_type = holy_order
 	is_mechanic_type_default = yes
@@ -50,5 +50,30 @@ holy_order_government = {
 
 	royal_court = any
 	domicile_type = holy_orders
+}
+
+# One-tick pivot only: engine spawns holy_orders domicile here, then we switch back.
+templar_chapter_domicile_seed_government = {
+	government_rules = {
+		council = yes
+		court_generate_spouses = no
+		landless_playable = yes
+		rulers_should_have_dynasty = yes
+		use_title_tier_modifiers = no
+	}
+
+	royal_court = any
+	domicile_type = holy_orders
+
+	flags = {
+		government_is_templar_chapter_domicile_seed
+		government_uses_domicile_but_not_adventurer
+	}
+
+	can_get_government = {
+		any_held_title = { is_holy_order = yes }
+	}
+
+	color = hsv{ 0.00 0.00 0.66 }
 }
 

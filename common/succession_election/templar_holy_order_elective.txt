@@ -9,7 +9,12 @@ templar_holy_order_elective = {
 		modifier = {
 			desc = templar_holy_order_vote_strength_senior_knight
 			add = 2
-			has_court_position = templar_senior_knight_court_position
+			templar_holy_order_election_senior_knight_elector_trigger = yes
+		}
+		modifier = {
+			desc = templar_holy_order_vote_strength_pope
+			add = 4
+			templar_holy_order_pope_elector_trigger = yes
 		}
 	}
 
@@ -18,8 +23,10 @@ templar_holy_order_elective = {
 		add = {
 			type = holder_direct_vassals
 			limit = {
-				has_court_position = templar_senior_knight_court_position
-				any_held_title = { has_variable = templar_chapter_voice }
+				OR = {
+					templar_holy_order_election_senior_knight_elector_trigger = yes
+					templar_holy_order_pope_elector_trigger = yes
+				}
 			}
 		}
 	}
@@ -35,27 +42,23 @@ templar_holy_order_elective = {
 		elector_voting_pattern_circumstances_misc_elective_modifier = yes
 		modifier = {
 			add = 25
-			scope:candidate = { has_court_position = templar_senior_knight_court_position }
+			scope:candidate = {
+				templar_holy_order_election_senior_knight_vassal_candidate_trigger = yes
+			}
 		}
 	}
 
 	candidates = {
 		add = {
-			type = holder_close_or_extended_family
-			limit = {
-				templar_holy_order_election_relative_trigger = yes
-			}
-		}
-		add = {
-			type = holder_dynasty
-			limit = {
-				templar_holy_order_election_knight_trigger = yes
-			}
-		}
-		add = {
 			type = holder_direct_vassals
 			limit = {
-				templar_holy_order_election_senior_knight_candidate_trigger = yes
+				templar_holy_order_election_senior_knight_vassal_candidate_trigger = yes
+			}
+		}
+		add = {
+			type = title_claimants
+			limit = {
+				templar_holy_order_election_senior_knight_vassal_candidate_trigger = yes
 			}
 		}
 	}

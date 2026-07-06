@@ -178,8 +178,8 @@ templar_low_zeal_modifier = { monthly_piety = -0.25 advantage = -2 }
 templar_high_reputation_modifier = { monthly_income = 0.5 same_faith_opinion = 8 }
 templar_low_reputation_modifier = { monthly_income = -0.25 same_faith_opinion = -5 }
 
-templar_rank_regional_modifier = { monthly_piety = 0.10 }
-templar_rank_renowned_modifier = { monthly_piety = 0.20 knight_limit = 1 }
-templar_rank_guardian_modifier = { monthly_piety = 0.30 knight_limit = 2 men_at_arms_cap = 1 }
-templar_rank_legendary_modifier = { monthly_piety = 0.50 knight_limit = 3 men_at_arms_cap = 1 advantage = 2 }
-templar_rank_shield_modifier = { monthly_piety = 0.75 knight_limit = 4 men_at_arms_cap = 2 advantage = 3 }
+templar_rank_regional_modifier = { monthly_piety = 0.10 knight_limit = 2 }
+templar_rank_renowned_modifier = { monthly_piety = 0.20 knight_limit = 3 }
+templar_rank_guardian_modifier = { monthly_piety = 0.30 knight_limit = 4 men_at_arms_cap = 1 }
+templar_rank_legendary_modifier = { monthly_piety = 0.50 knight_limit = 5 men_at_arms_cap = 1 advantage = 2 }
+templar_rank_shield_modifier = { monthly_piety = 0.75 knight_limit = 6 men_at_arms_cap = 2 advantage = 3 }

@@ -1,0 +1,7 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_court_position_types_templar_senior_knight_court_position"
+		texturefile = "gfx/interface/icons/court_position_types/templar_senior_knight_court_position.dds"
+		noOfFrames = 1
+	}
+}

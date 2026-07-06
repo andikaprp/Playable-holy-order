@@ -1,4 +1,12 @@
 holy_orders = {
+	allowed_for_character = {
+		OR = {
+			government_has_flag = government_is_holy_order
+			government_has_flag = government_is_templar_chapter_domicile_seed
+		}
+		any_held_title = { is_holy_order = yes }
+	}
+
 	rename_window = primary_title
 
 	illustration = "gfx/interface/window_domiciles/estate_building_temple_christian.dds"

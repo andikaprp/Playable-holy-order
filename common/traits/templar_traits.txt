@@ -10,17 +10,22 @@ templar_grand_master = {
 	same_faith_opinion = 10
 	clergy_opinion = 15
 	knight_effectiveness_mult = 0.20
+	knight_limit = 3
 
 	ruler_designer_cost = 100
 }
 
 templar_banker = {
+	category = fame
+	icon = templar_banker.dds
 	stewardship = 3
 	monthly_income_mult = 0.15
 	vassal_opinion = 5
 }
 
 templar_deposit_banker = {
+	category = fame
+	icon = templar_banker.dds
 	stewardship = 4
 	monthly_income_mult = 0.25
 	vassal_opinion = 5
@@ -36,6 +41,8 @@ templar_insurer = {
 }
 
 templar_bank_client_trait = {
+	category = fame
+	icon = templar_bank_client.dds
 	same_faith_opinion = 3
 	stress_loss_mult = 0.10
 }

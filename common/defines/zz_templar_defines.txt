@@ -1,0 +1,4 @@
+NHolyOrder = {
+	BASE_NUM_KNIGHTS = 8
+	EXTRA_KNIGHTS_PER_HOLDING = 1
+}

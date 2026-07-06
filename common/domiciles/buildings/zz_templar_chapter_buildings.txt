@@ -83,7 +83,7 @@ templar_chapter_barracks_01 = {
 	cost = { gold = 250 }
 
 	character_modifier = {
-		knight_limit = 1
+		knight_limit = 2
 		prowess = 1
 	}
 
@@ -105,7 +105,7 @@ templar_chapter_barracks_02 = {
 	cost = { gold = 450 }
 
 	character_modifier = {
-		knight_limit = 2
+		knight_limit = 3
 		prowess = 2
 		knight_effectiveness_mult = 0.1
 	}
