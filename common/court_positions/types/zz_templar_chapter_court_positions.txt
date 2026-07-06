@@ -1,0 +1,114 @@
+@base_position_score = 500
+@base_candidate_score = 500
+
+templar_senior_knight_court_position = {
+	sort_order = 140
+	max_available_positions = 5
+	skill = martial
+
+	court_position_asset = {
+		animation = marshal_random_weapon
+		background = "gfx/interface/illustrations/event_scenes/ep3_military_tent.dds"
+	}
+
+	opinion = {
+		value = high_camp_officer_opinion
+	}
+
+	aptitude_level_breakpoints = { 20 40 60 80 }
+
+	aptitude = {
+		value = 0
+		add = {
+			value = martial
+			multiply = 2
+			max = 60
+			desc = court_position_skill_martial
+		}
+		add = {
+			value = prowess
+			max = 60
+			desc = court_position_skill_prowess
+		}
+		if = {
+			limit = { has_trait = order_member }
+			add = {
+				value = 15
+				desc = templar_senior_knight_order_member_desc
+			}
+		}
+		add = court_position_aptitude_high_penalty_value
+	}
+
+	is_shown = {
+		OR = {
+			government_has_flag = government_is_holy_order
+			has_character_flag = templar_playable_grandmaster
+		}
+	}
+
+	valid_position = { }
+
+	is_shown_character = {
+		scope:employee = {
+			court_position_employee_shown_trigger = yes
+		}
+	}
+
+	valid_character = {
+		scope:employee = {
+			templar_senior_knight_validity_trigger = { EMPLOYER = scope:liege }
+		}
+	}
+
+	revoke_cost = {
+		prestige = { value = minor_court_position_prestige_revoke_cost }
+	}
+
+	salary = {}
+
+	scaling_employer_modifiers = {
+		average = {
+			knight_limit = 1
+			knight_effectiveness_mult = 0.05
+		}
+		good = {
+			knight_limit = 1
+			knight_effectiveness_mult = 0.1
+		}
+		excellent = {
+			knight_limit = 1
+			knight_effectiveness_mult = 0.15
+		}
+	}
+
+	custom_employer_modifier_description = templar_senior_knight_employer_custom_effect_description
+
+	modifier = {
+		monthly_prestige = 0.1
+	}
+
+	on_court_position_received = {
+		templar_grant_chapter_voice_to_senior_knight_effect = yes
+	}
+	on_court_position_revoked = {
+		templar_revoke_chapter_voice_from_senior_knight_effect = yes
+	}
+	on_court_position_invalidated = {
+		templar_revoke_chapter_voice_from_senior_knight_effect = yes
+	}
+	on_court_position_vacated = {
+		scope:liege = {
+			templar_auto_appoint_senior_knights_effect = yes
+		}
+	}
+
+	ai_position_score = {
+		value = @base_position_score
+	}
+	ai_candidate_score = {
+		value = @base_candidate_score
+		add = court_position_candidate_score_base_value
+		add = court_position_candidate_aptitude_value
+	}
+}

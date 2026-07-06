@@ -2,8 +2,7 @@ templar_chapter_temple_01 = {
 	slot_type = main
 	internal_slots = 2
 	construction_time = 1
-	allowed_domicile_types = { holy_orders camp }
-	previous_building = camp_main_01
+	allowed_domicile_types = { holy_orders }
 
 	character_modifier = {
 		monthly_piety = 1
@@ -27,7 +26,7 @@ templar_chapter_temple_02 = {
 	slot_type = main
 	internal_slots = 3
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_temple_01
 
 	cost = { gold = 350 piety = 200 }
@@ -53,7 +52,7 @@ templar_chapter_temple_03 = {
 	slot_type = main
 	internal_slots = 4
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_temple_02
 
 	cost = { gold = 600 piety = 400 }
@@ -79,7 +78,7 @@ templar_chapter_temple_03 = {
 templar_chapter_barracks_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 
 	cost = { gold = 250 }
 
@@ -100,7 +99,7 @@ templar_chapter_barracks_01 = {
 templar_chapter_barracks_02 = {
 	slot_type = external
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_barracks_01
 
 	cost = { gold = 450 }
@@ -123,7 +122,7 @@ templar_chapter_barracks_02 = {
 templar_chapter_treasury_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 
 	cost = { gold = 300 }
 
@@ -145,7 +144,7 @@ templar_chapter_treasury_01 = {
 templar_chapter_treasury_02 = {
 	slot_type = external
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_treasury_01
 
 	cost = { gold = 550 }
@@ -168,7 +167,7 @@ templar_chapter_treasury_02 = {
 templar_chapter_stables_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 
 	cost = { gold = 275 }
 
@@ -189,7 +188,7 @@ templar_chapter_stables_01 = {
 templar_chapter_stables_02 = {
 	slot_type = external
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_stables_01
 
 	cost = { gold = 500 }
@@ -212,7 +211,7 @@ templar_chapter_stables_02 = {
 templar_chapter_chapel_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 
 	cost = { gold = 200 piety = 150 }
 
@@ -233,7 +232,7 @@ templar_chapter_chapel_01 = {
 templar_chapter_chapel_02 = {
 	slot_type = external
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_chapel_01
 
 	cost = { gold = 400 piety = 300 }
@@ -256,7 +255,7 @@ templar_chapter_chapel_02 = {
 templar_chapter_library_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 
 	cost = { gold = 225 }
 
@@ -277,7 +276,7 @@ templar_chapter_library_01 = {
 templar_chapter_library_02 = {
 	slot_type = external
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_library_01
 
 	cost = { gold = 425 }
@@ -299,7 +298,7 @@ templar_chapter_library_02 = {
 templar_chapter_hospice_01 = {
 	slot_type = external
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 
 	cost = { gold = 200 }
 
@@ -320,7 +319,7 @@ templar_chapter_hospice_01 = {
 templar_chapter_hospice_02 = {
 	slot_type = external
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_hospice_01
 
 	cost = { gold = 400 }
@@ -343,7 +342,7 @@ templar_chapter_hospice_02 = {
 templar_chapter_armory_01 = {
 	slot_type = internal
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_temple_01
 
 	cost = { gold = 250 }
@@ -365,7 +364,7 @@ templar_chapter_armory_01 = {
 templar_chapter_armory_02 = {
 	slot_type = internal
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_armory_01
 
 	cost = { gold = 450 }
@@ -388,7 +387,7 @@ templar_chapter_armory_02 = {
 templar_chapter_scriptorium_01 = {
 	slot_type = internal
 	construction_time = 365
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_temple_01
 
 	cost = { gold = 175 piety = 100 }
@@ -410,7 +409,7 @@ templar_chapter_scriptorium_01 = {
 templar_chapter_scriptorium_02 = {
 	slot_type = internal
 	construction_time = 730
-	allowed_domicile_types = { holy_orders camp }
+	allowed_domicile_types = { holy_orders }
 	previous_building = templar_chapter_scriptorium_01
 
 	cost = { gold = 350 piety = 200 }

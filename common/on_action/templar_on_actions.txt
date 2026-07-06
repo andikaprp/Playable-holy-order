@@ -45,6 +45,8 @@ templar_holy_order_playable_pulse = {
 				any_held_title = { is_holy_order = yes }
 				templar_is_active_grandmaster_trigger = yes
 			}
+			templar_set_holy_order_elective_succession_effect = yes
+			templar_auto_appoint_senior_knights_effect = yes
 			templar_sync_ho_army_effect = yes
 		}
 	}
@@ -72,8 +74,19 @@ on_title_gain = {
 	on_actions = { templar_holy_order_title_gain }
 }
 
+on_title_gain_inheritance = {
+	on_actions = { templar_ho_title_inheritance }
+}
+
+templar_ho_title_inheritance = {
+	effect = {
+		templar_ho_player_succession_effect = yes
+	}
+}
+
 templar_holy_order_title_gain = {
 	effect = {
+		templar_ho_player_succession_effect = yes
 		if = {
 			limit = {
 				is_ai = no
@@ -136,8 +149,8 @@ templar_order_yearly_pulse = {
 				55 = { }
 				12 = { trigger_event = templar_order.1000 }
 				12 = { trigger_event = templar_order.1001 }
-				11 = { trigger_event = templar_order.1002 }
-				10 = { trigger_event = templar_order.1003 }
+				12 = { trigger_event = templar_order.1002 }
+				11 = { trigger_event = templar_order.1003 }
 			}
 		}
 		if = {
@@ -154,118 +167,6 @@ templar_order_yearly_pulse = {
 					limit = { exists = var:templar_bank_client_of }
 					var:templar_bank_client_of = { save_scope_as = templar_lender }
 					trigger_event = { id = templar_order.0601 days = 3 }
-				}
-			}
-		}
-	}
-}
-
-on_death = {
-	on_actions = { templar_grandmaster_on_death }
-}
-
-templar_grandmaster_on_death = {
-	effect = {
-		if = {
-			limit = {
-				has_variable = templar_simulated_order
-				is_ai = no
-				exists = primary_heir
-			}
-			primary_heir = { save_scope_as = templar_successor }
-			if = {
-				limit = { has_variable_list = templar_commanderies_list }
-				every_in_list = {
-					variable = templar_commanderies_list
-					set_variable = { name = templar_commandery_order value = scope:templar_successor }
-					scope:templar_successor = {
-						add_to_variable_list = { name = templar_commanderies_list target = prev }
-					}
-				}
-			}
-			scope:templar_successor = {
-				if = {
-					limit = { is_lowborn = yes }
-					create_dynasty = { spread_to_descendants = yes }
-				}
-				add_character_flag = templar_playable_grandmaster
-				set_variable = templar_simulated_order
-				set_variable = { name = templar_discipline value = root.var:templar_discipline }
-				set_variable = { name = templar_zeal value = root.var:templar_zeal }
-				set_variable = { name = templar_reputation value = root.var:templar_reputation }
-				set_variable = { name = templar_commanderies value = root.var:templar_commanderies }
-				set_variable = { name = templar_rank value = root.var:templar_rank }
-				add_trait = templar_grand_master
-				templar_update_order_effect = yes
-				templar_rebuild_commandery_bonuses_effect = yes
-				templar_finalize_grandmaster_effect = yes
-			}
-			set_player_character = scope:templar_successor
-			if = {
-				limit = { has_variable = templar_temple_bank_active }
-				scope:templar_successor = {
-					set_variable = templar_temple_bank_active
-					add_trait = templar_banker
-					add_character_modifier = { modifier = templar_bank_of_the_temple_modifier }
-					add_to_global_variable_list = { name = templar_active_banks target = scope:templar_successor }
-				}
-				remove_list_variable = { name = templar_active_banks target = root }
-				if = {
-					limit = { has_variable_list = templar_bank_clients }
-					every_in_list = {
-						variable = templar_bank_clients
-						set_variable = { name = templar_bank_client_of value = scope:templar_successor }
-						scope:templar_successor = {
-							add_to_variable_list = { name = templar_bank_clients target = prev }
-						}
-					}
-				}
-				if = {
-					limit = { has_variable_list = owes_me_money }
-					every_in_list = {
-						variable = owes_me_money
-						scope:templar_successor = {
-							add_to_variable_list = { name = owes_me_money target = prev }
-						}
-					}
-				}
-				if = {
-					limit = { has_variable_list = templar_depositors }
-					every_in_list = {
-						variable = templar_depositors
-						scope:templar_successor = {
-							add_to_variable_list = { name = templar_depositors target = prev }
-						}
-					}
-				}
-			}
-			if = {
-				limit = { exists = var:templar_loan_amount_owed }
-				scope:templar_successor = {
-					set_variable = { name = templar_loan_amount_owed value = root.var:templar_loan_amount_owed }
-					set_variable = { name = templar_loan_years_elapsed value = root.var:templar_loan_years_elapsed }
-					set_variable = { name = templar_bank_client_of value = root.var:templar_bank_client_of }
-				}
-				if = {
-					limit = { exists = var:templar_bank_client_of }
-					var:templar_bank_client_of = {
-						remove_list_variable = { name = owes_me_money target = root }
-						add_to_variable_list = { name = owes_me_money target = scope:templar_successor }
-					}
-				}
-			}
-			if = {
-				limit = { exists = var:templar_deposit_amount }
-				scope:templar_successor = {
-					set_variable = { name = templar_deposit_amount value = root.var:templar_deposit_amount }
-					set_variable = { name = templar_bank_client_of value = root.var:templar_bank_client_of }
-				}
-				if = {
-					limit = { exists = var:templar_bank_client_of }
-					var:templar_bank_client_of = {
-						remove_list_variable = { name = templar_depositors target = root }
-						add_to_variable_list = { name = templar_depositors target = scope:templar_successor }
-					}
 				}
 			}
 		}

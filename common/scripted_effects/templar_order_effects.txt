@@ -414,17 +414,6 @@ templar_setup_chapter_domicile_buildings_effect = {
 			}
 			if = {
 				limit = {
-					OR = {
-						is_domicile_type = camp
-						is_domicile_type = holy_orders
-					}
-					has_domicile_building = camp_main_01
-					NOT = { has_domicile_building_or_higher = templar_chapter_temple_01 }
-				}
-				add_domicile_building = templar_chapter_temple_01
-			}
-			else_if = {
-				limit = {
 					is_domicile_type = holy_orders
 					NOT = { has_domicile_building_or_higher = templar_chapter_temple_01 }
 				}
@@ -455,47 +444,22 @@ templar_schedule_domicile_setup_effect = {
 	}
 }
 
-templar_bootstrap_chapter_domicile_effect = {
+templar_initialize_chapter_domicile_effect = {
 	if = {
 		limit = {
 			has_dlc_feature = roads_to_power
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
-			NOT = { has_domicile = yes }
 		}
-		hidden_effect = {
-			if = {
-				limit = {
-					NOT = {
-						any_held_title = { has_variable = templar_chapter_domicile_anchor }
-					}
-				}
-				create_adventurer_title = {
-					name = templar_chapter_domicile_name
-					holder = root
-					article = DEFAULT_TITLE_NAME_ARTICLE
-					save_scope_as = templar_chapter_domicile_title
-				}
-				scope:templar_chapter_domicile_title = {
-					set_variable = templar_chapter_domicile_anchor
-					set_coa = root.house
-				}
+		templar_enforce_holy_order_identity_effect = yes
+		if = {
+			limit = {
+				has_domicile = yes
+				domicile = { is_domicile_type = holy_orders }
 			}
-			every_held_title = {
-				limit = { is_holy_order = yes }
-				save_scope_as = templar_ho_title
-			}
-			if = {
-				limit = { exists = scope:templar_ho_title }
-				set_primary_title_to = scope:templar_ho_title
-			}
-			templar_enforce_holy_order_identity_effect = yes
+			templar_setup_chapter_domicile_buildings_effect = yes
 		}
 	}
-}
-
-templar_force_domicile_spawn_effect = {
-	templar_bootstrap_chapter_domicile_effect = yes
 }
 
 templar_sync_ho_army_effect = {
@@ -859,15 +823,62 @@ templar_finalize_grandmaster_effect = {
 			primary_heir = { save_scope_as = templar_realm_heir }
 		}
 		templar_enforce_landless_grandmaster_effect = yes
-		templar_force_domicile_spawn_effect = yes
+		# Changing to the Holy Order government creates its custom holy_orders domicile.
+		# Do this before domicile setup and never create an adventurer title as a bootstrap.
 		templar_enforce_holy_order_identity_effect = yes
+		templar_set_holy_order_elective_succession_effect = yes
+		templar_initialize_chapter_domicile_effect = yes
 		templar_schedule_domicile_setup_effect = yes
 		templar_sync_ho_army_effect = yes
 		templar_sync_vanilla_commanderies_effect = yes
+		templar_auto_appoint_senior_knights_effect = yes
 		if = {
 			limit = { templar_grandmaster_setup_incomplete_trigger = yes }
 			templar_schedule_grandmaster_finalize_effect = yes
 		}
+	}
+}
+
+templar_set_holy_order_elective_succession_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			is_ai = no
+			any_held_title = { is_holy_order = yes }
+		}
+		every_held_title = {
+			limit = { is_holy_order = yes }
+			if = {
+				limit = { NOT = { has_title_law = male_preference_law } }
+				add_title_law = male_preference_law
+			}
+			if = {
+				limit = { NOT = { has_title_law = templar_holy_order_elective_succession_law } }
+				add_title_law = templar_holy_order_elective_succession_law
+			}
+		}
+		if = {
+			limit = { has_realm_law = holy_order_succession_law }
+			remove_realm_law = holy_order_succession_law
+		}
+		if = {
+			limit = { has_realm_law = landless_adventurer_succession_law }
+			remove_realm_law = landless_adventurer_succession_law
+		}
+		if = {
+			limit = { NOT = { has_realm_law = male_preference_law } }
+			add_realm_law_skip_effects = male_preference_law
+		}
+		templar_auto_appoint_senior_knights_effect = yes
+	}
+	else_if = {
+		limit = {
+			is_ruler = yes
+			is_ai = yes
+			government_has_flag = government_is_holy_order
+			NOT = { has_realm_law = holy_order_succession_law }
+		}
+		add_realm_law_skip_effects = holy_order_succession_law
 	}
 }
 
@@ -888,15 +899,130 @@ templar_set_holy_order_government_effect = {
 			is_ruler = yes
 			government_has_flag = government_is_holy_order
 		}
-		if = {
-			limit = { has_realm_law = landless_adventurer_succession_law }
-			remove_realm_law = landless_adventurer_succession_law
-		}
-		if = {
-			limit = { NOT = { has_realm_law = holy_order_succession_law } }
-			add_realm_law_skip_effects = holy_order_succession_law
+		templar_set_holy_order_elective_succession_effect = yes
+	}
+}
+
+templar_transfer_grandmaster_assets_effect = {
+	if = {
+		limit = { scope:templar_old_grandmaster = { has_variable_list = templar_commanderies_list } }
+		scope:templar_old_grandmaster = {
+			every_in_list = {
+				variable = templar_commanderies_list
+				set_variable = { name = templar_commandery_order value = scope:templar_successor }
+				scope:templar_successor = {
+					add_to_variable_list = { name = templar_commanderies_list target = prev }
+				}
+			}
 		}
 	}
+	if = {
+		limit = { scope:templar_old_grandmaster = { has_variable = templar_temple_bank_active } }
+		scope:templar_successor = {
+			set_variable = templar_temple_bank_active
+			add_trait = templar_banker
+			add_character_modifier = { modifier = templar_bank_of_the_temple_modifier }
+			add_to_global_variable_list = { name = templar_active_banks target = scope:templar_successor }
+		}
+		scope:templar_old_grandmaster = {
+			remove_list_variable = { name = templar_active_banks target = this }
+			if = {
+				limit = { has_variable_list = templar_bank_clients }
+				every_in_list = {
+					variable = templar_bank_clients
+					set_variable = { name = templar_bank_client_of value = scope:templar_successor }
+					scope:templar_successor = {
+						add_to_variable_list = { name = templar_bank_clients target = prev }
+					}
+				}
+			}
+			if = {
+				limit = { has_variable_list = owes_me_money }
+				every_in_list = {
+					variable = owes_me_money
+					scope:templar_successor = {
+						add_to_variable_list = { name = owes_me_money target = prev }
+					}
+				}
+			}
+			if = {
+				limit = { has_variable_list = templar_depositors }
+				every_in_list = {
+					variable = templar_depositors
+					scope:templar_successor = {
+						add_to_variable_list = { name = templar_depositors target = prev }
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = { scope:templar_old_grandmaster = { exists = var:templar_loan_amount_owed } }
+		scope:templar_successor = {
+			set_variable = { name = templar_loan_amount_owed value = scope:templar_old_grandmaster.var:templar_loan_amount_owed }
+			set_variable = { name = templar_loan_years_elapsed value = scope:templar_old_grandmaster.var:templar_loan_years_elapsed }
+			set_variable = { name = templar_bank_client_of value = scope:templar_old_grandmaster.var:templar_bank_client_of }
+		}
+		if = {
+			limit = { scope:templar_old_grandmaster = { exists = var:templar_bank_client_of } }
+			scope:templar_old_grandmaster.var:templar_bank_client_of = {
+				remove_list_variable = { name = owes_me_money target = scope:templar_old_grandmaster }
+				add_to_variable_list = { name = owes_me_money target = scope:templar_successor }
+			}
+		}
+	}
+	if = {
+		limit = { scope:templar_old_grandmaster = { exists = var:templar_deposit_amount } }
+		scope:templar_successor = {
+			set_variable = { name = templar_deposit_amount value = scope:templar_old_grandmaster.var:templar_deposit_amount }
+			set_variable = { name = templar_bank_client_of value = scope:templar_old_grandmaster.var:templar_bank_client_of }
+		}
+		if = {
+			limit = { scope:templar_old_grandmaster = { exists = var:templar_bank_client_of } }
+			scope:templar_old_grandmaster.var:templar_bank_client_of = {
+				remove_list_variable = { name = templar_depositors target = scope:templar_old_grandmaster }
+				add_to_variable_list = { name = templar_depositors target = scope:templar_successor }
+			}
+		}
+	}
+}
+
+templar_ho_player_succession_effect = {
+	if = {
+		limit = {
+			scope:title = { is_holy_order = yes }
+			exists = scope:previous_holder
+			scope:previous_holder = { has_character_flag = templar_player_grandmaster }
+			NOT = { has_character_flag = templar_ho_succession_handled }
+			NOT = { this = scope:previous_holder }
+		}
+		add_character_flag = templar_ho_succession_handled
+		scope:previous_holder = { save_scope_as = templar_old_grandmaster }
+		save_scope_as = templar_successor
+		templar_transfer_grandmaster_assets_effect = yes
+		templar_inherit_grandmaster_effect = yes
+	}
+}
+
+templar_inherit_grandmaster_effect = {
+	scope:templar_successor = {
+		templar_ensure_playable_grandmaster_effect = yes
+		if = {
+			limit = { scope:templar_old_grandmaster = { has_variable = templar_simulated_order } }
+			set_variable = templar_simulated_order
+			set_variable = { name = templar_discipline value = scope:templar_old_grandmaster.var:templar_discipline }
+			set_variable = { name = templar_zeal value = scope:templar_old_grandmaster.var:templar_zeal }
+			set_variable = { name = templar_reputation value = scope:templar_old_grandmaster.var:templar_reputation }
+			set_variable = { name = templar_commanderies value = scope:templar_old_grandmaster.var:templar_commanderies }
+			set_variable = { name = templar_rank value = scope:templar_old_grandmaster.var:templar_rank }
+			add_trait = templar_grand_master
+			templar_update_order_effect = yes
+			templar_rebuild_commandery_bonuses_effect = yes
+		}
+		templar_finalize_grandmaster_effect = yes
+	}
+	set_player_character = scope:templar_successor
+	scope:templar_successor = { add_character_flag = templar_player_grandmaster }
 }
 
 templar_play_as_grandmaster_effect = {
@@ -965,6 +1091,7 @@ templar_abdicate_all_secular_titles_effect = {
 			is_noble_family_title = no
 			NOT = { is_holy_order = yes }
 			NOT = { has_variable = templar_chapter_domicile_anchor }
+			NOT = { has_variable = templar_chapter_voice }
 			tier > tier_barony
 		}
 		if = {
@@ -994,6 +1121,7 @@ templar_abdicate_all_secular_titles_effect = {
 			is_noble_family_title = no
 			NOT = { is_holy_order = yes }
 			NOT = { has_variable = templar_chapter_domicile_anchor }
+			NOT = { has_variable = templar_chapter_voice }
 			tier = tier_barony
 		}
 		if = {
@@ -1027,6 +1155,7 @@ templar_strip_secular_titles_effect = {
 			is_noble_family_title = no
 			NOT = { is_holy_order = yes }
 			NOT = { has_variable = templar_chapter_domicile_anchor }
+			NOT = { has_variable = templar_chapter_voice }
 			tier = tier_barony
 			holder = scope:templar_new_grandmaster
 		}
@@ -1085,6 +1214,7 @@ templar_enforce_landless_grandmaster_effect = {
 					is_noble_family_title = no
 					NOT = { is_holy_order = yes }
 					NOT = { has_variable = templar_chapter_domicile_anchor }
+			NOT = { has_variable = templar_chapter_voice }
 				}
 			}
 			create_title_and_vassal_change = {
@@ -1118,9 +1248,10 @@ templar_transfer_holy_order_leases_effect = {
 templar_ensure_playable_grandmaster_effect = {
 	add_character_flag = templar_playable_grandmaster
 	if = {
-		limit = { NOT = { has_realm_law = holy_order_succession_law } }
-		add_realm_law_skip_effects = holy_order_succession_law
+		limit = { is_ai = no }
+		add_character_flag = templar_player_grandmaster
 	}
+	templar_set_holy_order_elective_succession_effect = yes
 	if = {
 		limit = {
 			OR = {
@@ -1152,6 +1283,7 @@ templar_ensure_playable_grandmaster_effect = {
 	remove_variable = templar_ho_army_lease_snapshot
 	templar_sync_ho_army_effect = yes
 	templar_sync_vanilla_commanderies_effect = yes
+	templar_auto_appoint_senior_knights_effect = yes
 }
 
 templar_become_grandmaster_effect = {

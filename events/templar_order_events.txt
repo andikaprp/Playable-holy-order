@@ -551,7 +551,7 @@ templar_order.0010 = {
 			if = {
 				limit = { var:templar_domicile_setup_retries < 5 }
 				change_variable = { name = templar_domicile_setup_retries add = 1 }
-				templar_bootstrap_chapter_domicile_effect = yes
+				templar_initialize_chapter_domicile_effect = yes
 				templar_enforce_holy_order_identity_effect = yes
 				add_character_flag = templar_domicile_setup_scheduled
 				trigger_event = { id = templar_order.0010 days = 1 }

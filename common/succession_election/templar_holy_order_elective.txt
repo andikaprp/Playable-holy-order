@@ -1,0 +1,62 @@
+templar_holy_order_elective = {
+	elector_vote_strength = {
+		base = 1
+		modifier = {
+			desc = templar_holy_order_vote_strength_grandmaster
+			add = 5
+			this = scope:holder
+		}
+		modifier = {
+			desc = templar_holy_order_vote_strength_senior_knight
+			add = 2
+			has_court_position = templar_senior_knight_court_position
+		}
+	}
+
+	electors = {
+		add = holder
+		add = {
+			type = holder_direct_vassals
+			limit = {
+				has_court_position = templar_senior_knight_court_position
+				any_held_title = { has_variable = templar_chapter_voice }
+			}
+		}
+	}
+
+	candidate_score = {
+		base = 0
+		elector_self_voting_pattern_feudal_elective_modifier = yes
+		holder_voting_pattern_feudal_elective_modifier = yes
+		elector_voting_pattern_circumstances_feudal_elective_modifier = yes
+		elector_voting_pattern_prestige_piety_feudal_elective_modifier = yes
+		elector_voting_pattern_traits_feudal_elective_modifier = yes
+		elector_voting_pattern_opinion_feudal_elective_modifier = yes
+		elector_voting_pattern_circumstances_misc_elective_modifier = yes
+		modifier = {
+			add = 25
+			scope:candidate = { has_court_position = templar_senior_knight_court_position }
+		}
+	}
+
+	candidates = {
+		add = {
+			type = holder_close_or_extended_family
+			limit = {
+				templar_holy_order_election_relative_trigger = yes
+			}
+		}
+		add = {
+			type = holder_dynasty
+			limit = {
+				templar_holy_order_election_knight_trigger = yes
+			}
+		}
+		add = {
+			type = holder_direct_vassals
+			limit = {
+				templar_holy_order_election_senior_knight_candidate_trigger = yes
+			}
+		}
+	}
+}

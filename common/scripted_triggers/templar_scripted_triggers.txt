@@ -5,6 +5,98 @@ templar_is_active_grandmaster_trigger = {
 	}
 }
 
+templar_is_valid_native_election_candidate_trigger = {
+	is_capable_adult = yes
+	is_imprisoned = no
+	faith = scope:holder.faith
+	is_married = no
+	is_betrothed = no
+	NOT = { has_trait = excommunicated }
+	has_unelectable_trait_trigger = no
+	has_unelectable_government_trigger = no
+	OR = {
+		has_trait = order_member
+		is_knight = yes
+	}
+}
+
+templar_holy_order_election_relative_trigger = {
+	is_capable_adult = yes
+	is_imprisoned = no
+	faith = scope:holder.faith
+	NOT = { has_trait = excommunicated }
+	has_unelectable_trait_trigger = no
+	NOT = { government_has_flag = government_is_holy_order }
+	is_close_or_extended_family_of = scope:holder
+}
+
+templar_holy_order_election_knight_trigger = {
+	is_capable_adult = yes
+	is_imprisoned = no
+	faith = scope:holder.faith
+	NOT = { has_trait = excommunicated }
+	has_unelectable_trait_trigger = no
+	has_unelectable_government_trigger = no
+	NOT = { government_has_flag = government_is_holy_order }
+	is_knight_of = scope:holder
+	is_courtier_of = scope:holder
+}
+
+templar_holy_order_election_senior_knight_candidate_trigger = {
+	is_capable_adult = yes
+	is_imprisoned = no
+	faith = scope:holder.faith
+	NOT = { has_trait = excommunicated }
+	has_unelectable_trait_trigger = no
+	NOT = { government_has_flag = government_is_holy_order }
+	has_court_position = templar_senior_knight_court_position
+}
+
+templar_senior_knight_validity_trigger = {
+	base_court_position_validity_trigger = { EMPLOYER = $EMPLOYER$ }
+	is_capable_adult = yes
+	is_imprisoned = no
+	is_landed = no
+	faith = $EMPLOYER$.faith
+	NOT = { has_trait = excommunicated }
+	NOT = { is_spouse_of = $EMPLOYER$ }
+	is_courtier_of = $EMPLOYER$
+	can_be_combatant_based_on_gender_trigger = { ARMY_OWNER = $EMPLOYER$ }
+	custom_tooltip = {
+		text = none_does_not_have_a_full_time_job
+		trigger_if = {
+			limit = { NOT = { has_court_position = templar_senior_knight_court_position } }
+			court_position_does_not_already_have_a_job_trigger = yes
+		}
+	}
+	OR = {
+		has_trait = order_member
+		is_knight_of = $EMPLOYER$
+		martial >= 6
+		prowess >= 8
+	}
+}
+
+templar_is_valid_chapter_candidate_trigger = {
+	is_capable_adult = yes
+	is_imprisoned = no
+	faith = $GRANDMASTER$.faith
+	NOT = { has_trait = excommunicated }
+	has_unelectable_trait_trigger = no
+	has_unelectable_government_trigger = no
+	OR = {
+		is_close_or_extended_family_of = $GRANDMASTER$
+		AND = {
+			is_married = no
+			is_betrothed = no
+			OR = {
+				has_trait = order_member
+				is_knight_of = $GRANDMASTER$
+			}
+		}
+	}
+}
+
 is_landless_holy_order = {
 
 	government_has_flag = government_is_holy_order
@@ -19,6 +111,7 @@ is_landless_holy_order = {
 			is_noble_family_title = no
 			NOT = { is_holy_order = yes }
 			NOT = { has_variable = templar_chapter_domicile_anchor }
+			NOT = { has_variable = templar_chapter_voice }
 		}
 
 	}
@@ -55,6 +148,7 @@ templar_grandmaster_setup_incomplete_trigger = {
 			is_noble_family_title = no
 			NOT = { is_holy_order = yes }
 			NOT = { has_variable = templar_chapter_domicile_anchor }
+			NOT = { has_variable = templar_chapter_voice }
 		}
 
 		AND = {
@@ -198,5 +292,3 @@ templar_active_bank_exists_trigger = {
 	}
 
 }
-
-

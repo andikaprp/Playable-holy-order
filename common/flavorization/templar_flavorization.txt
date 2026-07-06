@@ -6,14 +6,6 @@ templar_domicile_holy_orders = {
 	flavourization_rules = { top_liege = no }
 }
 
-templar_domicile_chapter_camp = {
-	type = domicile
-	domicile_type = camp
-	priority = 31
-	governments = { holy_order_government }
-	flavourization_rules = { top_liege = no }
-}
-
 templar_grand_master_title_county = {
 	type = character
 	gender = male
