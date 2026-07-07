@@ -162,14 +162,14 @@ templar_sync_vanilla_commanderies_effect = {
 					limit = {
 						any_sub_realm_barony = {
 							is_under_holy_order_lease = yes
-							lessee = scope:templar_new_grandmaster.primary_title
+							lessee_title = scope:templar_new_grandmaster.primary_title
 						}
 					}
 					every_sub_realm_barony = {
 						limit = {
 							is_under_holy_order_lease = yes
 							OR = {
-								lessee = scope:templar_new_grandmaster.primary_title
+								lessee_title = scope:templar_new_grandmaster.primary_title
 								lessee = scope:templar_new_grandmaster
 							}
 						}
@@ -279,7 +279,7 @@ templar_open_bank_effect = {
 	set_variable = templar_temple_bank_active
 	add_trait = templar_banker
 	add_character_modifier = { modifier = templar_bank_of_the_temple_modifier }
-	add_to_global_variable_list = { name = templar_active_banks target = root }
+	add_to_global_variable_list = { name = templar_active_banks target = this }
 }
 
 templar_update_bank_tier_effect = {
@@ -347,7 +347,7 @@ templar_make_deposit_effect = {
 		add_to_variable_list = { name = templar_depositors target = $DEPOSITOR$ }
 	}
 	$DEPOSITOR$ = {
-		add_gold = -$GROSS$
+		add_gold = { value = $GROSS$ multiply = -1 }
 		add_trait = templar_bank_client_trait
 		set_variable = { name = templar_deposit_amount value = $NET$ }
 		set_variable = { name = templar_bank_client_of value = $BANK$ }
@@ -382,7 +382,10 @@ templar_enforce_holy_order_identity_effect = {
 				save_scope_as = templar_ho_title
 			}
 			if = {
-				limit = { exists = scope:templar_ho_title }
+				limit = {
+					exists = scope:templar_ho_title
+					NOT = { primary_title = scope:templar_ho_title }
+				}
 				set_primary_title_to = scope:templar_ho_title
 			}
 			templar_set_holy_order_government_effect = yes
@@ -412,8 +415,8 @@ templar_setup_chapter_domicile_buildings_effect = {
 		limit = { has_domicile = yes }
 		domicile = {
 			if = {
-				limit = { root = { exists = location } }
-				move_domicile = root.location
+				limit = { exists = location }
+				move_domicile = location
 			}
 			if = {
 				limit = {
@@ -427,16 +430,46 @@ templar_setup_chapter_domicile_buildings_effect = {
 	}
 }
 
-templar_schedule_domicile_setup_effect = {
+templar_run_domicile_setup_effect = {
 	if = {
 		limit = {
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
 			NOT = { has_domicile = yes }
-			NOT = { has_character_flag = templar_domicile_setup_scheduled }
 		}
-		add_character_flag = templar_domicile_setup_scheduled
-		trigger_event = { id = templar_order.0010 days = 1 }
+		while = {
+			limit = {
+				NOT = { has_domicile = yes }
+				OR = {
+					NOT = { exists = var:templar_domicile_setup_retries }
+					var:templar_domicile_setup_retries < 5
+				}
+			}
+			count = 5
+			if = {
+				limit = { NOT = { exists = var:templar_domicile_setup_retries } }
+				set_variable = { name = templar_domicile_setup_retries value = 0 }
+			}
+			change_variable = { name = templar_domicile_setup_retries add = 1 }
+			if = {
+				limit = {
+					OR = {
+						has_government = templar_chapter_domicile_seed_government
+						has_government = landless_adventurer_government
+					}
+				}
+				templar_finalize_domicile_seed_government_effect = yes
+			}
+			else = {
+				templar_refresh_government_for_domicile_effect = yes
+				templar_initialize_chapter_domicile_effect = yes
+			}
+		}
+		if = {
+			limit = { has_domicile = yes }
+			remove_variable = templar_domicile_setup_retries
+			templar_setup_chapter_domicile_buildings_effect = yes
+		}
 	}
 	else_if = {
 		limit = {
@@ -445,6 +478,10 @@ templar_schedule_domicile_setup_effect = {
 		}
 		templar_setup_chapter_domicile_buildings_effect = yes
 	}
+}
+
+templar_schedule_domicile_setup_effect = {
+	templar_run_domicile_setup_effect = yes
 }
 
 templar_refresh_government_for_domicile_effect = {
@@ -463,8 +500,17 @@ templar_refresh_government_for_domicile_effect = {
 				save_scope_as = templar_ho_title
 			}
 			change_government = templar_chapter_domicile_seed_government
+			# Fallback: if the seed government was rejected, bounce through the
+			# vanilla adventurer government (always legal, always creates a domicile).
 			if = {
-				limit = { exists = scope:templar_ho_title }
+				limit = { NOT = { has_government = templar_chapter_domicile_seed_government } }
+				change_government = landless_adventurer_government
+			}
+			if = {
+				limit = {
+					exists = scope:templar_ho_title
+					NOT = { primary_title = scope:templar_ho_title }
+				}
 				set_primary_title_to = scope:templar_ho_title
 			}
 		}
@@ -477,7 +523,10 @@ templar_finalize_domicile_seed_government_effect = {
 			has_dlc_feature = roads_to_power
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
-			has_government = templar_chapter_domicile_seed_government
+			OR = {
+				has_government = templar_chapter_domicile_seed_government
+				has_government = landless_adventurer_government
+			}
 		}
 		hidden_effect = {
 			every_held_title = {
@@ -486,9 +535,14 @@ templar_finalize_domicile_seed_government_effect = {
 			}
 			change_government = holy_order_government
 			if = {
-				limit = { exists = scope:templar_ho_title }
+				limit = {
+					exists = scope:templar_ho_title
+					NOT = { primary_title = scope:templar_ho_title }
+				}
 				set_primary_title_to = scope:templar_ho_title
 			}
+			# Re-assert elective succession in case the swap dropped it.
+			templar_set_holy_order_elective_succession_effect = yes
 		}
 	}
 }
@@ -503,7 +557,12 @@ templar_initialize_chapter_domicile_effect = {
 		if = {
 			limit = { NOT = { has_domicile = yes } }
 			if = {
-				limit = { has_government = templar_chapter_domicile_seed_government }
+				limit = {
+					OR = {
+						has_government = templar_chapter_domicile_seed_government
+						has_government = landless_adventurer_government
+					}
+				}
 				templar_finalize_domicile_seed_government_effect = yes
 			}
 			else = {
@@ -530,7 +589,7 @@ templar_count_ho_leases_effect = {
 				limit = {
 					is_under_holy_order_lease = yes
 					OR = {
-						lessee = scope:templar_ho_title
+						lessee_title = scope:templar_ho_title
 						lessee = root
 					}
 				}
@@ -545,27 +604,42 @@ templar_reset_ho_maa_sync_effect = {
 	remove_variable = templar_ho_army_lease_snapshot
 }
 
+templar_refresh_title_heir_effect = {
+	if = {
+		limit = {
+			is_ruler = yes
+			government_has_flag = government_is_holy_order
+			any_held_title = { is_holy_order = yes }
+		}
+		templar_auto_appoint_senior_knights_effect = yes
+		templar_repair_senior_knight_election_effect = yes
+		templar_auto_nominate_chapter_successor_effect = yes
+	}
+}
+
 templar_automated_grandmaster_maintenance_effect = {
 	if = {
 		limit = {
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
 			templar_is_active_grandmaster_trigger = yes
+			NOT = { has_character_flag = templar_maintenance_running }
 		}
+		add_character_flag = templar_maintenance_running
 		templar_set_holy_order_elective_succession_effect = yes
 		templar_enforce_holy_order_identity_effect = yes
 		templar_initialize_chapter_voices_effect = yes
 		templar_initialize_chapter_domicile_effect = yes
-		templar_schedule_domicile_setup_effect = yes
+		templar_run_domicile_setup_effect = yes
 		templar_sync_vanilla_commanderies_effect = yes
 		templar_auto_appoint_senior_knights_effect = yes
 		templar_repair_senior_knight_election_effect = yes
-		templar_auto_nominate_chapter_successor_effect = yes
-		templar_schedule_senior_knight_setup_effect = yes
 		if = {
 			limit = { templar_grandmaster_setup_incomplete_trigger = yes }
-			templar_schedule_grandmaster_finalize_effect = yes
+			templar_run_grandmaster_finalize_if_needed_effect = yes
 		}
+		templar_refresh_title_heir_effect = yes
+		remove_character_flag = templar_maintenance_running
 	}
 }
 
@@ -575,31 +649,15 @@ templar_sync_ho_army_effect = {
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
 			templar_is_active_grandmaster_trigger = yes
+			number_of_maa_regiments < 1
+			NOT = { has_character_flag = templar_ho_maa_bootstrapped }
 		}
 		hidden_effect = {
+			add_character_flag = templar_ho_maa_bootstrapped
 			templar_count_ho_leases_effect = yes
-			if = {
-				limit = {
-					OR = {
-						is_ai = no
-						NOT = { has_character_flag = templar_ho_army_synced }
-						NOT = { has_variable = templar_ho_army_lease_snapshot }
-						var:templar_ho_army_lease_snapshot < var:templar_ho_lease_count
-						var:templar_ho_army_lease_snapshot > var:templar_ho_lease_count
-					}
-				}
-				templar_rebuild_ho_maa_regiments_effect = yes
-				set_variable = { name = templar_ho_army_lease_snapshot value = var:templar_ho_lease_count }
-				add_character_flag = templar_ho_army_synced
-				if = {
-					limit = {
-						is_ai = no
-						NOT = { has_character_flag = templar_maa_setup_scheduled }
-					}
-					add_character_flag = templar_maa_setup_scheduled
-					trigger_event = { id = templar_order.0013 days = 1 }
-				}
-			}
+			templar_rebuild_ho_maa_regiments_effect = yes
+			set_variable = { name = templar_ho_army_lease_snapshot value = var:templar_ho_lease_count }
+			add_character_flag = templar_ho_army_synced
 		}
 	}
 }
@@ -868,24 +926,19 @@ templar_install_old_grandmaster_as_knight_effect = {
 	}
 }
 
-templar_schedule_grandmaster_finalize_effect = {
+templar_run_grandmaster_finalize_if_needed_effect = {
 	if = {
 		limit = {
 			is_ruler = yes
 			any_held_title = { is_holy_order = yes }
 			templar_grandmaster_setup_incomplete_trigger = yes
-			NOT = { has_character_flag = templar_finalize_scheduled }
+			NOT = { has_character_flag = templar_finalize_running }
 		}
-		if = {
-			limit = { NOT = { has_variable = templar_finalize_retries } }
-			set_variable = { name = templar_finalize_retries value = 0 }
-		}
-		if = {
-			limit = { var:templar_finalize_retries < 10 }
-			change_variable = { name = templar_finalize_retries add = 1 }
-			add_character_flag = templar_finalize_scheduled
-			trigger_event = { id = templar_order.0009 days = 1 }
-		}
+		add_character_flag = templar_finalize_running
+		templar_enforce_landless_grandmaster_effect = yes
+		templar_run_domicile_setup_effect = yes
+		templar_enforce_holy_order_identity_effect = yes
+		remove_character_flag = templar_finalize_running
 	}
 	if = {
 		limit = {
@@ -895,6 +948,10 @@ templar_schedule_grandmaster_finalize_effect = {
 		}
 		remove_variable = templar_finalize_retries
 	}
+}
+
+templar_schedule_grandmaster_finalize_effect = {
+	templar_run_grandmaster_finalize_if_needed_effect = yes
 }
 
 templar_setup_chapter_domicile_effect = {
@@ -941,43 +998,38 @@ templar_set_holy_order_elective_succession_effect = {
 	if = {
 		limit = {
 			is_ruler = yes
-			is_ai = no
+			government_has_flag = government_is_holy_order
 			any_held_title = { is_holy_order = yes }
+		}
+		if = {
+			limit = { has_realm_law = landless_adventurer_succession_law }
+			remove_realm_law = landless_adventurer_succession_law
+		}
+		# Vanilla holy_order_succession_law is theocratic POOL succession and shows
+		# no heir ("No Player Heir"). Use the elective law at BOTH the realm and
+		# title level so the election governs succession regardless of which law
+		# level the engine consults.
+		if = {
+			limit = { NOT = { has_realm_law = templar_holy_order_elective_succession_law } }
+			add_realm_law_skip_effects = templar_holy_order_elective_succession_law
+		}
+		if = {
+			limit = { has_realm_law = holy_order_succession_law }
+			remove_realm_law = holy_order_succession_law
 		}
 		every_held_title = {
 			limit = { is_holy_order = yes }
 			if = {
-				limit = { NOT = { has_title_law = male_preference_law } }
-				add_title_law = male_preference_law
+				limit = { has_title_law = male_preference_law }
+				remove_title_law = male_preference_law
 			}
 			if = {
 				limit = { NOT = { has_title_law = templar_holy_order_elective_succession_law } }
 				add_title_law = templar_holy_order_elective_succession_law
 			}
 		}
-		if = {
-			limit = { has_realm_law = holy_order_succession_law }
-			remove_realm_law = holy_order_succession_law
-		}
-		if = {
-			limit = { has_realm_law = landless_adventurer_succession_law }
-			remove_realm_law = landless_adventurer_succession_law
-		}
-		if = {
-			limit = { NOT = { has_realm_law = male_preference_law } }
-			add_realm_law_skip_effects = male_preference_law
-		}
 		templar_auto_appoint_senior_knights_effect = yes
 		templar_repair_senior_knight_election_effect = yes
-	}
-	else_if = {
-		limit = {
-			is_ruler = yes
-			is_ai = yes
-			government_has_flag = government_is_holy_order
-			NOT = { has_realm_law = holy_order_succession_law }
-		}
-		add_realm_law_skip_effects = holy_order_succession_law
 	}
 }
 
@@ -989,6 +1041,7 @@ templar_set_holy_order_government_effect = {
 			OR = {
 				NOT = { government_has_flag = government_is_holy_order }
 				has_government = landless_adventurer_government
+				has_government = templar_chapter_domicile_seed_government
 			}
 		}
 		change_government = holy_order_government
@@ -1091,7 +1144,15 @@ templar_ho_player_succession_effect = {
 		limit = {
 			scope:title = { is_holy_order = yes }
 			exists = scope:previous_holder
-			scope:previous_holder = { has_character_flag = templar_player_grandmaster }
+			scope:previous_holder = {
+				OR = {
+					has_character_flag = templar_player_grandmaster
+					AND = {
+						is_ai = no
+						templar_is_active_grandmaster_trigger = yes
+					}
+				}
+			}
 			NOT = { has_character_flag = templar_ho_succession_handled }
 			NOT = { this = scope:previous_holder }
 		}
@@ -1122,9 +1183,14 @@ templar_inherit_grandmaster_effect = {
 			templar_rebuild_commandery_bonuses_effect = yes
 		}
 		templar_finalize_grandmaster_effect = yes
+		add_character_flag = templar_player_grandmaster
 	}
-	set_player_character = scope:templar_successor
-	scope:templar_successor = { add_character_flag = templar_player_grandmaster }
+	if = {
+		limit = {
+			scope:templar_old_grandmaster = { is_ai = no }
+		}
+		set_player_character = scope:templar_successor
+	}
 }
 
 templar_play_as_grandmaster_effect = {
@@ -1182,8 +1248,14 @@ templar_lease_barony_to_ho_effect = {
 		limit = {
 			is_leased_out = no
 			barony_is_valid_for_holy_order_lease_trigger = { CHARACTER = scope:templar_new_grandmaster }
+			scope:templar_new_grandmaster.faith = {
+				any_faith_holy_order = {
+					title = scope:templar_ho_title
+					save_temporary_scope_as = templar_ho_order
+				}
+			}
 		}
-		lease_out_to = scope:templar_ho_title
+		lease_out_to = scope:templar_ho_order
 	}
 }
 
@@ -1287,8 +1359,14 @@ templar_seize_old_grandmaster_baronies_effect = {
 				limit = {
 					is_leased_out = no
 					barony_is_valid_for_holy_order_lease_trigger = { CHARACTER = scope:templar_new_grandmaster }
+					scope:templar_new_grandmaster.faith = {
+						any_faith_holy_order = {
+							title = scope:templar_ho_title
+							save_temporary_scope_as = templar_ho_order
+						}
+					}
 				}
-				lease_out_to = scope:templar_ho_title
+				lease_out_to = scope:templar_ho_order
 			}
 		}
 	}
@@ -1338,10 +1416,16 @@ templar_transfer_holy_order_leases_effect = {
 					is_under_holy_order_lease = yes
 					OR = {
 						lessee = scope:templar_old_grandmaster
-						lessee = scope:templar_ho_title
+						lessee_title = scope:templar_ho_title
+					}
+					scope:templar_ho_title.faith = {
+						any_faith_holy_order = {
+							title = scope:templar_ho_title
+							save_temporary_scope_as = templar_ho_order
+						}
 					}
 				}
-				lease_out_to = scope:templar_ho_title
+				lease_out_to = scope:templar_ho_order
 			}
 		}
 	}
@@ -1443,7 +1527,6 @@ templar_become_grandmaster_effect = {
 	scope:templar_new_grandmaster = {
 		templar_finalize_grandmaster_effect = yes
 		remove_character_flag = templar_becoming_grandmaster
-
 		if = {
 			limit = { scope:templar_old_grandmaster = { has_variable = templar_simulated_order } }
 			set_variable = { name = templar_discipline value = scope:templar_old_grandmaster.var:templar_discipline }

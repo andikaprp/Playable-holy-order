@@ -298,6 +298,7 @@ templar_defend_commanderies_decision = {
 	}
 	effect = {
 		add_character_modifier = { modifier = templar_defending_commanderies_modifier years = 3 }
+		templar_defend_commanderies_join_wars_effect = yes
 		every_in_list = {
 			variable = templar_commanderies_list
 			if = {

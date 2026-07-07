@@ -1,3 +1,4 @@
+# Overrides holy_order_government — playable landless Grand Master with chapter domicile.
 holy_order_government = {
 	government_rules = {
 		council = yes
@@ -16,6 +17,8 @@ holy_order_government = {
 		men_at_arms_cap = 12
 		men_at_arms_limit = 24
 		knight_limit = 12
+		men_at_arms_maintenance = -1
+		army_maintenance_mult = -1
 	}
 
 	can_get_government = {
@@ -52,7 +55,6 @@ holy_order_government = {
 	domicile_type = holy_orders
 }
 
-# One-tick pivot only: engine spawns holy_orders domicile here, then we switch back.
 templar_chapter_domicile_seed_government = {
 	government_rules = {
 		council = yes
@@ -67,6 +69,7 @@ templar_chapter_domicile_seed_government = {
 
 	flags = {
 		government_is_templar_chapter_domicile_seed
+		government_is_holy_order
 		government_uses_domicile_but_not_adventurer
 	}
 
@@ -74,6 +77,9 @@ templar_chapter_domicile_seed_government = {
 		any_held_title = { is_holy_order = yes }
 	}
 
+	# Governments without a mechanic_type are rejected by change_government
+	# ("Trying to set illegal government").
+	mechanic_type = holy_order
+
 	color = hsv{ 0.00 0.00 0.66 }
 }
-

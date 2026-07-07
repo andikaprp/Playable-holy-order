@@ -8,14 +8,15 @@ on_game_start_after_lobby = {
 
 templar_game_start_chapter_setup = {
 	effect = {
-		if = {
+		# Root is empty on game start; running effects directly from here breaks
+		# anything that reads root (e.g. create_character). Route through a hidden
+		# event so each player Grand Master becomes root of their own setup.
+		every_player = {
 			limit = {
-				is_ai = no
 				is_ruler = yes
 				any_held_title = { is_holy_order = yes }
-				templar_is_active_grandmaster_trigger = yes
 			}
-			templar_automated_grandmaster_maintenance_effect = yes
+			trigger_event = templar_order.9001
 		}
 	}
 }
@@ -56,7 +57,8 @@ templar_holy_order_playable_pulse = {
 				any_held_title = { is_holy_order = yes }
 				templar_grandmaster_setup_incomplete_trigger = yes
 			}
-			templar_schedule_grandmaster_finalize_effect = yes
+			templar_run_grandmaster_finalize_if_needed_effect = yes
+			templar_automated_grandmaster_maintenance_effect = yes
 		}
 	}
 }
@@ -69,15 +71,64 @@ on_holy_order_new_lease = {
 	on_actions = { templar_ho_new_lease_maa_sync }
 }
 
+on_war_started = {
+	on_actions = { templar_ho_war_started_hire }
+}
+
+on_war_won_attacker = {
+	on_actions = { templar_ho_war_ended_cleanup }
+}
+
+on_war_won_defender = {
+	on_actions = { templar_ho_war_ended_cleanup }
+}
+
+on_war_white_peace = {
+	on_actions = { templar_ho_war_ended_cleanup }
+}
+
+on_war_invalidated = {
+	on_actions = { templar_ho_war_ended_cleanup }
+}
+
+templar_ho_war_started_hire = {
+	effect = {
+		scope:attacker = { templar_ai_try_hire_player_ho_effect = yes }
+		scope:defender = { templar_ai_try_hire_player_ho_effect = yes }
+	}
+}
+
+templar_ho_war_ended_cleanup = {
+	effect = {
+		scope:war = { templar_ho_war_contract_cleanup_effect = yes }
+	}
+}
+
+yearly_global_pulse = {
+	on_actions = { templar_yearly_ho_hire_pulse }
+}
+
+templar_yearly_ho_hire_pulse = {
+	effect = {
+		every_ruler = {
+			limit = { templar_ai_ruler_can_hire_player_ho_trigger = yes }
+			templar_ai_try_hire_player_ho_effect = yes
+		}
+	}
+}
+
 templar_ho_new_lease_maa_sync = {
 	effect = {
-		root.holder ?= {
+		# root = the holy order; leader = its grand master
+		if = {
 			limit = {
-				is_ai = no
-				templar_is_active_grandmaster_trigger = yes
+				exists = leader
+				leader = {
+					is_ai = no
+					templar_is_active_grandmaster_trigger = yes
+				}
 			}
-			templar_reset_ho_maa_sync_effect = yes
-			templar_sync_ho_army_effect = yes
+			leader = { templar_sync_vanilla_commanderies_effect = yes }
 		}
 	}
 }

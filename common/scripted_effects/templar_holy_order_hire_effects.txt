@@ -1,0 +1,262 @@
+templar_execute_ho_hire_contract_effect = {
+	$HIRER$ = { save_scope_as = templar_hirer }
+	$GRANDMASTER$ = { save_scope_as = templar_ho_leader }
+	$HO_TITLE$ = { save_scope_as = templar_ho_title }
+
+	scope:templar_hirer = {
+		random_character_war = {
+			limit = {
+				is_war_leader = scope:templar_hirer
+				NOT = { has_variable = templar_faith_ho_hired }
+				NOT = { scope:templar_ho_leader = { is_participant_in_war = prev } }
+				OR = {
+					any_war_defender = {
+						NOT = { this = scope:templar_hirer }
+						is_hostile_enough_for_holy_war_trigger = { FAITH = scope:templar_hirer.faith }
+					}
+					any_war_attacker = {
+						NOT = { this = scope:templar_hirer }
+						is_hostile_enough_for_holy_war_trigger = { FAITH = scope:templar_hirer.faith }
+					}
+				}
+			}
+			save_scope_as = templar_hire_war
+		}
+	}
+
+	if = {
+		limit = { exists = scope:templar_hire_war }
+
+		scope:templar_ho_leader = {
+			set_variable = { name = templar_ho_contract_employer value = scope:templar_hirer }
+			set_variable = { name = templar_ho_contract_war value = scope:templar_hire_war }
+			add_character_flag = templar_under_ho_contract
+		}
+		scope:templar_hire_war = {
+			set_variable = { name = templar_faith_ho_hired value = yes }
+			set_variable = { name = templar_ho_hired_leader value = scope:templar_ho_leader }
+		}
+
+		if = {
+			limit = {
+				NOT = {
+					scope:templar_hirer.faith = {
+						any_faith_holy_order = {
+							title = scope:templar_ho_title
+							holy_order_patron = scope:templar_hirer
+						}
+					}
+				}
+			}
+			scope:templar_hirer = {
+				add_piety = {
+					value = scope:templar_ho_leader.current_military_strength
+					divide = 5
+					min = 75
+					max = 500
+					multiply = -1
+				}
+			}
+			scope:templar_ho_leader = {
+				add_piety = {
+					value = scope:templar_ho_leader.current_military_strength
+					divide = 10
+					min = 50
+					max = 250
+				}
+			}
+		}
+
+		if = {
+			limit = { scope:templar_hirer = { is_attacker_in_war = scope:templar_hire_war } }
+			scope:templar_hire_war = {
+				hidden_effect = {
+					scope:templar_ho_leader = { set_called_to = scope:templar_hirer }
+				}
+				add_attacker = scope:templar_ho_leader
+			}
+		}
+		else = {
+			scope:templar_hire_war = {
+				hidden_effect = {
+					scope:templar_ho_leader = { set_called_to = scope:templar_hirer }
+				}
+				add_defender = scope:templar_ho_leader
+			}
+		}
+
+		scope:templar_hirer = {
+			add_opinion = {
+				target = scope:templar_ho_leader
+				modifier = holy_order_patron_opinion
+				opinion = 15
+			}
+		}
+		scope:templar_ho_leader = {
+			add_prestige = 150
+			templar_change_reputation_effect = { VALUE = 5 }
+			if = {
+				limit = { is_ai = no }
+				trigger_event = { id = templar_order.3000 days = 1 }
+			}
+		}
+	}
+}
+
+templar_ai_try_hire_player_ho_effect = {
+	# Root can be empty (yearly global pulse) — always use the saved ruler scope.
+	save_scope_as = templar_hirer_ruler
+	if = {
+		limit = { templar_ai_ruler_can_hire_player_ho_trigger = yes }
+		faith = {
+			every_faith_holy_order = {
+				limit = {
+					leader = {
+						is_ai = no
+						templar_is_active_grandmaster_trigger = yes
+						templar_gm_available_for_hire_trigger = yes
+					}
+				}
+				# Scope here is the holy order object; its title is a separate scope.
+				save_scope_as = templar_ho_order
+				title = { save_scope_as = templar_ho_title }
+				leader = { save_scope_as = templar_ho_leader }
+				if = {
+					limit = {
+						templar_ruler_can_hire_gm_in_faith_war_trigger = {
+							HIRER = scope:templar_hirer_ruler
+							GRANDMASTER = scope:templar_ho_leader
+						}
+					}
+					if = {
+						limit = {
+							OR = {
+								holy_order_patron = scope:templar_hirer_ruler
+								scope:templar_hirer_ruler = {
+									any_sub_realm_barony = {
+										is_under_holy_order_lease = yes
+										lessee_title = scope:templar_ho_title
+									}
+								}
+							}
+						}
+						templar_execute_ho_hire_contract_effect = {
+							HIRER = scope:templar_hirer_ruler
+							GRANDMASTER = scope:templar_ho_leader
+							HO_TITLE = scope:templar_ho_title
+						}
+					}
+					else_if = {
+						limit = {
+							scope:templar_hirer_ruler = { highest_held_title_tier >= tier_kingdom }
+						}
+						random = {
+							chance = 75
+							templar_execute_ho_hire_contract_effect = {
+								HIRER = scope:templar_hirer_ruler
+								GRANDMASTER = scope:templar_ho_leader
+								HO_TITLE = scope:templar_ho_title
+							}
+						}
+					}
+					else = {
+						random = {
+							chance = 40
+							templar_execute_ho_hire_contract_effect = {
+								HIRER = scope:templar_hirer_ruler
+								GRANDMASTER = scope:templar_ho_leader
+								HO_TITLE = scope:templar_ho_title
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+templar_ho_war_contract_cleanup_effect = {
+	if = {
+		limit = { has_variable = templar_ho_hired_leader }
+		var:templar_ho_hired_leader = {
+			remove_character_flag = templar_under_ho_contract
+			remove_variable = templar_ho_contract_employer
+			remove_variable = templar_ho_contract_war
+		}
+		remove_variable = templar_ho_hired_leader
+		remove_variable = templar_faith_ho_hired
+	}
+}
+
+templar_defend_commanderies_join_wars_effect = {
+	every_in_list = {
+		variable = templar_commanderies_list
+		if = {
+			limit = {
+				exists = var:templar_commandery_patron
+				var:templar_commandery_patron = {
+					save_temporary_scope_as = templar_cmd_patron
+					is_at_war = yes
+					any_character_war = {
+						save_temporary_scope_as = templar_cmd_war
+						is_war_leader = scope:templar_cmd_patron
+						NOT = { root = { is_participant_in_war = scope:templar_cmd_war } }
+						OR = {
+							any_war_attacker = {
+								NOT = { this = scope:templar_cmd_patron }
+								faith = {
+									is_hostile_enough_for_holy_war_trigger = { FAITH = root.faith }
+								}
+							}
+							any_war_defender = {
+								NOT = { this = scope:templar_cmd_patron }
+								faith = {
+									is_hostile_enough_for_holy_war_trigger = { FAITH = root.faith }
+								}
+							}
+						}
+					}
+				}
+			}
+			var:templar_commandery_patron = {
+				save_scope_as = templar_cmd_patron
+				random_character_war = {
+					limit = {
+						save_temporary_scope_as = templar_cmd_war
+						is_war_leader = scope:templar_cmd_patron
+						NOT = { root = { is_participant_in_war = scope:templar_cmd_war } }
+						OR = {
+							any_war_attacker = {
+								NOT = { this = scope:templar_cmd_patron }
+								faith = {
+									is_hostile_enough_for_holy_war_trigger = { FAITH = root.faith }
+								}
+							}
+							any_war_defender = {
+								NOT = { this = scope:templar_cmd_patron }
+								faith = {
+									is_hostile_enough_for_holy_war_trigger = { FAITH = root.faith }
+								}
+							}
+						}
+					}
+					save_scope_as = templar_defense_war
+				}
+			}
+			if = {
+				limit = { exists = scope:templar_defense_war }
+				if = {
+					limit = {
+						var:templar_commandery_patron = {
+							is_attacker_in_war = scope:templar_defense_war
+						}
+					}
+					scope:templar_defense_war = { add_attacker = root }
+				}
+				else = {
+					scope:templar_defense_war = { add_defender = root }
+				}
+			}
+		}
+	}
+}

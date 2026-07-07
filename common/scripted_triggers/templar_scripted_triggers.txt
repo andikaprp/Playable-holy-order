@@ -94,6 +94,42 @@ templar_holy_order_election_senior_knight_candidate_trigger = {
 	NOT = { this = scope:holder }
 }
 
+templar_holy_order_pool_succession_candidate_trigger = {
+	is_capable_adult = yes
+	is_imprisoned = no
+	NOT = { this = scope:base }
+	faith = scope:base.faith
+	NOT = { has_trait = excommunicated }
+	templar_holy_order_election_banned_trait_trigger = no
+	has_unelectable_government_trigger = no
+	OR = {
+		is_courtier_of = scope:base
+		AND = {
+			scope:base.faith = { has_allowed_gender_for_clergy = root }
+			OR = {
+				has_trait = order_member
+				has_trait = devoted
+				has_trait = pilgrim
+			}
+		}
+	}
+	OR = {
+		has_court_position = templar_senior_knight_court_position
+		has_character_flag = templar_senior_knight
+		AND = {
+			is_courtier_of = scope:base
+			OR = {
+				has_trait = order_member
+				is_knight_of = scope:base
+			}
+			OR = {
+				martial >= 8
+				prowess >= 10
+			}
+		}
+	}
+}
+
 templar_holy_order_election_senior_knight_dynasty_candidate_trigger = {
 	templar_holy_order_election_senior_knight_candidate_trigger = yes
 }
@@ -287,32 +323,6 @@ templar_grandmaster_setup_incomplete_trigger = {
 
 
 
-is_playable_character = {
-
-	OR = {
-
-		is_landed = yes
-
-		is_landless_administrative = yes
-
-		is_landless_adventurer = yes
-
-		is_landless_nomad = yes
-
-		is_landless_soryo = yes
-
-		is_landless_holy_order = yes
-
-		is_playable_holy_order = yes
-
-		tgp_is_any_minister = yes
-
-	}
-
-}
-
-
-
 templar_loan_needy_ruler_trigger = {
 
 	is_ruler = yes
@@ -343,7 +353,7 @@ templar_is_registered_commandery_trigger = {
 
 			is_under_holy_order_lease = yes
 
-			lessee = $GRANDMASTER$.primary_title
+			lessee_title = $GRANDMASTER$.primary_title
 
 		}
 
@@ -391,6 +401,85 @@ templar_recipient_has_charter_barony_trigger = {
 
 	}
 
+}
+
+templar_gm_available_for_hire_trigger = {
+	templar_is_active_grandmaster_trigger = yes
+	is_at_war = no
+	is_imprisoned = no
+	is_alive = yes
+	current_military_strength >= 100
+	NOT = { has_character_flag = templar_under_ho_contract }
+}
+
+templar_character_at_faith_war_trigger = {
+	save_temporary_scope_as = templar_faith_war_char
+	is_at_war = yes
+	any_character_war = {
+		is_war_leader = scope:templar_faith_war_char
+		OR = {
+			any_war_defender = {
+				NOT = { this = scope:templar_faith_war_char }
+				faith = {
+					is_hostile_enough_for_holy_war_trigger = { FAITH = scope:templar_faith_war_char.faith }
+				}
+			}
+			any_war_attacker = {
+				NOT = { this = scope:templar_faith_war_char }
+				faith = {
+					is_hostile_enough_for_holy_war_trigger = { FAITH = scope:templar_faith_war_char.faith }
+				}
+			}
+		}
+	}
+}
+
+templar_ai_ruler_can_hire_player_ho_trigger = {
+	is_ai = yes
+	is_alive = yes
+	is_imprisoned = no
+	is_landed = yes
+	highest_held_title_tier >= tier_duchy
+	NOT = { government_has_flag = government_is_holy_order }
+	templar_character_at_faith_war_trigger = yes
+}
+
+templar_ruler_can_hire_gm_in_faith_war_trigger = {
+	$HIRER$ = {
+		any_character_war = {
+			save_temporary_scope_as = templar_hire_war
+			is_war_leader = $HIRER$
+			NOT = { has_variable = templar_faith_ho_hired }
+			NOT = { $GRANDMASTER$ = { is_participant_in_war = scope:templar_hire_war } }
+			OR = {
+				any_war_defender = {
+					NOT = { this = $HIRER$ }
+					faith = {
+						is_hostile_enough_for_holy_war_trigger = { FAITH = $HIRER$.faith }
+					}
+				}
+				any_war_attacker = {
+					NOT = { this = $HIRER$ }
+					faith = {
+						is_hostile_enough_for_holy_war_trigger = { FAITH = $HIRER$.faith }
+					}
+				}
+			}
+		}
+	}
+}
+
+templar_offer_ho_war_target_trigger = {
+	is_landed = yes
+	faith = scope:actor.faith
+	is_at_war = yes
+	NOT = { government_has_flag = government_is_holy_order }
+	templar_character_at_faith_war_trigger = yes
+	any_character_war = {
+		is_war_leader = prev
+		NOT = { has_variable = templar_faith_ho_hired }
+		NOT = { scope:actor = { is_participant_in_war = prev } }
+	}
 }
 
 

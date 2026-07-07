@@ -21,13 +21,20 @@ templar_cleanup_legacy_chapter_voices_effect = {
 }
 
 templar_spawn_chapter_brother_effect = {
+	save_scope_as = templar_chapter_gm
+	# No template: the vanilla 'knight' template reads root, which is unset in
+	# on_action contexts and corrupts the created character (invalid culture/faith).
 	create_character = {
-		employer = root
-		template = knight
-		dynasty = root.dynasty
-		faith = root.faith
-		culture = root.culture
-		gender_female_chance = root_faith_clergy_gender_female_chance
+		employer = scope:templar_chapter_gm
+		age = { 22 40 }
+		gender = male
+		random_traits = yes
+		trait = education_martial_3
+		martial = { 8 14 }
+		prowess = { 10 16 }
+		dynasty = scope:templar_chapter_gm.dynasty
+		faith = scope:templar_chapter_gm.faith
+		culture = scope:templar_chapter_gm.culture
 		save_scope_as = templar_spawned_brother
 	}
 	scope:templar_spawned_brother = {
@@ -36,11 +43,12 @@ templar_spawn_chapter_brother_effect = {
 }
 
 templar_ensure_chapter_brethren_pool_effect = {
+	save_scope_as = templar_chapter_gm
 	while = {
 		limit = {
 			NOR = {
 				any_courtier = {
-					templar_senior_knight_auto_appoint_trigger = { EMPLOYER = root }
+					templar_senior_knight_auto_appoint_trigger = { EMPLOYER = scope:templar_chapter_gm }
 					count = 3
 				}
 			}
@@ -54,23 +62,23 @@ templar_auto_appoint_senior_knights_effect = {
 	if = {
 		limit = {
 			is_ruler = yes
-			is_ai = no
 			templar_is_active_grandmaster_trigger = yes
 			any_held_title = { is_holy_order = yes }
 		}
+		save_scope_as = templar_chapter_gm
 		templar_ensure_chapter_brethren_pool_effect = yes
 		while = {
 			limit = {
 				templar_senior_knight_slots_open_trigger = yes
 				any_courtier = {
-					templar_senior_knight_auto_appoint_trigger = { EMPLOYER = root }
+					templar_senior_knight_auto_appoint_trigger = { EMPLOYER = scope:templar_chapter_gm }
 					NOT = { has_court_position = templar_senior_knight_court_position }
 				}
 			}
 			count = 3
 			ordered_courtier = {
 				limit = {
-					templar_senior_knight_auto_appoint_trigger = { EMPLOYER = root }
+					templar_senior_knight_auto_appoint_trigger = { EMPLOYER = scope:templar_chapter_gm }
 					NOT = { has_court_position = templar_senior_knight_court_position }
 				}
 				order_by = {
@@ -93,7 +101,7 @@ templar_auto_appoint_senior_knights_effect = {
 				}
 				scope:templar_senior_knight_candidate = {
 					save_scope_as = employee
-					root = { save_scope_as = liege }
+					scope:templar_chapter_gm = { save_scope_as = liege }
 					templar_register_senior_knight_effect = yes
 				}
 			}
@@ -131,13 +139,6 @@ templar_register_senior_knight_effect = {
 			limit = { has_trait = order_member }
 			add_character_flag = templar_had_order_member
 			remove_trait = order_member
-		}
-		if = {
-			limit = {
-				exists = scope:liege.dynasty
-				NOT = { dynasty = scope:liege.dynasty }
-			}
-			set_dynasty = scope:liege.dynasty
 		}
 		if = {
 			limit = {
@@ -209,6 +210,7 @@ templar_set_chapter_nominee_effect = {
 		save_scope_as = templar_chapter_nominee
 	}
 	set_variable = { name = templar_chapter_nominee value = scope:templar_nominee }
+	templar_refresh_title_heir_effect = yes
 	send_interface_toast = {
 		type = event_toast_effect_neutral
 		title = templar_chapter_vote_toast_title
@@ -218,7 +220,7 @@ templar_set_chapter_nominee_effect = {
 }
 
 templar_cleanup_stale_apostolic_voice_effect = {
-	every_character = {
+	every_living_character = {
 		limit = {
 			has_character_flag = templar_apostolic_voice_holder
 			OR = {
@@ -276,7 +278,7 @@ templar_grant_apostolic_voice_effect = {
 			}
 		}
 		create_dynamic_title = {
-			tier = barony
+			tier = duchy
 			name = templar_apostolic_voice_title_name
 		}
 		scope:templar_apostolic_voice_liege = {
@@ -412,17 +414,7 @@ templar_repair_chapter_voice_vassalage_effect = {
 }
 
 templar_schedule_senior_knight_setup_effect = {
-	if = {
-		limit = {
-			is_ruler = yes
-			is_ai = no
-			templar_is_active_grandmaster_trigger = yes
-			any_held_title = { is_holy_order = yes }
-			NOT = { has_character_flag = templar_senior_knight_setup_scheduled }
-		}
-		add_character_flag = templar_senior_knight_setup_scheduled
-		trigger_event = { id = templar_order.0011 days = 1 }
-	}
+	templar_refresh_title_heir_effect = yes
 }
 
 templar_grant_chapter_voice_to_senior_knight_effect = {
@@ -442,7 +434,7 @@ templar_grant_chapter_voice_to_senior_knight_effect = {
 			}
 		}
 		create_dynamic_title = {
-			tier = barony
+			tier = duchy
 			name = templar_chapter_voice_title_name
 		}
 		scope:templar_voice_liege = {

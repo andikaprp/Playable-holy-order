@@ -57,8 +57,11 @@ templar_request_endorsement_interaction = {
 	is_shown = {
 		scope:actor = { has_variable = templar_simulated_order }
 		scope:recipient = {
-			is_head_of_faith = yes
 			faith = scope:actor.faith
+			faith = {
+				exists = religious_head
+				religious_head = scope:recipient
+			}
 			is_ai = yes
 		}
 		scope:recipient != scope:actor
@@ -163,8 +166,14 @@ templar_request_commandery_charter_interaction = {
 				limit = {
 					is_leased_out = no
 					barony_is_valid_for_holy_order_lease_trigger = { CHARACTER = scope:actor }
+					scope:actor.faith = {
+						any_faith_holy_order = {
+							title = scope:actor.primary_title
+							save_temporary_scope_as = templar_ho_order
+						}
+					}
 				}
-				lease_out_to = scope:actor.primary_title
+				lease_out_to = scope:templar_ho_order
 			}
 		}
 		scope:actor = {
@@ -568,5 +577,62 @@ templar_support_commandery_patron_interaction = {
 			templar_change_reputation_effect = { VALUE = 3 }
 			templar_rebuild_commandery_bonuses_effect = yes
 		}
+	}
+}
+
+templar_offer_order_in_holy_war_interaction = {
+	common_interaction = yes
+	category = interaction_category_religion
+	interface_priority = 45
+	cooldown_against_recipient = { years = 1 }
+	icon = holy_order
+	desc = templar_offer_order_in_holy_war_interaction_desc
+	greeting = positive
+	notification_text = templar_offer_order_in_holy_war_interaction_notification
+	answer_accept_key = templar_interaction_accept
+	answer_reject_key = templar_interaction_reject
+	use_diplomatic_range = yes
+
+	is_shown = {
+		scope:actor = {
+			templar_is_active_grandmaster_trigger = yes
+			government_has_flag = government_is_holy_order
+			templar_gm_available_for_hire_trigger = yes
+		}
+		scope:recipient = { templar_offer_ho_war_target_trigger = yes }
+		scope:recipient != scope:actor
+	}
+
+	is_valid_showing_failures_only = {
+		custom_tooltip = {
+			text = templar_offer_ho_war_faith_war_tt
+			scope:recipient = { templar_character_at_faith_war_trigger = yes }
+		}
+	}
+
+	on_accept = {
+		scope:actor.primary_title = { save_scope_as = templar_ho_title }
+		templar_execute_ho_hire_contract_effect = {
+			HIRER = scope:recipient
+			GRANDMASTER = scope:actor
+			HO_TITLE = scope:templar_ho_title
+		}
+	}
+
+	ai_accept = {
+		base = 25
+		modifier = {
+			add = 50
+			scope:recipient.faith = {
+				any_faith_holy_order = {
+					title = scope:actor.primary_title
+					holy_order_patron = scope:recipient
+				}
+			}
+		}
+		modifier = { add = 30 scope:recipient = { is_at_war = yes } }
+		modifier = { add = 20 scope:actor = { var:templar_reputation >= 50 } }
+		modifier = { add = -25 scope:actor = { var:templar_reputation <= 25 } }
+		modifier = { add = 25 scope:recipient = { highest_held_title_tier >= tier_kingdom } }
 	}
 }

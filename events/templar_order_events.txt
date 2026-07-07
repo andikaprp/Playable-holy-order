@@ -528,8 +528,7 @@ templar_order.0009 = {
 	hidden = yes
 
 	immediate = {
-		remove_character_flag = templar_finalize_scheduled
-		templar_finalize_grandmaster_effect = yes
+		templar_automated_grandmaster_maintenance_effect = yes
 	}
 }
 
@@ -538,38 +537,8 @@ templar_order.0010 = {
 	hidden = yes
 
 	immediate = {
-		remove_character_flag = templar_domicile_setup_scheduled
-		if = {
-			limit = { has_domicile = yes }
-			templar_setup_chapter_domicile_buildings_effect = yes
-		}
-		else_if = {
-			limit = { has_government = templar_chapter_domicile_seed_government }
-			templar_finalize_domicile_seed_government_effect = yes
-			templar_setup_chapter_domicile_buildings_effect = yes
-		}
-		else = {
-			if = {
-				limit = { NOT = { exists = var:templar_domicile_setup_retries } }
-				set_variable = { name = templar_domicile_setup_retries value = 0 }
-			}
-			if = {
-				limit = { var:templar_domicile_setup_retries < 5 }
-				change_variable = { name = templar_domicile_setup_retries add = 1 }
-				templar_refresh_government_for_domicile_effect = yes
-				templar_initialize_chapter_domicile_effect = yes
-				add_character_flag = templar_domicile_setup_scheduled
-				trigger_event = { id = templar_order.0010 days = 1 }
-			}
-		}
-		if = {
-			limit = {
-				has_domicile = yes
-				NOT = { templar_grandmaster_setup_incomplete_trigger = yes }
-			}
-			remove_variable = templar_domicile_setup_retries
-			templar_automated_grandmaster_maintenance_effect = yes
-		}
+		templar_run_domicile_setup_effect = yes
+		templar_automated_grandmaster_maintenance_effect = yes
 	}
 }
 
@@ -578,16 +547,7 @@ templar_order.0013 = {
 	hidden = yes
 
 	immediate = {
-		remove_character_flag = templar_maa_setup_scheduled
-		if = {
-			limit = {
-				is_ruler = yes
-				any_held_title = { is_holy_order = yes }
-				templar_is_active_grandmaster_trigger = yes
-				number_of_maa_regiments < 1
-			}
-			templar_automated_grandmaster_maintenance_effect = yes
-		}
+		templar_automated_grandmaster_maintenance_effect = yes
 	}
 }
 
@@ -596,8 +556,7 @@ templar_order.0011 = {
 	hidden = yes
 
 	immediate = {
-		remove_character_flag = templar_senior_knight_setup_scheduled
-		templar_automated_grandmaster_maintenance_effect = yes
+		templar_refresh_title_heir_effect = yes
 	}
 }
 
@@ -655,5 +614,39 @@ templar_order.0012 = {
 	}
 	option = {
 		name = templar_order.0012.d
+	}
+}
+
+# Hidden setup event — gives game-start chapter setup a proper character root.
+templar_order.9001 = {
+	type = character_event
+	hidden = yes
+
+	trigger = {
+		is_ruler = yes
+		any_held_title = { is_holy_order = yes }
+	}
+
+	immediate = {
+		templar_ensure_playable_grandmaster_effect = yes
+		templar_automated_grandmaster_maintenance_effect = yes
+	}
+}
+
+templar_order.3000 = {
+	type = character_event
+	title = templar_order.3000.t
+	desc = templar_order.3000.desc
+	theme = faith
+	override_background = { reference = ep3_military_tent }
+
+	immediate = {
+		var:templar_ho_contract_employer ?= { save_scope_as = templar_hirer }
+	}
+
+	left_portrait = scope:templar_hirer
+
+	option = {
+		name = templar_order.3000.a
 	}
 }

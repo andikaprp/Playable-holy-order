@@ -43,8 +43,13 @@ templar_become_grandmaster_interaction = {
 	}
 
 	on_accept = {
+		scope:actor = { save_scope_as = templar_new_grandmaster }
+		scope:recipient = { save_scope_as = templar_old_grandmaster }
+		scope:recipient.primary_title = { save_scope_as = templar_ho_title }
 		hidden_effect = {
-			templar_become_grandmaster_effect = yes
+			scope:templar_new_grandmaster = {
+				templar_become_grandmaster_effect = yes
+			}
 		}
 	}
 }

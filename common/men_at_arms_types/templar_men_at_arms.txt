@@ -1,6 +1,10 @@
 templar_knights_of_the_temple = {
 	type = heavy_cavalry
-	can_recruit = { always = no }
+	can_recruit = {
+		government_has_flag = government_is_holy_order
+	}
+
+	holy_order_fallback = yes
 
 	damage = 38
 	toughness = 30
@@ -12,8 +16,8 @@ templar_knights_of_the_temple = {
 	}
 
 	buy_cost = { gold = 300 }
-	low_maintenance_cost = { gold = 0.15 }
-	high_maintenance_cost = { gold = 0.35 }
+	low_maintenance_cost = { gold = 0 }
+	high_maintenance_cost = { gold = 0 }
 
 	stack = 100
 
@@ -23,7 +27,11 @@ templar_knights_of_the_temple = {
 
 templar_sergeant_brothers = {
 	type = heavy_infantry
-	can_recruit = { always = no }
+	can_recruit = {
+		government_has_flag = government_is_holy_order
+	}
+
+	holy_order_fallback = yes
 
 	damage = 24
 	toughness = 34
@@ -35,8 +43,8 @@ templar_sergeant_brothers = {
 	}
 
 	buy_cost = { gold = 180 }
-	low_maintenance_cost = { gold = 0.08 }
-	high_maintenance_cost = { gold = 0.18 }
+	low_maintenance_cost = { gold = 0 }
+	high_maintenance_cost = { gold = 0 }
 
 	stack = 100
 
@@ -46,7 +54,11 @@ templar_sergeant_brothers = {
 
 templar_turcopoles = {
 	type = light_cavalry
-	can_recruit = { always = no }
+	can_recruit = {
+		government_has_flag = government_is_holy_order
+	}
+
+	holy_order_fallback = yes
 
 	damage = 20
 	toughness = 14

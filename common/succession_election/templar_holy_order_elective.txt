@@ -9,7 +9,7 @@ templar_holy_order_elective = {
 		modifier = {
 			desc = templar_holy_order_vote_strength_senior_knight
 			add = 2
-			templar_holy_order_election_senior_knight_elector_trigger = yes
+			templar_holy_order_election_senior_knight_candidate_trigger = yes
 		}
 		modifier = {
 			desc = templar_holy_order_vote_strength_pope
@@ -23,12 +23,11 @@ templar_holy_order_elective = {
 		add = {
 			type = holder_direct_vassals
 			limit = {
-				OR = {
-					templar_holy_order_election_senior_knight_elector_trigger = yes
-					templar_holy_order_pope_elector_trigger = yes
-				}
+				is_capable_adult = yes
+				is_imprisoned = no
 			}
 		}
+		max = 15
 	}
 
 	candidate_score = {
@@ -43,22 +42,46 @@ templar_holy_order_elective = {
 		modifier = {
 			add = 25
 			scope:candidate = {
-				templar_holy_order_election_senior_knight_vassal_candidate_trigger = yes
+				templar_holy_order_election_senior_knight_candidate_trigger = yes
+			}
+		}
+		modifier = {
+			add = 10000
+			scope:holder ?= {
+				exists = var:templar_chapter_nominee
+				var:templar_chapter_nominee = scope:candidate
 			}
 		}
 	}
 
 	candidates = {
+		# Senior Knights are moved into the Grand Master's dynasty when appointed,
+		# so holder_dynasty covers the chapter brethren.
 		add = {
-			type = holder_direct_vassals
+			type = holder_dynasty
 			limit = {
-				templar_holy_order_election_senior_knight_vassal_candidate_trigger = yes
+				templar_holy_order_election_senior_knight_candidate_trigger = yes
 			}
 		}
+		# Fallback: anyone holding a pressed claim on the order title.
 		add = {
 			type = title_claimants
 			limit = {
-				templar_holy_order_election_senior_knight_vassal_candidate_trigger = yes
+				is_capable_adult = yes
+				is_imprisoned = no
+				NOT = { has_trait = excommunicated }
+			}
+		}
+		# Last resort: chapter brothers at court, before Senior Knights are appointed.
+		add = {
+			type = holder_dynasty
+			limit = {
+				is_capable_adult = yes
+				is_imprisoned = no
+				NOT = { has_trait = excommunicated }
+				is_courtier_of = scope:holder
+				NOT = { this = scope:holder }
+				faith = scope:holder.faith
 			}
 		}
 	}

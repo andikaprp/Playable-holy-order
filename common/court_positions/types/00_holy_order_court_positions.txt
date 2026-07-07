@@ -41,10 +41,7 @@ templar_senior_knight_court_position = {
 	}
 
 	is_shown = {
-		OR = {
-			government_has_flag = government_is_holy_order
-			has_character_flag = templar_playable_grandmaster
-		}
+		government_has_flag = government_is_holy_order
 	}
 
 	valid_position = { }
@@ -92,6 +89,7 @@ templar_senior_knight_court_position = {
 		scope:liege = { save_scope_as = liege }
 		scope:employee = { save_scope_as = employee }
 		templar_register_senior_knight_effect = yes
+		scope:liege = { templar_refresh_title_heir_effect = yes }
 	}
 	on_court_position_revoked = {
 		scope:liege = { save_scope_as = liege }

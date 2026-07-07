@@ -1,6 +1,5 @@
 founded_holy_order_opinion = {
 	opinion = 10
-	same_faith = yes
 }
 
 templar_recognized_patron = {

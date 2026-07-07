@@ -1,4 +1,43 @@
+NGovernment = {
+	GOVERNMENT_TYPES = {
+		"feudal_government"
+		"republic_government"
+		"theocracy_government"
+		"clan_government"
+		"tribal_government"
+		"mercenary_government"
+		"holy_order_government"
+		"administrative_government"
+		"landless_adventurer_government"
+		"nomad_government"
+		"herder_government"
+		"celestial_government"
+		"japan_administrative_government"
+		"japan_feudal_government"
+		"mandala_government"
+		"wanua_government"
+		"meritocratic_government"
+		"steppe_admin_government"
+		"templar_chapter_domicile_seed_government"
+	}
+}
+
 NHolyOrder = {
+	NUM_LEVIES_BASE = 500
+	NUM_LEVIES_PER_HOLDING = 200
+	NUM_MAA_BASE = 2
+	NUM_MAA_PER_HOLDING = 1
+	NUM_HOLDINGS_PER_MAA_REGIMENT = 3
+	RELIGION_MAA_RATIO = 0.7
+	PATRON_MIN_TIER = 4
+	LEVY_COST_PER_100_SOLDIERS = 5.0
+	MAA_COST_RATIO = 0.2
+	REALM_SIZE_MULT = 0.05
+	PATRON_HIRE_COST_MULT = 0
+	PATRON_STEAL_COST_MULT = 1
+	HIRE_LIMIT = 1
+	ENEMY_MIN_HOSTILITY_LEVEL = 2
 	BASE_NUM_KNIGHTS = 8
 	EXTRA_KNIGHTS_PER_HOLDING = 1
+	COAT_OF_ARMS_LIST = "religious_title"
 }

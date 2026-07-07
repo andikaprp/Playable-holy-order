@@ -30,6 +30,7 @@ templar_nominate_chapter_successor_interaction = {
 	on_accept = {
 		scope:actor = {
 			set_variable = { name = templar_chapter_nominee value = scope:recipient }
+			templar_refresh_title_heir_effect = yes
 			send_interface_toast = {
 				type = event_toast_effect_neutral
 				title = templar_chapter_vote_toast_title

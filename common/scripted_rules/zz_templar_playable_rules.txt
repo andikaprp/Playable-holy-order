@@ -1,97 +1,100 @@
-# Holy Order Grand Masters are playable (vanilla blocks government_is_holy_order)
+# Overrides vanilla rules — playable Holy Order Grand Masters.
 is_character_allowed_to_be_player = {
 	trigger_if = {
 		limit = {
 			scope:will_override_government = no
-			OR = {
-				is_playable_holy_order = yes
-				has_character_flag = templar_playable_grandmaster
-			}
+			government_has_flag = government_is_holy_order
+			any_held_title = { is_holy_order = yes }
 		}
 		always = yes
 	}
-	trigger_else = {
+	trigger_else_if = {
+		limit = {
+			scope:will_override_government = no
+		}
+		custom_description = {
+			text = "GAME_OVER_CANNOT_PLAY_THEOCRACY"
+			NOT = { government_has_flag = government_is_theocracy }
+		}
+
+		custom_description = {
+			text = "GAME_OVER_CANNOT_PLAY_REPUBLIC"
+			NOT = { government_has_flag = government_is_republic }
+		}
+
+		custom_description = {
+			text = "GAME_OVER_CANNOT_PLAY_MERCENARY"
+			NOT = { government_has_flag = government_is_mercenary }
+		}
+
+		custom_description = {
+			text = "GAME_OVER_CANNOT_PLAY_HOLY_ORDER"
+			NOT = { government_has_flag = government_is_holy_order }
+		}
+
 		trigger_if = {
 			limit = {
-				scope:will_override_government = no
+				NOT = { has_dlc_feature = admin_gov }
 			}
 			custom_description = {
-				text = "GAME_OVER_CANNOT_PLAY_THEOCRACY"
-				NOT = { government_has_flag = government_is_theocracy }
-			}
-
-			custom_description = {
-				text = "GAME_OVER_CANNOT_PLAY_REPUBLIC"
-				NOT = { government_has_flag = government_is_republic }
-			}
-
-			custom_description = {
-				text = "GAME_OVER_CANNOT_PLAY_MERCENARY"
-				NOT = { government_has_flag = government_is_mercenary }
-			}
-
-			trigger_if = {
-				limit = {
-					NOT = { has_dlc_feature = admin_gov }
-				}
-				custom_description = {
-					text = "GAME_OVER_CANNOT_PLAY_ADMIN"
-					NOT = { government_has_flag = government_is_administrative }
-				}
-			}
-
-			trigger_if = {
-				limit = {
-					NOT = { has_dlc_feature = roads_to_power }
-				}
-				custom_description = {
-					text = "GAME_OVER_CANNOT_PLAY_ADVENTURER"
-					NOT = { government_has_flag = government_is_landless_adventurer }
-				}
-				custom_description = {
-					text = "GAME_OVER_CANNOT_PLAY_BARON"
-					NOT = { highest_held_title_tier = tier_barony }
-				}
-
-				is_playable_character = yes
-			}
-
-			trigger_if = {
-				limit = {
-					government_is_japanese_trigger = yes
-					is_landed = no
-				}
-
-				custom_tooltip = {
-					text = GAME_OVER_CANNOT_PLAY_ESTATELESS
-					has_domicile = yes
-				}
-			}
-
-			trigger_else = {
-				OR = {
-					AND = {
-						is_ruler = no
-						is_valid_for_laampdom = yes
-					}
-					is_playable_character = yes
-				}
-				NOT = { has_character_flag = declined_become_laamp }
+				text = "GAME_OVER_CANNOT_PLAY_ADMIN"
+				NOT = { government_has_flag = government_is_administrative }
 			}
 		}
+
+		trigger_if = {
+			limit = {
+				NOT = { has_dlc_feature = roads_to_power }
+			}
+			custom_description = {
+				text = "GAME_OVER_CANNOT_PLAY_ADVENTURER"
+				NOT = { government_has_flag = government_is_landless_adventurer }
+			}
+			custom_description = {
+				text = "GAME_OVER_CANNOT_PLAY_BARON"
+				NOT = { highest_held_title_tier = tier_barony }
+			}
+
+			is_playable_character = yes
+		}
+
+		trigger_if = {
+			limit = {
+				government_is_japanese_trigger = yes
+				is_landed = no
+			}
+
+			custom_tooltip = {
+				text = GAME_OVER_CANNOT_PLAY_ESTATELESS
+				has_domicile = yes
+			}
+		}
+
+		trigger_else = {
+			OR = {
+				AND = {
+					is_ruler = no
+					is_valid_for_laampdom = yes
+				}
+				is_playable_character = yes
+			}
+			NOT = { has_character_flag = declined_become_laamp }
+		}
+	}
+	trigger_else = {
+		always = yes
 	}
 }
 
 is_hireable_ruler_trigger = {
-	OR = {
-		AND = {
-			has_government = landless_adventurer_government
-			current_military_strength >= 100
-		}
-		AND = {
-			is_landless_holy_order = yes
-			has_character_flag = templar_playable_grandmaster
-			current_military_strength >= 100
-		}
+	has_government = landless_adventurer_government
+	current_military_strength >= 100
+}
+
+can_hire_hireable_ruler_trigger = {
+	is_at_war = yes
+	any_character_war = {
+		is_war_leader = root
 	}
+	scope:candidate != root
 }

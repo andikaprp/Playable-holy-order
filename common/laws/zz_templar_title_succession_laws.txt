@@ -1,5 +1,9 @@
 title_succession_laws = {
 	templar_holy_order_elective_succession_law = {
+		# Survives the brief government swap used to bootstrap the domicile.
+		can_keep = {
+			always = yes
+		}
 		can_have = {
 			government_has_flag = government_is_holy_order
 		}
@@ -13,9 +17,10 @@ title_succession_laws = {
 			always = no
 		}
 		succession = {
-			order_of_succession = theocratic
+			order_of_succession = election
+			election_type = templar_holy_order_elective
 			faith = same_faith
-			pool_character_config = pool_templar_chapter_succession
 		}
+		flag = elective_succession_law
 	}
 }
